@@ -1,9 +1,11 @@
+```javascript
 // =========================
 // ÉLÉMENTS HTML
 // =========================
 
 let cases = document.querySelectorAll(".case");
 let touches = document.querySelectorAll(".touche");
+
 let message = document.querySelector("#message");
 
 let musiqueJeu = document.querySelector("#musiqueJeu");
@@ -23,17 +25,182 @@ let motSecret = "";
 
 let partieTerminee = false;
 
-
 // Laisse vide pour un mot aléatoire
 let motChoisi = "";
 
 
 // =========================
-// VOLUME
+// VOLUME DES MUSIQUES
 // =========================
 
 musiqueJeu.volume = 0.15;
 musiqueVictoire.volume = 0.25;
+
+
+// =========================
+// SON MACHINE À ÉCRIRE
+// =========================
+
+let contexteAudio = null;
+
+
+// Crée le contexte audio uniquement
+// quand le joueur commence à interagir
+
+function obtenirContexteAudio() {
+
+    if (!contexteAudio) {
+
+        contexteAudio =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+    if (contexteAudio.state === "suspended") {
+
+        contexteAudio.resume();
+
+    }
+
+    return contexteAudio;
+
+}
+
+
+// =========================
+// PETIT "CLAC"
+// =========================
+
+function sonTouche() {
+
+    let audio = obtenirContexteAudio();
+
+    let oscillateur =
+        audio.createOscillator();
+
+    let gain =
+        audio.createGain();
+
+    oscillateur.type = "square";
+
+    oscillateur.frequency.setValueAtTime(
+        170,
+        audio.currentTime
+    );
+
+    oscillateur.frequency.exponentialRampToValueAtTime(
+        75,
+        audio.currentTime + 0.035
+    );
+
+    gain.gain.setValueAtTime(
+        0.035,
+        audio.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audio.currentTime + 0.045
+    );
+
+    oscillateur.connect(gain);
+    gain.connect(audio.destination);
+
+    oscillateur.start();
+
+    oscillateur.stop(
+        audio.currentTime + 0.05
+    );
+
+}
+
+
+// =========================
+// SON D'ENRAYEMENT
+// =========================
+
+function sonEnrayement() {
+
+    let audio = obtenirContexteAudio();
+
+    let oscillateur =
+        audio.createOscillator();
+
+    let gain =
+        audio.createGain();
+
+    oscillateur.type = "sawtooth";
+
+    oscillateur.frequency.setValueAtTime(
+        120,
+        audio.currentTime
+    );
+
+    oscillateur.frequency.setValueAtTime(
+        65,
+        audio.currentTime + 0.025
+    );
+
+    oscillateur.frequency.setValueAtTime(
+        105,
+        audio.currentTime + 0.05
+    );
+
+    oscillateur.frequency.setValueAtTime(
+        55,
+        audio.currentTime + 0.075
+    );
+
+    gain.gain.setValueAtTime(
+        0.025,
+        audio.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audio.currentTime + 0.1
+    );
+
+    oscillateur.connect(gain);
+    gain.connect(audio.destination);
+
+    oscillateur.start();
+
+    oscillateur.stop(
+        audio.currentTime + 0.11
+    );
+
+}
+
+
+// =========================
+// ANIMATION TOUCHE
+// =========================
+
+function animerTouche(touche) {
+
+    touche.classList.remove(
+        "touche-appuyee"
+    );
+
+    void touche.offsetWidth;
+
+    touche.classList.add(
+        "touche-appuyee"
+    );
+
+    setTimeout(function() {
+
+        touche.classList.remove(
+            "touche-appuyee"
+        );
+
+    }, 120);
+
+}
 
 
 // =========================
@@ -44,7 +211,10 @@ function enleverAccents(texte) {
 
     return texte
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        );
 
 }
 
@@ -56,6 +226,7 @@ function enleverAccents(texte) {
 function afficherMessage(texte) {
 
     message.textContent = texte;
+
     message.style.opacity = "1";
 
     setTimeout(function() {
@@ -71,57 +242,276 @@ function afficherMessage(texte) {
 // CLAVIER
 // =========================
 
-function mettreAJourClavier(lettre, couleur) {
+function mettreAJourClavier(
+    lettre,
+    couleur
+) {
 
     touches.forEach(function(touche) {
 
-        if (touche.textContent !== lettre) {
+        if (
+            touche.textContent !== lettre
+        ) {
+
             return;
+
         }
 
 
+        // =========================
         // VERT
+        // =========================
 
         if (couleur === "vert") {
 
-            touche.classList.remove("jaune");
-            touche.classList.remove("gris");
+            touche.classList.remove(
+                "jaune"
+            );
 
-            touche.classList.add("vert");
+            touche.classList.remove(
+                "gris"
+            );
+
+            touche.classList.add(
+                "vert"
+            );
 
         }
 
 
+        // =========================
         // JAUNE
+        // =========================
 
-        else if (couleur === "jaune") {
+        else if (
+            couleur === "jaune"
+        ) {
 
-            if (!touche.classList.contains("vert")) {
+            if (
+                !touche.classList.contains(
+                    "vert"
+                )
+            ) {
 
-                touche.classList.remove("gris");
-                touche.classList.add("jaune");
+                touche.classList.remove(
+                    "gris"
+                );
+
+                touche.classList.add(
+                    "jaune"
+                );
 
             }
 
         }
 
 
+        // =========================
         // GRIS
+        // =========================
 
-        else if (couleur === "gris") {
+        else if (
+            couleur === "gris"
+        ) {
 
             if (
-                !touche.classList.contains("vert") &&
-                !touche.classList.contains("jaune")
+                !touche.classList.contains(
+                    "vert"
+                ) &&
+                !touche.classList.contains(
+                    "jaune"
+                )
             ) {
 
-                touche.classList.add("gris");
+                touche.classList.add(
+                    "gris"
+                );
 
             }
 
         }
 
     });
+
+}
+
+
+// =========================
+// TROUVER UNE TOUCHE
+// =========================
+
+function trouverTouche(lettre) {
+
+    for (
+        let i = 0;
+        i < touches.length;
+        i++
+    ) {
+
+        if (
+            touches[i].textContent === lettre
+        ) {
+
+            return touches[i];
+
+        }
+
+    }
+
+    return null;
+
+}
+
+
+// =========================
+// MUSIQUE DU JEU
+// =========================
+
+function lancerMusiqueJeu() {
+
+    if (
+        musiqueJeu.paused
+    ) {
+
+        musiqueJeu.play().catch(
+            function(erreur) {
+
+                console.log(
+                    "Wordle1 ne peut pas démarrer :",
+                    erreur
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+// =========================
+// ÉCRIRE UNE LETTRE
+// =========================
+
+function ecrireLettre(lettre) {
+
+    if (partieTerminee) {
+
+        return;
+
+    }
+
+
+    if (position >= 5) {
+
+        return;
+
+    }
+
+
+    // =========================
+    // LETTRE DÉJÀ BLOQUÉE
+    // =========================
+
+    let touche =
+        trouverTouche(lettre);
+
+
+    if (
+        touche &&
+        touche.classList.contains("gris")
+    ) {
+
+        animerTouche(touche);
+
+        sonEnrayement();
+
+        return;
+
+    }
+
+
+    // =========================
+    // MUSIQUE
+    // =========================
+
+    lancerMusiqueJeu();
+
+
+    // =========================
+    // SON DE TOUCHE
+    // =========================
+
+    sonTouche();
+
+
+    // =========================
+    // ANIMATION CLAVIER
+    // =========================
+
+    if (touche) {
+
+        animerTouche(touche);
+
+    }
+
+
+    // =========================
+    // ÉCRIRE
+    // =========================
+
+    let caseActuelle =
+        cases[
+            debut + position
+        ];
+
+
+    caseActuelle.textContent =
+        lettre;
+
+
+    // =========================
+    // ANIMATION LETTRE
+    // =========================
+
+    caseActuelle.classList.remove(
+        "letter-animation"
+    );
+
+    void caseActuelle.offsetWidth;
+
+    caseActuelle.classList.add(
+        "letter-animation"
+    );
+
+
+    position++;
+
+}
+
+
+// =========================
+// EFFACER
+// =========================
+
+function effacerLettre() {
+
+    if (partieTerminee) {
+
+        return;
+
+    }
+
+
+    if (position > 0) {
+
+        position--;
+
+        cases[
+            debut + position
+        ].textContent = "";
+
+    }
 
 }
 
@@ -174,7 +564,7 @@ fetch("mots.txt")
 
 
         // =========================
-        // CHOISIR LE MOT SECRET
+        // MOT SECRET
         // =========================
 
         if (motChoisi === "") {
@@ -182,7 +572,8 @@ fetch("mots.txt")
             motSecret =
                 mots[
                     Math.floor(
-                        Math.random() * mots.length
+                        Math.random() *
+                        mots.length
                     )
                 ];
 
@@ -223,11 +614,10 @@ document.addEventListener(
     "keydown",
     function(event) {
 
-
-        // Partie terminée
-
         if (partieTerminee) {
+
             return;
+
         }
 
 
@@ -236,10 +626,8 @@ document.addEventListener(
         // =========================
 
         if (
-            event.key.length === 1 &&
-            position < 5
+            event.key.length === 1
         ) {
-
 
             let lettre =
                 enleverAccents(
@@ -247,51 +635,17 @@ document.addEventListener(
                 );
 
 
-            // Seulement A-Z
+            if (
+                /^[A-Z]$/.test(lettre)
+            ) {
 
-            if (!/^[A-Z]$/.test(lettre)) {
+                ecrireLettre(
+                    lettre
+                );
+
                 return;
-            }
-
-
-            // =========================
-            // MUSIQUE DU JEU
-            // =========================
-
-            if (musiqueJeu.paused) {
-
-                musiqueJeu.play();
 
             }
-
-
-            // =========================
-            // ÉCRIRE LA LETTRE
-            // =========================
-
-            let caseActuelle =
-                cases[debut + position];
-
-
-            caseActuelle.textContent = lettre;
-
-
-            // Animation
-
-            caseActuelle.classList.remove(
-                "letter-animation"
-            );
-
-            void caseActuelle.offsetWidth;
-
-            caseActuelle.classList.add(
-                "letter-animation"
-            );
-
-
-            position++;
-
-            return;
 
         }
 
@@ -304,16 +658,7 @@ document.addEventListener(
             event.key === "Backspace"
         ) {
 
-
-            if (position > 0) {
-
-                position--;
-
-                cases[
-                    debut + position
-                ].textContent = "";
-
-            }
+            effacerLettre();
 
             return;
 
@@ -339,14 +684,61 @@ document.addEventListener(
 
 
 // =========================
+// CLAVIER VIRTUEL
+// =========================
+
+touches.forEach(function(touche) {
+
+    touche.addEventListener(
+        "click",
+        function() {
+
+            if (partieTerminee) {
+
+                return;
+
+            }
+
+
+            let lettre =
+                touche.textContent;
+
+
+            // Lettre bloquée
+
+            if (
+                touche.classList.contains(
+                    "gris"
+                )
+            ) {
+
+                animerTouche(touche);
+
+                sonEnrayement();
+
+                return;
+
+            }
+
+
+            ecrireLettre(lettre);
+
+        }
+    );
+
+});
+
+
+// =========================
 // VALIDER LE MOT
 // =========================
 
 function validerMot() {
 
-
     if (partieTerminee) {
+
         return;
+
     }
 
 
@@ -389,7 +781,9 @@ function validerMot() {
     // MOT INEXISTANT
     // =========================
 
-    if (!mots.includes(mot)) {
+    if (
+        !mots.includes(mot)
+    ) {
 
         afficherMessage(
             "Ce mot n'existe pas"
@@ -404,33 +798,47 @@ function validerMot() {
     // VICTOIRE
     // =========================
 
-    if (mot === motSecret) {
+    if (
+        mot === motSecret
+    ) {
 
-
-        console.log("VICTOIRE !");
+        console.log(
+            "VICTOIRE !"
+        );
 
 
         partieTerminee = true;
 
 
         // =========================
-        // ARRÊTER WORDLE1
+        // WORDLE1
         // =========================
 
         musiqueJeu.pause();
+
         musiqueJeu.currentTime = 0;
 
 
         // =========================
-        // LANCER VICTORY
+        // VICTORY
         // =========================
 
         musiqueVictoire.currentTime = 0;
-        musiqueVictoire.play();
+
+        musiqueVictoire.play().catch(
+            function(erreur) {
+
+                console.error(
+                    "Victory ne peut pas démarrer :",
+                    erreur
+                );
+
+            }
+        );
 
 
         // =========================
-        // ANIMATION VICTOIRE
+        // CASES VERTES
         // =========================
 
         for (
@@ -439,10 +847,11 @@ function validerMot() {
             i++
         ) {
 
-
             cases[
                 debut + i
-            ].classList.add("vert");
+            ].classList.add(
+                "vert"
+            );
 
 
             mettreAJourClavier(
@@ -481,7 +890,7 @@ function validerMot() {
 
 
     // =========================
-    // LETTRES VERTES
+    // VERT
     // =========================
 
     for (
@@ -490,15 +899,15 @@ function validerMot() {
         i++
     ) {
 
-
         if (
             mot[i] === motSecret[i]
         ) {
 
-
             cases[
                 debut + i
-            ].classList.add("vert");
+            ].classList.add(
+                "vert"
+            );
 
 
             mettreAJourClavier(
@@ -507,7 +916,8 @@ function validerMot() {
             );
 
 
-            lettresDisponibles[i] = null;
+            lettresDisponibles[i] =
+                null;
 
         }
 
@@ -524,7 +934,6 @@ function validerMot() {
         i++
     ) {
 
-
         if (
             mot[i] === motSecret[i]
         ) {
@@ -540,16 +949,19 @@ function validerMot() {
             );
 
 
+        // =========================
         // JAUNE
+        // =========================
 
         if (
             positionLettre !== -1
         ) {
 
-
             cases[
                 debut + i
-            ].classList.add("jaune");
+            ].classList.add(
+                "jaune"
+            );
 
 
             mettreAJourClavier(
@@ -565,14 +977,17 @@ function validerMot() {
         }
 
 
+        // =========================
         // GRIS
+        // =========================
 
         else {
 
-
             cases[
                 debut + i
-            ].classList.add("gris");
+            ].classList.add(
+                "gris"
+            );
 
 
             mettreAJourClavier(
@@ -592,9 +1007,12 @@ function validerMot() {
     ligne++;
 
 
-    if (ligne === 6) {
+    if (
+        ligne === 6
+    ) {
 
-        window.location = "perdu.html";
+        window.location =
+            "perdu.html";
 
     }
 
@@ -607,3 +1025,4 @@ function validerMot() {
     }
 
 }
+```
