@@ -1,754 +1,83 @@
-```css
-/* =========================================
-   POLICES
-   ========================================= */
+```javascript
+function ecrireLettre(lettre) {
 
-@import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
-);
+    if (partieTerminee) {
+        return;
+    }
 
+    if (position >= 5) {
+        return;
+    }
 
-/* =========================================
-   BASE
-   ========================================= */
 
-* {
-    box-sizing: border-box;
-}
+    // Chercher la touche correspondante
 
-body {
+    let touche = null;
 
-    margin: 0;
+    touches.forEach(function(element) {
 
-    min-height: 100vh;
+        if (element.textContent === lettre) {
+            touche = element;
+        }
 
-    background:
-        radial-gradient(
-            circle at center,
-            #faf7ed 0%,
-            #f2ecdc 70%,
-            #e8dfcc 100%
-        );
+    });
 
-    color: #29261f;
 
-    font-family:
-        "Special Elite",
-        monospace;
+    // Si la lettre est déjà connue comme fausse
 
-    display: flex;
+    if (
+        touche &&
+        touche.classList.contains("gris")
+    ) {
 
-    flex-direction: column;
-
-    align-items: center;
-
-    padding: 45px 20px;
-
-}
-
-
-/* =========================================
-   EFFET PAPIER
-   ========================================= */
-
-body::before {
-
-    content: "";
-
-    position: fixed;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    opacity: 0.08;
-
-    background-image:
-        repeating-linear-gradient(
-            0deg,
-            rgba(80, 65, 40, 0.08) 0px,
-            rgba(80, 65, 40, 0.08) 1px,
-            transparent 1px,
-            transparent 4px
-        );
-
-    z-index: 10;
-
-}
-
-
-/* =========================================
-   TITRE
-   ========================================= */
-
-h1 {
-
-    margin: 0;
-
-    font-family:
-        "Cinzel",
-        serif;
-
-    font-size: 4rem;
-
-    font-weight: 600;
-
-    letter-spacing: 0.12em;
-
-    color: #29261f;
-
-    text-align: center;
-
-    position: relative;
-
-    text-shadow:
-        1px 1px 0
-        rgba(255, 255, 255, 0.5);
-
-}
-
-
-h1::after {
-
-    content: "◇";
-
-    display: block;
-
-    font-size: 0.9rem;
-
-    margin-top: 8px;
-
-    color: #75694f;
-
-    letter-spacing: 0;
-
-}
-
-
-/* =========================================
-   MESSAGE
-   ========================================= */
-
-#message {
-
-    height: 30px;
-
-    margin-top: 15px;
-
-    font-family:
-        "Special Elite",
-        monospace;
-
-    font-size: 1rem;
-
-    color: #514a3d;
-
-    opacity: 0;
-
-    transition:
-        opacity 0.25s ease,
-        transform 0.25s ease;
-
-}
-
-
-/* =========================================
-   JEU
-   ========================================= */
-
-.jeu {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    width: 100%;
-
-    max-width: 620px;
-
-    margin-top: 15px;
-
-}
-
-
-/* =========================================
-   GRILLE
-   ========================================= */
-
-.grille {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 9px;
-
-    padding: 20px;
-
-}
-
-
-.ligne {
-
-    display: flex;
-
-    gap: 9px;
-
-}
-
-
-/* =========================================
-   CASES
-   ========================================= */
-
-.case {
-
-    width: 68px;
-
-    height: 68px;
-
-    border:
-        1px solid #aaa08b;
-
-    background:
-        rgba(255, 252, 242, 0.45);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-family:
-        "Special Elite",
-        monospace;
-
-    font-size: 2rem;
-
-    color: #29261f;
-
-    transition:
-        background 0.25s ease,
-        border-color 0.25s ease,
-        color 0.25s ease,
-        transform 0.2s ease;
-
-}
-
-
-.case:not(:empty) {
-
-    border-color: #6f6758;
-
-    background:
-        rgba(255, 252, 242, 0.8);
-
-}
-
-
-/* =========================================
-   COULEURS
-   ========================================= */
-
-.case.vert {
-
-    background: #65745b;
-
-    border-color: #65745b;
-
-    color: #fffdf5;
-
-}
-
-
-.case.jaune {
-
-    background: #b69a5a;
-
-    border-color: #b69a5a;
-
-    color: #fffdf5;
-
-}
-
-
-.case.gris {
-
-    background: #625f57;
-
-    border-color: #625f57;
-
-    color: #f7f2e7;
-
-}
-
-
-/* =========================================
-   ANIMATION LETTRE
-   ========================================= */
-
-.letter-animation {
-
-    animation:
-        apparitionLettre
-        0.15s
-        ease-out;
-
-}
-
-
-@keyframes apparitionLettre {
-
-    0% {
-
-        transform: scale(0.8);
+        sonFalse.currentTime = 0;
+        sonFalse.play().catch(function() {});
 
     }
 
-    70% {
+    // Sinon : son normal
 
-        transform: scale(1.08);
+    else {
 
-    }
-
-    100% {
-
-        transform: scale(1);
-
-    }
-
-}
-
-
-/* =========================================
-   VICTOIRE
-   ========================================= */
-
-.case.victoire {
-
-    animation:
-        victoire
-        0.55s
-        ease-in-out;
-
-}
-
-
-@keyframes victoire {
-
-    0% {
-
-        transform:
-            translateY(0)
-            rotate(0);
-
-    }
-
-    35% {
-
-        transform:
-            translateY(-10px)
-            rotate(-2deg);
-
-    }
-
-    70% {
-
-        transform:
-            translateY(3px)
-            rotate(1deg);
-
-    }
-
-    100% {
-
-        transform:
-            translateY(0)
-            rotate(0);
-
-    }
-
-}
-
-
-/* =========================================
-   CLAVIER
-   ========================================= */
-
-#clavier {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 7px;
-
-    margin-top: 15px;
-
-    width: 100%;
-
-}
-
-
-.ligne-clavier {
-
-    display: flex;
-
-    flex-direction: row;
-
-    gap: 6px;
-
-    justify-content: center;
-
-    width: 100%;
-
-}
-
-
-/* =========================================
-   TOUCHES
-   ========================================= */
-
-.touche {
-
-    width: 48px;
-
-    height: 52px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    background:
-        linear-gradient(
-            145deg,
-            #eee7d7,
-            #dcd3c0
-        );
-
-    border:
-        1px solid #aaa08d;
-
-    border-radius: 4px;
-
-    box-shadow:
-        0 2px 0 #a49a86,
-        0 3px 5px
-        rgba(60, 50, 35, 0.15);
-
-    font-family:
-        "Special Elite",
-        monospace;
-
-    font-size: 1.05rem;
-
-    color: #312e27;
-
-    transition:
-        transform 0.08s ease,
-        box-shadow 0.08s ease,
-        background 0.2s ease,
-        color 0.2s ease;
-
-}
-
-
-/* =========================================
-   TOUCHE ENFONCÉE
-   ========================================= */
-
-.touche-appuyee {
-
-    animation:
-        frappeTouche
-        0.12s
-        ease-out;
-
-}
-
-
-@keyframes frappeTouche {
-
-    0% {
-
-        transform: translateY(0);
-
-        box-shadow:
-            0 2px 0 #a49a86,
-            0 3px 5px
-            rgba(60, 50, 35, 0.15);
-
-    }
-
-    45% {
-
-        transform: translateY(3px);
-
-        box-shadow:
-            0 0 0 #a49a86,
-            0 1px 2px
-            rgba(60, 50, 35, 0.12);
-
-    }
-
-    100% {
-
-        transform: translateY(0);
-
-        box-shadow:
-            0 2px 0 #a49a86,
-            0 3px 5px
-            rgba(60, 50, 35, 0.15);
-
-    }
-
-}
-
-
-/* =========================================
-   ENRAYEMENT
-   ========================================= */
-
-.touche.gris.touche-appuyee {
-
-    animation:
-        enrayement
-        0.18s
-        ease-in-out;
-
-}
-
-
-@keyframes enrayement {
-
-    0% {
-        transform: translateX(0);
-    }
-
-    20% {
-        transform: translateX(-3px);
-    }
-
-    40% {
-        transform: translateX(3px);
-    }
-
-    60% {
-        transform: translateX(-2px);
-    }
-
-    80% {
-        transform: translateX(2px);
-    }
-
-    100% {
-        transform: translateX(0);
-    }
-
-}
-
-
-/* =========================================
-   COULEURS DU CLAVIER
-   ========================================= */
-
-.touche.vert {
-
-    background: #65745b;
-
-    border-color: #596650;
-
-    color: #fffdf5;
-
-    box-shadow:
-        0 2px 0 #4f5948;
-
-}
-
-
-.touche.jaune {
-
-    background: #b69a5a;
-
-    border-color: #a3874d;
-
-    color: #fffdf5;
-
-    box-shadow:
-        0 2px 0 #8d7542;
-
-}
-
-
-.touche.gris {
-
-    background: #625f57;
-
-    border-color: #55524b;
-
-    color: #eee9dc;
-
-    box-shadow:
-        0 2px 0 #484640;
-
-}
-
-
-/* =========================================
-   PAGE PERDUE
-   ========================================= */
-
-.page-perdue {
-
-    min-height: 100vh;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    padding: 30px;
-
-}
-
-
-.page-perdue h1 {
-
-    font-family:
-        "Cinzel",
-        serif;
-
-    font-size: 4rem;
-
-    margin: 0;
-
-}
-
-
-.page-perdue h1::after {
-
-    content: "◇";
-
-    display: block;
-
-    font-size: 0.9rem;
-
-    margin-top: 8px;
-
-    color: #75694f;
-
-}
-
-
-.page-perdue p {
-
-    margin-top: 25px;
-
-    font-family:
-        "Cinzel",
-        serif;
-
-    font-size: 1.4rem;
-
-    color: #514a3d;
-
-}
-
-
-/* =========================================
-   MOBILE
-   ========================================= */
-
-@media (max-width: 600px) {
-
-    body {
-
-        padding: 25px 10px;
+        sonGood.currentTime = 0;
+        sonGood.play().catch(function() {});
 
     }
 
 
-    h1 {
+    // Écrire la lettre
 
-        font-size: 2.7rem;
-
-    }
+    cases[debut + position].textContent = lettre;
 
 
-    .grille {
+    // Animation de la case
 
-        gap: 6px;
+    cases[debut + position].classList.remove(
+        "letter-animation"
+    );
 
-        padding: 10px;
+    void cases[debut + position].offsetWidth;
 
-    }
-
-
-    .ligne {
-
-        gap: 6px;
-
-    }
+    cases[debut + position].classList.add(
+        "letter-animation"
+    );
 
 
-    .case {
+    // Animation du clavier
 
-        width: 57px;
+    animerTouche(lettre);
 
-        height: 57px;
 
-        font-size: 1.7rem;
+    // Musique du jeu
+
+    if (musiqueJeu.paused) {
+
+        musiqueJeu.play().catch(function() {});
 
     }
 
 
-    .touche {
-
-        width: 34px;
-
-        height: 46px;
-
-        font-size: 0.85rem;
-
-    }
-
-
-    .ligne-clavier {
-
-        gap: 4px;
-
-    }
-
-
-    .page-perdue h1 {
-
-        font-size: 2.7rem;
-
-    }
-
-
-    .page-perdue p {
-
-        font-size: 1.1rem;
-
-    }
+    position++;
 
 }
 ```
