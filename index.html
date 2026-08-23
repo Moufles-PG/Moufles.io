@@ -5,6 +5,8 @@
 
     <meta charset="UTF-8">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Motle</title>
 
     <link rel="stylesheet" href="style.css">
@@ -19,29 +21,27 @@
     <div id="message"></div>
 
 
-    <!-- =========================
-         MUSIQUES
-         ========================= -->
+    <!-- MUSIQUES -->
 
     <audio id="musiqueJeu" loop>
-        <source src="/Moufles.io/Wordle1.mp3" type="audio/mpeg">
+        <source src="Wordle1.mp3" type="audio/mpeg">
     </audio>
 
     <audio id="musiqueVictoire">
-        <source src="/Moufles.io/Victory.mp3" type="audio/mpeg">
+        <source src="Victory.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="musiqueDefaite">
+        <source src="Fail.mp3" type="audio/mpeg">
     </audio>
 
 
-    <!-- =========================
-         JEU
-         ========================= -->
+    <!-- JEU -->
 
     <div class="jeu">
 
 
-        <!-- =========================
-             GRILLE DU WORDLE
-             ========================= -->
+        <!-- GRILLE -->
 
         <div class="grille">
 
@@ -96,9 +96,7 @@
         </div>
 
 
-        <!-- =========================
-             CLAVIER AZERTY
-             ========================= -->
+        <!-- CLAVIER -->
 
         <div id="clavier">
 
@@ -150,9 +148,26 @@
     </div>
 
 
-    <!-- =========================
-         JAVASCRIPT
-         ========================= -->
+    <!-- ÉCRAN DE DÉFAITE -->
+
+    <div id="ecranDefaite">
+
+        <div class="defaite-contenu">
+
+            <h2>PERDU</h2>
+
+            <p>Le mot était :</p>
+
+            <div id="motPerdu"></div>
+
+            <button id="boutonRejouer">
+                REJOUER
+            </button>
+
+        </div>
+
+    </div>
+
 
     <script src="script.js"></script>
 
