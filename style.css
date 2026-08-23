@@ -24,10 +24,10 @@ body {
 
     background:
         radial-gradient(
-            circle at center,
-            #faf7ed 0%,
-            #f2ecdc 70%,
-            #e8dfcc 100%
+            ellipse at center,
+            #f5eedb 0%,
+            #eee3c8 55%,
+            #d8c8a8 100%
         );
 
     color: #29261f;
@@ -44,11 +44,13 @@ body {
 
     padding: 45px 20px;
 
+    position: relative;
+
 }
 
 
 /* =========================================
-   EFFET PAPIER
+   TEXTURE DU PAPIER
    ========================================= */
 
 body::before {
@@ -61,26 +63,94 @@ body::before {
 
     pointer-events: none;
 
-    opacity: 0.08;
+    opacity: 0.16;
 
-    background-image:
+    background:
+
+        radial-gradient(
+            circle at 12% 25%,
+            rgba(70, 50, 25, 0.10) 0px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 83% 17%,
+            rgba(70, 50, 25, 0.07) 0px,
+            transparent 4px
+        ),
+
+        radial-gradient(
+            circle at 72% 78%,
+            rgba(70, 50, 25, 0.08) 0px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 28% 84%,
+            rgba(70, 50, 25, 0.06) 0px,
+            transparent 4px
+        ),
+
         repeating-linear-gradient(
             0deg,
-            rgba(
-                80,
-                65,
-                40,
-                0.08
-            ) 0px,
-            rgba(
-                80,
-                65,
-                40,
-                0.08
-            ) 1px,
+            rgba(80, 60, 35, 0.035) 0px,
+            rgba(80, 60, 35, 0.035) 1px,
             transparent 1px,
             transparent 4px
+        ),
+
+        repeating-linear-gradient(
+            90deg,
+            rgba(80, 60, 35, 0.025) 0px,
+            rgba(80, 60, 35, 0.025) 1px,
+            transparent 1px,
+            transparent 6px
         );
+
+    z-index: 0;
+
+}
+
+
+/* =========================================
+   BORDS VIEILLIS
+   ========================================= */
+
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 52%,
+            rgba(91, 68, 38, 0.07) 72%,
+            rgba(73, 51, 28, 0.18) 100%
+        );
+
+    z-index: 0;
+
+}
+
+
+/* =========================================
+   CONTENU AU-DESSUS DU PAPIER
+   ========================================= */
+
+h1,
+#message,
+.jeu,
+#ecranFin {
+
+    position: relative;
+
+    z-index: 1;
 
 }
 
@@ -106,8 +176,6 @@ h1 {
     color: #29261f;
 
     text-align: center;
-
-    position: relative;
 
     text-shadow:
         1px 1px 0
@@ -416,9 +484,9 @@ h1::after {
 
     align-items: center;
 
-    gap: 10px;
+    gap: 7px;
 
-    margin-top: 7px;
+    margin-top: 5px;
 
     width: 100%;
 
@@ -440,7 +508,7 @@ h1::after {
 
 /* =========================================
    TOUCHES
-   STYLE MACHINE À ÉCRIRE
+   MACHINE À ÉCRIRE
    ========================================= */
 
 .touche {
@@ -939,7 +1007,7 @@ h1::after {
 
     .ligne-clavier {
 
-        gap: 5px;
+        gap: 7px;
 
     }
 
