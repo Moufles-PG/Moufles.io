@@ -37,13 +37,43 @@ musiqueVictoire.volume = 0.25;
 
 
 // =========================
+// PETIT SON DE MACHINE
+// =========================
+
+let audioContext = null;
+
+function sonTouche() {
+
+    if (!audioContext) {
+        audioContext = new AudioContext();
+    }
+
+    let oscillateur = audioContext.createOscillator();
+    let volume = audioContext.createGain();
+
+    oscillateur.type = "square";
+    oscillateur.frequency.value = 150;
+
+    volume.gain.value = 0.02;
+
+    oscillateur.connect(volume);
+    volume.connect(audioContext.destination);
+
+    oscillateur.start();
+    oscillateur.stop(audioContext.currentTime + 0.04);
+}
+
+
+// =========================
 // ACCENTS
 // =========================
 
 function enleverAccents(texte) {
+
     return texte
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
+
 }
 
 
@@ -59,6 +89,7 @@ function afficherMessage(texte) {
     setTimeout(function() {
         message.style.opacity = "0";
     }, 1500);
+
 }
 
 
@@ -75,57 +106,87 @@ function mettreAJourClavier(lettre, couleur) {
         }
 
         if (couleur === "vert") {
-            touche.classList.remove("jaune", "gris");
+
+            touche.classList.remove("jaune");
+            touche.classList.remove("gris");
+
             touche.classList.add("vert");
+
         }
 
-        if (couleur === "jaune") {
+        else if (couleur === "jaune") {
+
             if (!touche.classList.contains("vert")) {
+
                 touche.classList.remove("gris");
                 touche.classList.add("jaune");
+
             }
+
         }
 
-        if (couleur === "gris") {
+        else if (couleur === "gris") {
+
             if (
                 !touche.classList.contains("vert") &&
                 !touche.classList.contains("jaune")
             ) {
+
                 touche.classList.add("gris");
+
             }
+
         }
+
     });
+
 }
 
 
 // =========================
-// SON DE TOUCHE
+// ANIMATION TOUCHE
 // =========================
 
-function sonTouche() {
+function animerTouche(lettre) {
 
-    let son = new Audio("touche.mp3");
+    touches.forEach(function(touche) {
 
-    son.volume = 0.15;
-    son.play();
+        if (touche.textContent === lettre) {
+
+            touche.classList.remove("touche-appuyee");
+
+            void touche.offsetWidth;
+
+            touche.classList.add("touche-appuyee");
+
+        }
+
+    });
+
 }
 
 
 // =========================
-// ÉCRIRE
+// ÉCRIRE UNE LETTRE
 // =========================
 
 function ecrireLettre(lettre) {
 
-    if (partieTerminee || position >= 5) {
+    if (partieTerminee) {
         return;
     }
 
-    // Écrire la lettre
+    if (position >= 5) {
+        return;
+    }
+
+
+    // Écrire
 
     cases[debut + position].textContent = lettre;
 
-    // Animation de la case
+
+    // Animation de la lettre
 
     cases[debut + position].classList.remove(
         "letter-animation"
@@ -137,31 +198,32 @@ function ecrireLettre(lettre) {
         "letter-animation"
     );
 
+
     // Animation du clavier
 
-    touches.forEach(function(touche) {
+    animerTouche(lettre);
 
-        if (touche.textContent === lettre) {
-
-            touche.classList.remove("touche-appuyee");
-
-            void touche.offsetWidth;
-
-            touche.classList.add("touche-appuyee");
-        }
-    });
 
     // Petit son
 
     sonTouche();
 
+
     // Musique
 
     if (musiqueJeu.paused) {
-        musiqueJeu.play();
+
+        musiqueJeu.play().catch(function(erreur) {
+
+            console.log(erreur);
+
+        });
+
     }
 
+
     position++;
+
 }
 
 
@@ -175,6 +237,7 @@ document.addEventListener("keydown", function(event) {
         return;
     }
 
+
     // Lettre
 
     if (event.key.length === 1) {
@@ -184,29 +247,41 @@ document.addEventListener("keydown", function(event) {
         );
 
         if (/^[A-Z]$/.test(lettre)) {
+
             ecrireLettre(lettre);
+
         }
 
         return;
     }
+
 
     // Effacer
 
     if (event.key === "Backspace") {
 
         if (position > 0) {
+
             position--;
-            cases[debut + position].textContent = "";
+
+            cases[
+                debut + position
+            ].textContent = "";
+
         }
 
         return;
     }
 
+
     // Valider
 
     if (event.key === "Enter") {
+
         validerMot();
+
     }
+
 });
 
 
@@ -218,9 +293,12 @@ touches.forEach(function(touche) {
 
     touche.addEventListener("click", function() {
 
-        ecrireLettre(touche.textContent);
+        ecrireLettre(
+            touche.textContent
+        );
 
     });
+
 });
 
 
@@ -231,7 +309,9 @@ touches.forEach(function(touche) {
 fetch("mots.txt")
 
     .then(function(response) {
+
         return response.text();
+
     })
 
     .then(function(texte) {
@@ -239,30 +319,62 @@ fetch("mots.txt")
         mots = texte
             .split(/\r?\n/)
             .map(function(mot) {
+
                 return enleverAccents(
                     mot.trim().toUpperCase()
                 );
+
             })
             .filter(function(mot) {
+
                 return mot.length === 5;
+
             });
 
-        console.log("Mots chargés :", mots.length);
+
+        console.log(
+            "Mots chargés :",
+            mots.length
+        );
+
+
+        // Choisir le mot
 
         if (motChoisi === "") {
 
-            motSecret = mots[
-                Math.floor(Math.random() * mots.length)
-            ];
+            motSecret =
+                mots[
+                    Math.floor(
+                        Math.random() * mots.length
+                    )
+                ];
 
-        } else {
-
-            motSecret = enleverAccents(
-                motChoisi.toUpperCase()
-            );
         }
 
-        console.log("Mot secret :", motSecret);
+        else {
+
+            motSecret =
+                enleverAccents(
+                    motChoisi.toUpperCase()
+                );
+
+        }
+
+
+        console.log(
+            "Mot secret :",
+            motSecret
+        );
+
+    })
+
+    .catch(function(erreur) {
+
+        console.error(
+            "Erreur avec mots.txt :",
+            erreur
+        );
+
     });
 
 
@@ -276,22 +388,41 @@ function validerMot() {
         return;
     }
 
+
+    // Pas assez de lettres
+
     if (position < 5) {
-        afficherMessage("Pas assez de lettres.");
+
+        afficherMessage(
+            "Pas assez de lettres."
+        );
+
         return;
     }
+
+
+    // Construire le mot
 
     let mot = "";
 
     for (let i = 0; i < 5; i++) {
-        mot += cases[debut + i].textContent;
+
+        mot +=
+            cases[
+                debut + i
+            ].textContent;
+
     }
 
 
     // Mot inexistant
 
     if (!mots.includes(mot)) {
-        afficherMessage("Ce mot n'existe pas");
+
+        afficherMessage(
+            "Ce mot n'existe pas"
+        );
+
         return;
     }
 
@@ -304,57 +435,80 @@ function validerMot() {
 
         partieTerminee = true;
 
+
+        // Arrêter Wordle1
+
         musiqueJeu.pause();
         musiqueJeu.currentTime = 0;
+
+
+        // Lancer Victory
 
         musiqueVictoire.currentTime = 0;
         musiqueVictoire.play();
 
 
+        // Animation
+
         for (let i = 0; i < 5; i++) {
 
-            cases[debut + i].classList.add("vert");
+            cases[
+                debut + i
+            ].classList.add("vert");
+
 
             mettreAJourClavier(
                 mot[i],
                 "vert"
             );
 
+
             setTimeout(function() {
 
-                cases[debut + i].classList.add(
-                    "victoire"
-                );
+                cases[
+                    debut + i
+                ].classList.add("victoire");
 
             }, i * 100);
+
         }
+
 
         return;
     }
 
 
     // =========================
-    // MAUVAISE RÉPONSE
+    // MAUVAIS MOT
     // =========================
 
-    let lettresDisponibles = motSecret.split("");
+    let lettresDisponibles =
+        motSecret.split("");
 
 
-    // Vert
+    // Lettres vertes
 
     for (let i = 0; i < 5; i++) {
 
-        if (mot[i] === motSecret[i]) {
+        if (
+            mot[i] === motSecret[i]
+        ) {
 
-            cases[debut + i].classList.add("vert");
+            cases[
+                debut + i
+            ].classList.add("vert");
+
 
             mettreAJourClavier(
                 mot[i],
                 "vert"
             );
 
+
             lettresDisponibles[i] = null;
+
         }
+
     }
 
 
@@ -362,34 +516,59 @@ function validerMot() {
 
     for (let i = 0; i < 5; i++) {
 
-        if (mot[i] === motSecret[i]) {
+        if (
+            mot[i] === motSecret[i]
+        ) {
+
             continue;
+
         }
 
-        let index = lettresDisponibles.indexOf(
-            mot[i]
-        );
 
-        if (index !== -1) {
+        let positionLettre =
+            lettresDisponibles.indexOf(
+                mot[i]
+            );
 
-            cases[debut + i].classList.add("jaune");
+
+        // Jaune
+
+        if (positionLettre !== -1) {
+
+            cases[
+                debut + i
+            ].classList.add("jaune");
+
 
             mettreAJourClavier(
                 mot[i],
                 "jaune"
             );
 
-            lettresDisponibles[index] = null;
 
-        } else {
+            lettresDisponibles[
+                positionLettre
+            ] = null;
 
-            cases[debut + i].classList.add("gris");
+        }
+
+
+        // Gris
+
+        else {
+
+            cases[
+                debut + i
+            ].classList.add("gris");
+
 
             mettreAJourClavier(
                 mot[i],
                 "gris"
             );
+
         }
+
     }
 
 
@@ -397,51 +576,19 @@ function validerMot() {
 
     ligne++;
 
+
     if (ligne === 6) {
 
         window.location = "perdu.html";
 
-    } else {
+    }
+
+    else {
 
         debut += 5;
         position = 0;
-    }
-}
-```
 
-### Et il faut juste ajouter `touche.mp3`
-
-Mets **`touche.mp3` à côté de `Wordle1.mp3` et `Victory.mp3`** dans GitHub.
-
-Donc ton dossier doit être :
-
-```text
-Index.html
-Script.js
-style.css
-mots.txt
-Wordle1.mp3
-Victory.mp3
-touche.mp3
-perdu.html
-```
-
-Et dans le CSS, seulement ça :
-
-```css
-.touche-appuyee {
-    animation: touche 0.1s;
-}
-
-@keyframes touche {
-
-    50% {
-        transform: translateY(3px);
     }
 
 }
 ```
-
-**C'est tout.**
-
-Et surtout, avec cette version, **on ne bloque aucune lettre**. Même une touche grise peut être tapée normalement. On ajoutera l'enrayement après, une fois qu'on sait que l'écriture fonctionne.
