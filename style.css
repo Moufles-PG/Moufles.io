@@ -1,577 +1,752 @@
-```javascript
-// =========================
-// ÉLÉMENTS
-// =========================
+```css
+/* =========================================
+   POLICES
+   ========================================= */
 
-let cases = document.querySelectorAll(".case");
-let touches = document.querySelectorAll(".touche");
-
-let message = document.querySelector("#message");
-
-let musiqueJeu = document.querySelector("#musiqueJeu");
-let musiqueVictoire = document.querySelector("#musiqueVictoire");
+@import url(
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
+);
 
 
-// =========================
-// VARIABLES
-// =========================
+/* =========================================
+   BASE
+   ========================================= */
 
-let position = 0;
-let ligne = 0;
-let debut = 0;
+* {
+    box-sizing: border-box;
+}
 
-let mots = [];
-let motSecret = "";
+body {
 
-let partieTerminee = false;
+    margin: 0;
 
-let motChoisi = "";
+    min-height: 100vh;
 
+    background:
+        radial-gradient(
+            circle at center,
+            #faf7ed 0%,
+            #f2ecdc 70%,
+            #e8dfcc 100%
+        );
 
-// =========================
-// MUSIQUE
-// =========================
+    color: #29261f;
 
-musiqueJeu.volume = 0.15;
-musiqueVictoire.volume = 0.25;
+    font-family:
+        "Special Elite",
+        monospace;
 
+    display: flex;
 
-// =========================
-// SONS
-// =========================
+    flex-direction: column;
 
-let sonGood = new Audio("Good.mp3");
-let sonFalse = new Audio("False.mp3");
+    align-items: center;
 
-sonGood.volume = 0.15;
-sonFalse.volume = 0.15;
-
-
-// =========================
-// ACCENTS
-// =========================
-
-function enleverAccents(texte) {
-
-    return texte
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+    padding: 45px 20px;
 
 }
 
 
-// =========================
-// MESSAGE
-// =========================
+/* =========================================
+   EFFET PAPIER
+   ========================================= */
 
-function afficherMessage(texte) {
+body::before {
 
-    message.textContent = texte;
-    message.style.opacity = "1";
+    content: "";
 
-    setTimeout(function() {
-        message.style.opacity = "0";
-    }, 1500);
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.08;
+
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(80, 65, 40, 0.08) 0px,
+            rgba(80, 65, 40, 0.08) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+
+    z-index: 10;
 
 }
 
 
-// =========================
-// CLAVIER
-// =========================
+/* =========================================
+   TITRE
+   ========================================= */
 
-function mettreAJourClavier(lettre, couleur) {
+h1 {
 
-    touches.forEach(function(touche) {
+    margin: 0;
 
-        if (touche.textContent !== lettre) {
-            return;
-        }
+    font-family:
+        "Cinzel",
+        serif;
 
-        if (couleur === "vert") {
+    font-size: 4rem;
 
-            touche.classList.remove("jaune");
-            touche.classList.remove("gris");
+    font-weight: 600;
 
-            touche.classList.add("vert");
+    letter-spacing: 0.12em;
 
-        }
+    color: #29261f;
 
-        else if (couleur === "jaune") {
+    text-align: center;
 
-            if (!touche.classList.contains("vert")) {
+    position: relative;
 
-                touche.classList.remove("gris");
-                touche.classList.add("jaune");
-
-            }
-
-        }
-
-        else if (couleur === "gris") {
-
-            if (
-                !touche.classList.contains("vert") &&
-                !touche.classList.contains("jaune")
-            ) {
-
-                touche.classList.add("gris");
-
-            }
-
-        }
-
-    });
+    text-shadow:
+        1px 1px 0
+        rgba(255, 255, 255, 0.5);
 
 }
 
 
-// =========================
-// ANIMATION TOUCHE
-// =========================
+h1::after {
 
-function animerTouche(lettre) {
+    content: "◇";
 
-    touches.forEach(function(touche) {
+    display: block;
 
-        if (touche.textContent === lettre) {
+    font-size: 0.9rem;
 
-            touche.classList.remove("touche-appuyee");
+    margin-top: 8px;
 
-            void touche.offsetWidth;
+    color: #75694f;
 
-            touche.classList.add("touche-appuyee");
-
-        }
-
-    });
+    letter-spacing: 0;
 
 }
 
 
-// =========================
-// ÉCRIRE UNE LETTRE
-// =========================
+/* =========================================
+   MESSAGE
+   ========================================= */
 
-function ecrireLettre(lettre) {
+#message {
 
-    if (partieTerminee) {
-        return;
-    }
+    height: 30px;
 
-    if (position >= 5) {
-        return;
-    }
+    margin-top: 15px;
 
+    font-family:
+        "Special Elite",
+        monospace;
 
-    // Écrire
+    font-size: 1rem;
 
-    cases[debut + position].textContent = lettre;
+    color: #514a3d;
 
+    opacity: 0;
 
-    // Animation de la case
-
-    cases[debut + position].classList.remove(
-        "letter-animation"
-    );
-
-    void cases[debut + position].offsetWidth;
-
-    cases[debut + position].classList.add(
-        "letter-animation"
-    );
-
-
-    // Animation du clavier
-
-    animerTouche(lettre);
-
-
-    // Petit son
-
-    sonGood.currentTime = 0;
-    sonGood.play();
-
-
-    // Musique du jeu
-
-    if (musiqueJeu.paused) {
-
-        musiqueJeu.play().catch(function(erreur) {
-
-            console.log(erreur);
-
-        });
-
-    }
-
-
-    position++;
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
 
 }
 
 
-// =========================
-// CLAVIER PHYSIQUE
-// =========================
+/* =========================================
+   JEU
+   ========================================= */
 
-document.addEventListener("keydown", function(event) {
+.jeu {
 
-    if (partieTerminee) {
-        return;
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 100%;
+
+    max-width: 620px;
+
+    margin-top: 15px;
+
+}
+
+
+/* =========================================
+   GRILLE
+   ========================================= */
+
+.grille {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+    padding: 20px;
+
+}
+
+
+.ligne {
+
+    display: flex;
+
+    gap: 9px;
+
+}
+
+
+/* =========================================
+   CASES
+   ========================================= */
+
+.case {
+
+    width: 68px;
+
+    height: 68px;
+
+    border:
+        1px solid #aaa08b;
+
+    background:
+        rgba(255, 252, 242, 0.45);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-family:
+        "Special Elite",
+        monospace;
+
+    font-size: 2rem;
+
+    color: #29261f;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.2s ease;
+
+}
+
+
+.case:not(:empty) {
+
+    border-color: #6f6758;
+
+    background:
+        rgba(255, 252, 242, 0.8);
+
+}
+
+
+/* =========================================
+   COULEURS
+   ========================================= */
+
+.case.vert {
+
+    background: #65745b;
+
+    border-color: #65745b;
+
+    color: #fffdf5;
+
+}
+
+
+.case.jaune {
+
+    background: #b69a5a;
+
+    border-color: #b69a5a;
+
+    color: #fffdf5;
+
+}
+
+
+.case.gris {
+
+    background: #625f57;
+
+    border-color: #625f57;
+
+    color: #f7f2e7;
+
+}
+
+
+/* =========================================
+   ANIMATION LETTRE
+   ========================================= */
+
+.letter-animation {
+
+    animation:
+        apparitionLettre
+        0.15s
+        ease-out;
+
+}
+
+
+@keyframes apparitionLettre {
+
+    0% {
+
+        transform: scale(0.8);
+
     }
 
+    70% {
 
-    // Lettre
+        transform: scale(1.08);
 
-    if (event.key.length === 1) {
+    }
 
-        let lettre = enleverAccents(
-            event.key.toUpperCase()
+    100% {
+
+        transform: scale(1);
+
+    }
+
+}
+
+
+/* =========================================
+   VICTOIRE
+   ========================================= */
+
+.case.victoire {
+
+    animation:
+        victoire
+        0.55s
+        ease-in-out;
+
+}
+
+
+@keyframes victoire {
+
+    0% {
+
+        transform:
+            translateY(0)
+            rotate(0);
+
+    }
+
+    35% {
+
+        transform:
+            translateY(-10px)
+            rotate(-2deg);
+
+    }
+
+    70% {
+
+        transform:
+            translateY(3px)
+            rotate(1deg);
+
+    }
+
+    100% {
+
+        transform:
+            translateY(0)
+            rotate(0);
+
+    }
+
+}
+
+
+/* =========================================
+   CLAVIER
+   ========================================= */
+
+#clavier {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 15px;
+
+    width: 100%;
+
+}
+
+
+.ligne-clavier {
+
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 6px;
+
+    justify-content: center;
+
+    width: 100%;
+
+}
+
+
+/* =========================================
+   TOUCHES
+   ========================================= */
+
+.touche {
+
+    width: 48px;
+
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eee7d7,
+            #dcd3c0
         );
 
-        if (/^[A-Z]$/.test(lettre)) {
+    border:
+        1px solid #aaa08d;
 
-            ecrireLettre(lettre);
+    border-radius: 4px;
 
-        }
+    box-shadow:
+        0 2px 0 #a49a86,
+        0 3px 5px
+        rgba(60, 50, 35, 0.15);
 
-        return;
-    }
+    font-family:
+        "Special Elite",
+        monospace;
 
+    font-size: 1.05rem;
 
-    // Effacer
+    color: #312e27;
 
-    if (event.key === "Backspace") {
+    transition:
+        transform 0.08s ease,
+        box-shadow 0.08s ease,
+        background 0.2s ease,
+        color 0.2s ease;
 
-        if (position > 0) {
+}
 
-            position--;
 
-            cases[
-                debut + position
-            ].textContent = "";
+/* =========================================
+   TOUCHE ENFONCÉE
+   ========================================= */
 
-        }
+.touche-appuyee {
 
-        return;
-    }
+    animation:
+        frappeTouche
+        0.12s
+        ease-out;
 
+}
 
-    // Valider
 
-    if (event.key === "Enter") {
+@keyframes frappeTouche {
 
-        validerMot();
+    0% {
 
-    }
+        transform: translateY(0);
 
-});
-
-
-// =========================
-// CLAVIER VIRTUEL
-// =========================
-
-touches.forEach(function(touche) {
-
-    touche.addEventListener("click", function() {
-
-        ecrireLettre(
-            touche.textContent
-        );
-
-    });
-
-});
-
-
-// =========================
-// CHARGER LES MOTS
-// =========================
-
-fetch("mots.txt")
-
-    .then(function(response) {
-
-        return response.text();
-
-    })
-
-    .then(function(texte) {
-
-        mots = texte
-            .split(/\r?\n/)
-            .map(function(mot) {
-
-                return enleverAccents(
-                    mot.trim().toUpperCase()
-                );
-
-            })
-            .filter(function(mot) {
-
-                return mot.length === 5;
-
-            });
-
-
-        console.log(
-            "Mots chargés :",
-            mots.length
-        );
-
-
-        // Choisir le mot
-
-        if (motChoisi === "") {
-
-            motSecret =
-                mots[
-                    Math.floor(
-                        Math.random() * mots.length
-                    )
-                ];
-
-        }
-
-        else {
-
-            motSecret =
-                enleverAccents(
-                    motChoisi.toUpperCase()
-                );
-
-        }
-
-
-        console.log(
-            "Mot secret :",
-            motSecret
-        );
-
-    })
-
-    .catch(function(erreur) {
-
-        console.error(
-            "Erreur avec mots.txt :",
-            erreur
-        );
-
-    });
-
-
-// =========================
-// VALIDER LE MOT
-// =========================
-
-function validerMot() {
-
-    if (partieTerminee) {
-        return;
-    }
-
-
-    // Pas assez de lettres
-
-    if (position < 5) {
-
-        afficherMessage(
-            "Pas assez de lettres."
-        );
-
-        return;
-    }
-
-
-    // Construire le mot
-
-    let mot = "";
-
-    for (let i = 0; i < 5; i++) {
-
-        mot +=
-            cases[
-                debut + i
-            ].textContent;
+        box-shadow:
+            0 2px 0 #a49a86,
+            0 3px 5px
+            rgba(60, 50, 35, 0.15);
 
     }
 
+    45% {
 
-    // Mot inexistant
+        transform: translateY(3px);
 
-    if (!mots.includes(mot)) {
+        box-shadow:
+            0 0 0 #a49a86,
+            0 1px 2px
+            rgba(60, 50, 35, 0.12);
 
-        afficherMessage(
-            "Ce mot n'existe pas"
-        );
-
-        return;
     }
 
+    100% {
 
-    // =========================
-    // VICTOIRE
-    // =========================
+        transform: translateY(0);
 
-    if (mot === motSecret) {
+        box-shadow:
+            0 2px 0 #a49a86,
+            0 3px 5px
+            rgba(60, 50, 35, 0.15);
 
-        partieTerminee = true;
-
-
-        musiqueJeu.pause();
-        musiqueJeu.currentTime = 0;
-
-
-        musiqueVictoire.currentTime = 0;
-
-        musiqueVictoire.play();
-
-
-        for (let i = 0; i < 5; i++) {
-
-            cases[
-                debut + i
-            ].classList.add("vert");
-
-
-            mettreAJourClavier(
-                mot[i],
-                "vert"
-            );
-
-
-            setTimeout(function() {
-
-                cases[
-                    debut + i
-                ].classList.add("victoire");
-
-            }, i * 100);
-
-        }
-
-
-        return;
     }
 
-
-    // =========================
-    // MAUVAIS MOT
-    // =========================
-
-    let lettresDisponibles =
-        motSecret.split("");
+}
 
 
-    // Lettres vertes
+/* =========================================
+   ENRAYEMENT
+   ========================================= */
 
-    for (let i = 0; i < 5; i++) {
+.touche.gris.touche-appuyee {
 
-        if (
-            mot[i] === motSecret[i]
-        ) {
+    animation:
+        enrayement
+        0.18s
+        ease-in-out;
 
-            cases[
-                debut + i
-            ].classList.add("vert");
-
-
-            mettreAJourClavier(
-                mot[i],
-                "vert"
-            );
+}
 
 
-            lettresDisponibles[i] = null;
+@keyframes enrayement {
 
-        }
+    0% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-3px);
+    }
+
+    40% {
+        transform: translateX(3px);
+    }
+
+    60% {
+        transform: translateX(-2px);
+    }
+
+    80% {
+        transform: translateX(2px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+
+}
+
+
+/* =========================================
+   COULEURS DU CLAVIER
+   ========================================= */
+
+.touche.vert {
+
+    background: #65745b;
+
+    border-color: #596650;
+
+    color: #fffdf5;
+
+    box-shadow:
+        0 2px 0 #4f5948;
+
+}
+
+
+.touche.jaune {
+
+    background: #b69a5a;
+
+    border-color: #a3874d;
+
+    color: #fffdf5;
+
+    box-shadow:
+        0 2px 0 #8d7542;
+
+}
+
+
+.touche.gris {
+
+    background: #625f57;
+
+    border-color: #55524b;
+
+    color: #eee9dc;
+
+    box-shadow:
+        0 2px 0 #484640;
+
+}
+
+
+/* =========================================
+   PAGE PERDUE
+   ========================================= */
+
+.page-perdue {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 30px;
+
+}
+
+
+.page-perdue h1 {
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 4rem;
+
+    margin: 0;
+
+}
+
+
+.page-perdue h1::after {
+
+    content: "◇";
+
+    display: block;
+
+    font-size: 0.9rem;
+
+    margin-top: 8px;
+
+    color: #75694f;
+
+}
+
+
+.page-perdue p {
+
+    margin-top: 25px;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 1.4rem;
+
+    color: #514a3d;
+
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 25px 10px;
 
     }
 
 
-    // Jaune / gris
+    h1 {
 
-    for (let i = 0; i < 5; i++) {
-
-        if (
-            mot[i] === motSecret[i]
-        ) {
-
-            continue;
-
-        }
-
-
-        let positionLettre =
-            lettresDisponibles.indexOf(
-                mot[i]
-            );
-
-
-        // Jaune
-
-        if (positionLettre !== -1) {
-
-            cases[
-                debut + i
-            ].classList.add("jaune");
-
-
-            mettreAJourClavier(
-                mot[i],
-                "jaune"
-            );
-
-
-            lettresDisponibles[
-                positionLettre
-            ] = null;
-
-        }
-
-
-        // Gris
-
-        else {
-
-            cases[
-                debut + i
-            ].classList.add("gris");
-
-
-            mettreAJourClavier(
-                mot[i],
-                "gris"
-            );
-
-
-            // Petit son d'enrayement
-
-            sonFalse.currentTime = 0;
-            sonFalse.play();
-
-        }
+        font-size: 2.7rem;
 
     }
 
 
-    // Ligne suivante
+    .grille {
 
-    ligne++;
+        gap: 6px;
 
-
-    if (ligne === 6) {
-
-        window.location = "perdu.html";
+        padding: 10px;
 
     }
 
-    else {
 
-        debut += 5;
-        position = 0;
+    .ligne {
+
+        gap: 6px;
+
+    }
+
+
+    .case {
+
+        width: 57px;
+
+        height: 57px;
+
+        font-size: 1.7rem;
+
+    }
+
+
+    .touche {
+
+        width: 34px;
+
+        height: 46px;
+
+        font-size: 0.85rem;
+
+    }
+
+
+    .ligne-clavier {
+
+        gap: 4px;
+
+    }
+
+
+    .page-perdue h1 {
+
+        font-size: 2.7rem;
+
+    }
+
+
+    .page-perdue p {
+
+        font-size: 1.1rem;
 
     }
 
