@@ -1,82 +1,649 @@
+@import url(
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
+);
 
-function ecrireLettre(lettre) {
 
-    if (partieTerminee) {
-        return;
+/* =========================
+   BASE
+   ========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #faf7ed 0%,
+            #f2ecdc 70%,
+            #e8dfcc 100%
+        );
+
+    color: #29261f;
+
+    font-family: "Special Elite", monospace;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 45px 20px;
+
+}
+
+
+/* =========================
+   EFFET PAPIER
+   ========================= */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0.08;
+
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            rgba(80, 65, 40, 0.08) 0px,
+            rgba(80, 65, 40, 0.08) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+
+}
+
+
+/* =========================
+   TITRE
+   ========================= */
+
+h1 {
+
+    margin: 0;
+
+    font-family: "Cinzel", serif;
+
+    font-size: 4rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.12em;
+
+    color: #29261f;
+
+    text-align: center;
+
+}
+
+
+h1::after {
+
+    content: "◇";
+
+    display: block;
+
+    font-size: 0.9rem;
+
+    margin-top: 8px;
+
+    color: #75694f;
+
+}
+
+
+/* =========================
+   MESSAGE
+   ========================= */
+
+#message {
+
+    height: 30px;
+
+    margin-top: 15px;
+
+    font-size: 1rem;
+
+    color: #514a3d;
+
+    opacity: 0;
+
+    transition: opacity 0.25s ease;
+
+}
+
+
+/* =========================
+   JEU
+   ========================= */
+
+.jeu {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 100%;
+
+    max-width: 620px;
+
+    margin-top: 15px;
+
+}
+
+
+/* =========================
+   GRILLE
+   ========================= */
+
+.grille {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+    padding: 20px;
+
+}
+
+
+.ligne {
+
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 9px;
+
+}
+
+
+.case {
+
+    width: 68px;
+
+    height: 68px;
+
+    flex-shrink: 0;
+
+    border: 1px solid #aaa08b;
+
+    background: rgba(255, 252, 242, 0.45);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-family: "Special Elite", monospace;
+
+    font-size: 2rem;
+
+    color: #29261f;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.2s ease;
+
+}
+
+
+.case:not(:empty) {
+
+    border-color: #6f6758;
+
+    background: rgba(255, 252, 242, 0.8);
+
+}
+
+
+.case.vert {
+
+    background: #65745b;
+
+    border-color: #65745b;
+
+    color: #fffdf5;
+
+}
+
+
+.case.jaune {
+
+    background: #b69a5a;
+
+    border-color: #b69a5a;
+
+    color: #fffdf5;
+
+}
+
+
+.case.gris {
+
+    background: #625f57;
+
+    border-color: #625f57;
+
+    color: #f7f2e7;
+
+}
+
+
+/* =========================
+   ANIMATION LETTRE
+   ========================= */
+
+.letter-animation {
+
+    animation: apparitionLettre 0.15s ease-out;
+
+}
+
+
+@keyframes apparitionLettre {
+
+    0% {
+        transform: scale(0.8);
     }
 
-    if (position >= 5) {
-        return;
+    70% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================
+   VICTOIRE
+   ========================= */
+
+.case.victoire {
+
+    animation: victoire 0.55s ease-in-out;
+
+}
+
+
+@keyframes victoire {
+
+    0% {
+        transform: translateY(0) rotate(0);
+    }
+
+    35% {
+        transform: translateY(-10px) rotate(-2deg);
+    }
+
+    70% {
+        transform: translateY(3px) rotate(1deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0);
+    }
+
+}
+
+
+/* =========================
+   CLAVIER
+   ========================= */
+
+#clavier {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 15px;
+
+    width: 100%;
+
+}
+
+
+.ligne-clavier {
+
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 6px;
+
+    justify-content: center;
+
+    width: 100%;
+
+}
+
+
+.touche {
+
+    width: 48px;
+
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eee7d7,
+            #dcd3c0
+        );
+
+    border: 1px solid #aaa08d;
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 2px 0 #a49a86,
+        0 3px 5px rgba(60, 50, 35, 0.15);
+
+    font-family: "Special Elite", monospace;
+
+    font-size: 1.05rem;
+
+    color: #312e27;
+
+}
+
+
+.touche-appuyee {
+
+    animation: frappeTouche 0.12s ease-out;
+
+}
+
+
+@keyframes frappeTouche {
+
+    0% {
+        transform: translateY(0);
+    }
+
+    45% {
+        transform: translateY(3px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================
+   ENRAYEMENT
+   ========================= */
+
+.touche.gris.touche-appuyee {
+
+    animation: enrayement 0.18s ease-in-out;
+
+}
+
+
+@keyframes enrayement {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-3px);
+    }
+
+    40% {
+        transform: translateX(3px);
+    }
+
+    60% {
+        transform: translateX(-2px);
+    }
+
+    80% {
+        transform: translateX(2px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+
+}
+
+
+/* =========================
+   COULEURS CLAVIER
+   ========================= */
+
+.touche.vert {
+
+    background: #65745b;
+
+    border-color: #596650;
+
+    color: #fffdf5;
+
+}
+
+
+.touche.jaune {
+
+    background: #b69a5a;
+
+    border-color: #a3874d;
+
+    color: #fffdf5;
+
+}
+
+
+.touche.gris {
+
+    background: #625f57;
+
+    border-color: #55524b;
+
+    color: #eee9dc;
+
+}
+
+
+/* =========================
+   ÉCRAN DE DÉFAITE
+   ========================= */
+
+#ecranDefaite {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    background: rgba(242, 236, 220, 0.96);
+
+    z-index: 100;
+
+}
+
+
+.defaite-contenu {
+
+    font-family: "Cinzel", serif;
+
+}
+
+
+.defaite-contenu h2 {
+
+    margin: 0;
+
+    font-size: 4.5rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.12em;
+
+}
+
+
+.defaite-contenu h2::after {
+
+    content: "◇";
+
+    display: block;
+
+    font-size: 0.9rem;
+
+    margin-top: 8px;
+
+    color: #75694f;
+
+}
+
+
+.defaite-contenu p {
+
+    margin: 30px 0 8px;
+
+    font-size: 1.1rem;
+
+}
+
+
+#motPerdu {
+
+    font-family: "Special Elite", monospace;
+
+    font-size: 2rem;
+
+    letter-spacing: 0.15em;
+
+}
+
+
+#boutonRejouer {
+
+    margin-top: 35px;
+
+    padding: 13px 30px;
+
+    background: #65745b;
+
+    border: 1px solid #596650;
+
+    color: #fffdf5;
+
+    font-family: "Cinzel", serif;
+
+    font-size: 1rem;
+
+    letter-spacing: 0.08em;
+
+    cursor: pointer;
+
+    border-radius: 3px;
+
+    box-shadow: 0 3px 0 #4f5948;
+
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 25px 10px;
     }
 
 
-    // Chercher la touche correspondante
-
-    let touche = null;
-
-    touches.forEach(function(element) {
-
-        if (element.textContent === lettre) {
-            touche = element;
-        }
-
-    });
-
-
-    // Si la lettre est déjà connue comme fausse
-
-    if (
-        touche &&
-        touche.classList.contains("gris")
-    ) {
-
-        sonFalse.currentTime = 0;
-        sonFalse.play().catch(function() {});
-
-    }
-
-    // Sinon : son normal
-
-    else {
-
-        sonGood.currentTime = 0;
-        sonGood.play().catch(function() {});
-
+    h1 {
+        font-size: 2.7rem;
     }
 
 
-    // Écrire la lettre
-
-    cases[debut + position].textContent = lettre;
-
-
-    // Animation de la case
-
-    cases[debut + position].classList.remove(
-        "letter-animation"
-    );
-
-    void cases[debut + position].offsetWidth;
-
-    cases[debut + position].classList.add(
-        "letter-animation"
-    );
-
-
-    // Animation du clavier
-
-    animerTouche(lettre);
-
-
-    // Musique du jeu
-
-    if (musiqueJeu.paused) {
-
-        musiqueJeu.play().catch(function() {});
-
+    .grille {
+        gap: 6px;
+        padding: 10px;
     }
 
 
-    position++;
+    .ligne {
+        gap: 6px;
+    }
+
+
+    .case {
+        width: 57px;
+        height: 57px;
+        font-size: 1.7rem;
+    }
+
+
+    .touche {
+        width: 34px;
+        height: 46px;
+        font-size: 0.85rem;
+    }
+
+
+    .ligne-clavier {
+        gap: 4px;
+    }
+
+
+    .defaite-contenu h2 {
+        font-size: 3rem;
+    }
 
 }
