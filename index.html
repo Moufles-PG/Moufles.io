@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -7,7 +8,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Motle</title>
+    <title>Wowdle</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -21,7 +22,9 @@
     <div id="message"></div>
 
 
-    <!-- MUSIQUES -->
+    <!-- =========================
+         MUSIQUES
+         ========================= -->
 
     <audio id="musiqueJeu" loop>
         <source src="Wordle1.mp3" type="audio/mpeg">
@@ -36,7 +39,9 @@
     </audio>
 
 
-    <!-- JEU -->
+    <!-- =========================
+         JEU
+         ========================= -->
 
     <div class="jeu">
 
@@ -96,7 +101,9 @@
         </div>
 
 
-        <!-- CLAVIER -->
+        <!-- =========================
+             CLAVIER AZERTY
+             ========================= -->
 
         <div id="clavier">
 
@@ -148,17 +155,19 @@
     </div>
 
 
-    <!-- ÉCRAN DE DÉFAITE -->
+    <!-- =========================
+         ÉCRAN DE FIN
+         ========================= -->
 
-    <div id="ecranDefaite">
+    <div id="ecranFin">
 
-        <div class="defaite-contenu">
+        <div class="fin-contenu">
 
-            <h2>PERDU</h2>
+            <h2 id="titreFin"></h2>
 
-            <p>Le mot était :</p>
+            <p id="texteFin"></p>
 
-            <div id="motPerdu"></div>
+            <div id="motFin"></div>
 
             <button id="boutonRejouer">
                 REJOUER
@@ -174,3 +183,4 @@
 </body>
 
 </html>
+```
