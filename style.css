@@ -1,8 +1,11 @@
+```css
 /* =========================================
    POLICES
    ========================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap');
+@import url(
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
+);
 
 
 /* =========================================
@@ -29,10 +32,14 @@ body {
 
     color: #29261f;
 
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
 
     padding: 45px 20px;
@@ -48,7 +55,9 @@ h1 {
 
     margin: 0;
 
-    font-family: "Cinzel", serif;
+    font-family:
+        "Cinzel",
+        serif;
 
     font-size: 4rem;
 
@@ -63,12 +72,11 @@ h1 {
     position: relative;
 
     text-shadow:
-        1px 1px 0 rgba(255,255,255,0.5);
+        1px 1px 0
+        rgba(255,255,255,0.5);
 
 }
 
-
-/* Petite décoration sous le titre */
 
 h1::after {
 
@@ -97,7 +105,9 @@ h1::after {
 
     margin-top: 15px;
 
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     font-size: 1rem;
 
@@ -150,10 +160,6 @@ h1::after {
 }
 
 
-/* =========================================
-   LIGNES
-   ========================================= */
-
 .ligne {
 
     display: flex;
@@ -173,9 +179,16 @@ h1::after {
 
     height: 68px;
 
-    border: 1px solid #aaa08b;
+    border:
+        1px solid #aaa08b;
 
-    background: rgba(255, 252, 242, 0.45);
+    background:
+        rgba(
+            255,
+            252,
+            242,
+            0.45
+        );
 
     display: flex;
 
@@ -183,7 +196,9 @@ h1::after {
 
     justify-content: center;
 
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     font-size: 2rem;
 
@@ -198,13 +213,17 @@ h1::after {
 }
 
 
-/* Une case contenant une lettre */
-
 .case:not(:empty) {
 
     border-color: #6f6758;
 
-    background: rgba(255, 252, 242, 0.8);
+    background:
+        rgba(
+            255,
+            252,
+            242,
+            0.8
+        );
 
 }
 
@@ -252,7 +271,10 @@ h1::after {
 
 .letter-animation {
 
-    animation: apparitionLettre 0.15s ease-out;
+    animation:
+        apparitionLettre
+        0.15s
+        ease-out;
 
 }
 
@@ -261,19 +283,22 @@ h1::after {
 
     0% {
 
-        transform: scale(0.8);
+        transform:
+            scale(0.8);
 
     }
 
     70% {
 
-        transform: scale(1.08);
+        transform:
+            scale(1.08);
 
     }
 
     100% {
 
-        transform: scale(1);
+        transform:
+            scale(1);
 
     }
 
@@ -286,7 +311,10 @@ h1::after {
 
 .case.victoire {
 
-    animation: victoire 0.55s ease-in-out;
+    animation:
+        victoire
+        0.55s
+        ease-in-out;
 
 }
 
@@ -295,25 +323,33 @@ h1::after {
 
     0% {
 
-        transform: translateY(0) rotate(0);
+        transform:
+            translateY(0)
+            rotate(0);
 
     }
 
     35% {
 
-        transform: translateY(-10px) rotate(-2deg);
+        transform:
+            translateY(-10px)
+            rotate(-2deg);
 
     }
 
     70% {
 
-        transform: translateY(3px) rotate(1deg);
+        transform:
+            translateY(3px)
+            rotate(1deg);
 
     }
 
     100% {
 
-        transform: translateY(0) rotate(0);
+        transform:
+            translateY(0)
+            rotate(0);
 
     }
 
@@ -340,10 +376,6 @@ h1::after {
 
 }
 
-
-/* =========================================
-   LIGNES DU CLAVIER
-   ========================================= */
 
 .ligne-clavier {
 
@@ -384,47 +416,164 @@ h1::after {
         );
 
     border:
-
         1px solid #aaa08d;
 
     border-radius: 4px;
 
     box-shadow:
-
         0 2px 0 #a49a86,
+        0 3px 5px
+        rgba(
+            60,
+            50,
+            35,
+            0.15
+        );
 
-        0 3px 5px rgba(60, 50, 35, 0.15);
-
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     font-size: 1.05rem;
 
     color: #312e27;
 
     transition:
-
         transform 0.08s ease,
-
         box-shadow 0.08s ease,
-
         background 0.2s ease,
-
         color 0.2s ease;
 
 }
 
 
-/* Effet pression */
+/* =========================================
+   TOUCHE ENFONCÉE
+   ========================================= */
 
-.touche:active {
+.touche-appuyee {
 
-    transform: translateY(2px);
+    animation:
+        frappeTouche
+        0.12s
+        ease-out;
 
-    box-shadow:
+}
 
-        0 0 0 #a49a86,
 
-        0 1px 2px rgba(60, 50, 35, 0.15);
+@keyframes frappeTouche {
+
+    0% {
+
+        transform:
+            translateY(0);
+
+        box-shadow:
+            0 2px 0 #a49a86,
+            0 3px 5px
+            rgba(
+                60,
+                50,
+                35,
+                0.15
+            );
+
+    }
+
+    45% {
+
+        transform:
+            translateY(3px);
+
+        box-shadow:
+            0 0 0 #a49a86,
+            0 1px 2px
+            rgba(
+                60,
+                50,
+                35,
+                0.12
+            );
+
+    }
+
+    100% {
+
+        transform:
+            translateY(0);
+
+        box-shadow:
+            0 2px 0 #a49a86,
+            0 3px 5px
+            rgba(
+                60,
+                50,
+                35,
+                0.15
+            );
+
+    }
+
+}
+
+
+/* =========================================
+   ENRAYEMENT
+   ========================================= */
+
+.touche.gris.touche-appuyee {
+
+    animation:
+        enrayement
+        0.18s
+        ease-in-out;
+
+}
+
+
+@keyframes enrayement {
+
+    0% {
+
+        transform:
+            translateX(0);
+
+    }
+
+    20% {
+
+        transform:
+            translateX(-3px);
+
+    }
+
+    40% {
+
+        transform:
+            translateX(3px);
+
+    }
+
+    60% {
+
+        transform:
+            translateX(-2px);
+
+    }
+
+    80% {
+
+        transform:
+            translateX(2px);
+
+    }
+
+    100% {
+
+        transform:
+            translateX(0);
+
+    }
 
 }
 
@@ -442,7 +591,6 @@ h1::after {
     color: #fffdf5;
 
     box-shadow:
-
         0 2px 0 #4f5948;
 
 }
@@ -457,7 +605,6 @@ h1::after {
     color: #fffdf5;
 
     box-shadow:
-
         0 2px 0 #8d7542;
 
 }
@@ -472,14 +619,13 @@ h1::after {
     color: #eee9dc;
 
     box-shadow:
-
         0 2px 0 #484640;
 
 }
 
 
 /* =========================================
-   PETIT EFFET "PAPIER"
+   PAPIER
    ========================================= */
 
 body::before {
@@ -497,8 +643,18 @@ body::before {
     background-image:
         repeating-linear-gradient(
             0deg,
-            rgba(80, 65, 40, 0.08) 0px,
-            rgba(80, 65, 40, 0.08) 1px,
+            rgba(
+                80,
+                65,
+                40,
+                0.08
+            ) 0px,
+            rgba(
+                80,
+                65,
+                40,
+                0.08
+            ) 1px,
             transparent 1px,
             transparent 4px
         );
@@ -514,14 +670,16 @@ body::before {
 
     body {
 
-        padding: 25px 10px;
+        padding:
+            25px 10px;
 
     }
 
 
     h1 {
 
-        font-size: 2.7rem;
+        font-size:
+            2.7rem;
 
     }
 
@@ -571,3 +729,4 @@ body::before {
     }
 
 }
+```
