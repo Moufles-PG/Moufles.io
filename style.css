@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
+
+
+/* =========================
+   BASE
+   ========================= */
+
+* {
+    box-sizing: border-box;
+    font-family: "Cinzel", serif;
+}
+
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+
+/* =========================
+   TITRE
+   ========================= */
+
+h1 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+
+    font-size: 32px;
+}
+
+
+/* =========================
+   MESSAGE
+   ========================= */
+
+#message {
+    height: 30px;
+
+    margin-bottom: 10px;
+
+    font-weight: bold;
+
+    opacity: 0;
+
+    transition: opacity 0.3s;
+}
+
+
+/* =========================
+   JEU
+   ========================= */
+
+.jeu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* =========================
+   GRILLE
+   ========================= */
+
+.grille {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    align-items: center;
+}
+
+
+.ligne {
+    display: flex;
+
+    gap: 5px;
+}
+
+
+/* =========================
+   CASES
+   ========================= */
+
+.case {
+    width: 70px;
+    height: 70px;
+
+    border: 2px solid #999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 38px;
+    font-weight: 700;
+
+    background-color: white;
+
+    transition:
+        background-color 0.2s,
+        transform 0.2s;
+}
+
+
+/* =========================
+   ANIMATION LETTRE
+   ========================= */
+
+.case.letter-animation {
+    animation: apparition 0.15s;
+}
+
+
+@keyframes apparition {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================
+   COULEURS CASES
+   ========================= */
+
+.case.vert {
+    background-color: #4caf50;
+    border-color: #4caf50;
+    color: white;
+}
+
+
+.case.jaune {
+    background-color: #d6b900;
+    border-color: #d6b900;
+    color: white;
+}
+
+
+.case.gris {
+    background-color: #777;
+    border-color: #777;
+    color: white;
+}
+
+
+/* =========================
+   CLAVIER
+   ========================= */
+
+#clavier {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 30px;
+}
+
+
+.ligne-clavier {
+    display: flex;
+
+    gap: 5px;
+}
+
+
+/* =========================
+   TOUCHES
+   ========================= */
+
+.touche {
+    width: 45px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #aaa;
+    border-radius: 5px;
+
+    background-color: #d3d3d3;
+
+    color: black;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    user-select: none;
+
+    transition:
+        background-color 0.2s,
+        transform 0.1s,
+        opacity 0.2s;
+}
+
+
+.touche:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================
+   CLAVIER VERT
+   ========================= */
+
+.touche.vert {
+    background-color: #4caf50;
+
+    border-color: #4caf50;
+
+    color: white;
+}
+
+
+/* =========================
+   CLAVIER JAUNE
+   ========================= */
+
+.touche.jaune {
+    background-color: #d6b900;
+
+    border-color: #d6b900;
+
+    color: white;
+}
+
+
+/* =========================
+   CLAVIER GRIS
+   ========================= */
+
+.touche.gris {
+    background-color: #555;
+
+    border-color: #555;
+
+    color: white;
+
+    opacity: 0.5;
+}
+
+
+/* =========================
+   VICTOIRE
+   ========================= */
+
+.case.victoire {
+    animation:
+        victoire
+        0.8s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes victoire {
+
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    20% {
+        transform: translateY(-20px) rotate(-3deg);
+    }
+
+    40% {
+        transform: translateY(0) rotate(3deg);
+    }
+
+    60% {
+        transform: translateY(-10px) rotate(-2deg);
+    }
+
+    80% {
+        transform: translateY(0) rotate(1deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+}

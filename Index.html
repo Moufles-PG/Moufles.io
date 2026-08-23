@@ -1,0 +1,141 @@
+    <!DOCTYPE html>
+    <html lang="fr">
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <title>Mon Wordle</title>
+
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+
+
+    <body>
+
+        <h1>Mon Wordle</h1>
+
+        <div id="message"></div>
+
+
+        <!-- MUSIQUES -->
+
+        <audio id="musiqueJeu" loop>
+            <source src="/Wordle1.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="musiqueVictoire" loop>
+            <source src="/Victory.mp3" type="audio/mpeg">
+        </audio>
+
+
+        <!-- JEU -->
+
+        <div class="jeu">
+
+
+            <!-- GRILLE DU WORDLE -->
+
+            <div class="grille">
+
+                <div class="ligne">
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                </div>
+
+                <div class="ligne">
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                </div>
+
+                <div class="ligne">
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                </div>
+
+                <div class="ligne">
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                </div>
+
+                <div class="ligne">
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                </div>
+
+                <div class="ligne">
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                    <div class="case"></div>
+                </div>
+
+            </div>
+
+
+            <!-- CLAVIER AZERTY -->
+
+            <div id="clavier">
+
+                <div class="ligne-clavier">
+                    <div class="touche">A</div>
+                    <div class="touche">Z</div>
+                    <div class="touche">E</div>
+                    <div class="touche">R</div>
+                    <div class="touche">T</div>
+                    <div class="touche">Y</div>
+                    <div class="touche">U</div>
+                    <div class="touche">I</div>
+                    <div class="touche">O</div>
+                    <div class="touche">P</div>
+                </div>
+
+                <div class="ligne-clavier">
+                    <div class="touche">Q</div>
+                    <div class="touche">S</div>
+                    <div class="touche">D</div>
+                    <div class="touche">F</div>
+                    <div class="touche">G</div>
+                    <div class="touche">H</div>
+                    <div class="touche">J</div>
+                    <div class="touche">K</div>
+                    <div class="touche">L</div>
+                    <div class="touche">M</div>
+                </div>
+
+                <div class="ligne-clavier">
+                    <div class="touche">W</div>
+                    <div class="touche">X</div>
+                    <div class="touche">C</div>
+                    <div class="touche">V</div>
+                    <div class="touche">B</div>
+                    <div class="touche">N</div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script src="script.js"></script>
+
+    </body>
+
+    </html>
