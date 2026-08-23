@@ -1,730 +1,577 @@
-```css
-/* =========================================
-   POLICES
-   ========================================= */
+```javascript
+// =========================
+// ÉLÉMENTS
+// =========================
 
-@import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
-);
+let cases = document.querySelectorAll(".case");
+let touches = document.querySelectorAll(".touche");
+
+let message = document.querySelector("#message");
+
+let musiqueJeu = document.querySelector("#musiqueJeu");
+let musiqueVictoire = document.querySelector("#musiqueVictoire");
 
 
-/* =========================================
-   BASE
-   ========================================= */
+// =========================
+// VARIABLES
+// =========================
 
-* {
-    box-sizing: border-box;
+let position = 0;
+let ligne = 0;
+let debut = 0;
+
+let mots = [];
+let motSecret = "";
+
+let partieTerminee = false;
+
+let motChoisi = "";
+
+
+// =========================
+// MUSIQUE
+// =========================
+
+musiqueJeu.volume = 0.15;
+musiqueVictoire.volume = 0.25;
+
+
+// =========================
+// SONS
+// =========================
+
+let sonGood = new Audio("Good.mp3");
+let sonFalse = new Audio("False.mp3");
+
+sonGood.volume = 0.15;
+sonFalse.volume = 0.15;
+
+
+// =========================
+// ACCENTS
+// =========================
+
+function enleverAccents(texte) {
+
+    return texte
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
 }
 
-body {
 
-    margin: 0;
+// =========================
+// MESSAGE
+// =========================
 
-    min-height: 100vh;
+function afficherMessage(texte) {
 
-    background:
-        radial-gradient(
-            circle at center,
-            #faf7ed 0%,
-            #f2ecdc 70%,
-            #e8dfcc 100%
+    message.textContent = texte;
+    message.style.opacity = "1";
+
+    setTimeout(function() {
+        message.style.opacity = "0";
+    }, 1500);
+
+}
+
+
+// =========================
+// CLAVIER
+// =========================
+
+function mettreAJourClavier(lettre, couleur) {
+
+    touches.forEach(function(touche) {
+
+        if (touche.textContent !== lettre) {
+            return;
+        }
+
+        if (couleur === "vert") {
+
+            touche.classList.remove("jaune");
+            touche.classList.remove("gris");
+
+            touche.classList.add("vert");
+
+        }
+
+        else if (couleur === "jaune") {
+
+            if (!touche.classList.contains("vert")) {
+
+                touche.classList.remove("gris");
+                touche.classList.add("jaune");
+
+            }
+
+        }
+
+        else if (couleur === "gris") {
+
+            if (
+                !touche.classList.contains("vert") &&
+                !touche.classList.contains("jaune")
+            ) {
+
+                touche.classList.add("gris");
+
+            }
+
+        }
+
+    });
+
+}
+
+
+// =========================
+// ANIMATION TOUCHE
+// =========================
+
+function animerTouche(lettre) {
+
+    touches.forEach(function(touche) {
+
+        if (touche.textContent === lettre) {
+
+            touche.classList.remove("touche-appuyee");
+
+            void touche.offsetWidth;
+
+            touche.classList.add("touche-appuyee");
+
+        }
+
+    });
+
+}
+
+
+// =========================
+// ÉCRIRE UNE LETTRE
+// =========================
+
+function ecrireLettre(lettre) {
+
+    if (partieTerminee) {
+        return;
+    }
+
+    if (position >= 5) {
+        return;
+    }
+
+
+    // Écrire
+
+    cases[debut + position].textContent = lettre;
+
+
+    // Animation de la case
+
+    cases[debut + position].classList.remove(
+        "letter-animation"
+    );
+
+    void cases[debut + position].offsetWidth;
+
+    cases[debut + position].classList.add(
+        "letter-animation"
+    );
+
+
+    // Animation du clavier
+
+    animerTouche(lettre);
+
+
+    // Petit son
+
+    sonGood.currentTime = 0;
+    sonGood.play();
+
+
+    // Musique du jeu
+
+    if (musiqueJeu.paused) {
+
+        musiqueJeu.play().catch(function(erreur) {
+
+            console.log(erreur);
+
+        });
+
+    }
+
+
+    position++;
+
+}
+
+
+// =========================
+// CLAVIER PHYSIQUE
+// =========================
+
+document.addEventListener("keydown", function(event) {
+
+    if (partieTerminee) {
+        return;
+    }
+
+
+    // Lettre
+
+    if (event.key.length === 1) {
+
+        let lettre = enleverAccents(
+            event.key.toUpperCase()
         );
 
-    color: #29261f;
+        if (/^[A-Z]$/.test(lettre)) {
 
-    font-family:
-        "Special Elite",
-        monospace;
+            ecrireLettre(lettre);
 
-    display: flex;
+        }
 
-    flex-direction: column;
+        return;
+    }
 
-    align-items: center;
 
-    padding: 45px 20px;
+    // Effacer
 
-}
+    if (event.key === "Backspace") {
 
+        if (position > 0) {
 
-/* =========================================
-   TITRE
-   ========================================= */
+            position--;
 
-h1 {
+            cases[
+                debut + position
+            ].textContent = "";
 
-    margin: 0;
+        }
 
-    font-family:
-        "Cinzel",
-        serif;
+        return;
+    }
 
-    font-size: 4rem;
 
-    font-weight: 600;
+    // Valider
 
-    letter-spacing: 0.12em;
+    if (event.key === "Enter") {
 
-    color: #29261f;
+        validerMot();
 
-    text-align: center;
+    }
 
-    position: relative;
+});
 
-    text-shadow:
-        1px 1px 0
-        rgba(255,255,255,0.5);
 
-}
+// =========================
+// CLAVIER VIRTUEL
+// =========================
 
+touches.forEach(function(touche) {
 
-h1::after {
+    touche.addEventListener("click", function() {
 
-    content: "◇";
-
-    display: block;
-
-    font-size: 0.9rem;
-
-    margin-top: 8px;
-
-    color: #75694f;
-
-    letter-spacing: 0;
-
-}
-
-
-/* =========================================
-   MESSAGE
-   ========================================= */
-
-#message {
-
-    height: 30px;
-
-    margin-top: 15px;
-
-    font-family:
-        "Special Elite",
-        monospace;
-
-    font-size: 1rem;
-
-    color: #514a3d;
-
-    opacity: 0;
-
-    transition:
-        opacity 0.25s ease,
-        transform 0.25s ease;
-
-}
-
-
-/* =========================================
-   JEU
-   ========================================= */
-
-.jeu {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    width: 100%;
-
-    max-width: 620px;
-
-    margin-top: 15px;
-
-}
-
-
-/* =========================================
-   GRILLE
-   ========================================= */
-
-.grille {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 9px;
-
-    padding: 20px;
-
-}
-
-
-.ligne {
-
-    display: flex;
-
-    gap: 9px;
-
-}
-
-
-/* =========================================
-   CASES
-   ========================================= */
-
-.case {
-
-    width: 68px;
-
-    height: 68px;
-
-    border:
-        1px solid #aaa08b;
-
-    background:
-        rgba(
-            255,
-            252,
-            242,
-            0.45
+        ecrireLettre(
+            touche.textContent
         );
 
-    display: flex;
+    });
 
-    align-items: center;
-
-    justify-content: center;
-
-    font-family:
-        "Special Elite",
-        monospace;
-
-    font-size: 2rem;
-
-    color: #29261f;
-
-    transition:
-        background 0.25s ease,
-        border-color 0.25s ease,
-        color 0.25s ease,
-        transform 0.2s ease;
-
-}
+});
 
 
-.case:not(:empty) {
+// =========================
+// CHARGER LES MOTS
+// =========================
 
-    border-color: #6f6758;
+fetch("mots.txt")
 
-    background:
-        rgba(
-            255,
-            252,
-            242,
-            0.8
+    .then(function(response) {
+
+        return response.text();
+
+    })
+
+    .then(function(texte) {
+
+        mots = texte
+            .split(/\r?\n/)
+            .map(function(mot) {
+
+                return enleverAccents(
+                    mot.trim().toUpperCase()
+                );
+
+            })
+            .filter(function(mot) {
+
+                return mot.length === 5;
+
+            });
+
+
+        console.log(
+            "Mots chargés :",
+            mots.length
         );
 
-}
 
+        // Choisir le mot
 
-/* =========================================
-   COULEURS DES CASES
-   ========================================= */
+        if (motChoisi === "") {
 
-.case.vert {
+            motSecret =
+                mots[
+                    Math.floor(
+                        Math.random() * mots.length
+                    )
+                ];
 
-    background: #65745b;
+        }
 
-    border-color: #65745b;
+        else {
 
-    color: #fffdf5;
+            motSecret =
+                enleverAccents(
+                    motChoisi.toUpperCase()
+                );
 
-}
+        }
 
 
-.case.jaune {
-
-    background: #b69a5a;
-
-    border-color: #b69a5a;
-
-    color: #fffdf5;
-
-}
-
-
-.case.gris {
-
-    background: #625f57;
-
-    border-color: #625f57;
-
-    color: #f7f2e7;
-
-}
-
-
-/* =========================================
-   ANIMATION LETTRE
-   ========================================= */
-
-.letter-animation {
-
-    animation:
-        apparitionLettre
-        0.15s
-        ease-out;
-
-}
-
-
-@keyframes apparitionLettre {
-
-    0% {
-
-        transform:
-            scale(0.8);
-
-    }
-
-    70% {
-
-        transform:
-            scale(1.08);
-
-    }
-
-    100% {
-
-        transform:
-            scale(1);
-
-    }
-
-}
-
-
-/* =========================================
-   VICTOIRE
-   ========================================= */
-
-.case.victoire {
-
-    animation:
-        victoire
-        0.55s
-        ease-in-out;
-
-}
-
-
-@keyframes victoire {
-
-    0% {
-
-        transform:
-            translateY(0)
-            rotate(0);
-
-    }
-
-    35% {
-
-        transform:
-            translateY(-10px)
-            rotate(-2deg);
-
-    }
-
-    70% {
-
-        transform:
-            translateY(3px)
-            rotate(1deg);
-
-    }
-
-    100% {
-
-        transform:
-            translateY(0)
-            rotate(0);
-
-    }
-
-}
-
-
-/* =========================================
-   CLAVIER
-   ========================================= */
-
-#clavier {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 7px;
-
-    margin-top: 15px;
-
-    width: 100%;
-
-}
-
-
-.ligne-clavier {
-
-    display: flex;
-
-    gap: 6px;
-
-    justify-content: center;
-
-}
-
-
-/* =========================================
-   TOUCHES
-   ========================================= */
-
-.touche {
-
-    width: 48px;
-
-    height: 52px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    background:
-        linear-gradient(
-            145deg,
-            #eee7d7,
-            #dcd3c0
+        console.log(
+            "Mot secret :",
+            motSecret
         );
 
-    border:
-        1px solid #aaa08d;
+    })
 
-    border-radius: 4px;
+    .catch(function(erreur) {
 
-    box-shadow:
-        0 2px 0 #a49a86,
-        0 3px 5px
-        rgba(
-            60,
-            50,
-            35,
-            0.15
+        console.error(
+            "Erreur avec mots.txt :",
+            erreur
         );
 
-    font-family:
-        "Special Elite",
-        monospace;
-
-    font-size: 1.05rem;
-
-    color: #312e27;
-
-    transition:
-        transform 0.08s ease,
-        box-shadow 0.08s ease,
-        background 0.2s ease,
-        color 0.2s ease;
-
-}
+    });
 
 
-/* =========================================
-   TOUCHE ENFONCÉE
-   ========================================= */
+// =========================
+// VALIDER LE MOT
+// =========================
 
-.touche-appuyee {
+function validerMot() {
 
-    animation:
-        frappeTouche
-        0.12s
-        ease-out;
-
-}
+    if (partieTerminee) {
+        return;
+    }
 
 
-@keyframes frappeTouche {
+    // Pas assez de lettres
 
-    0% {
+    if (position < 5) {
 
-        transform:
-            translateY(0);
+        afficherMessage(
+            "Pas assez de lettres."
+        );
 
-        box-shadow:
-            0 2px 0 #a49a86,
-            0 3px 5px
-            rgba(
-                60,
-                50,
-                35,
-                0.15
+        return;
+    }
+
+
+    // Construire le mot
+
+    let mot = "";
+
+    for (let i = 0; i < 5; i++) {
+
+        mot +=
+            cases[
+                debut + i
+            ].textContent;
+
+    }
+
+
+    // Mot inexistant
+
+    if (!mots.includes(mot)) {
+
+        afficherMessage(
+            "Ce mot n'existe pas"
+        );
+
+        return;
+    }
+
+
+    // =========================
+    // VICTOIRE
+    // =========================
+
+    if (mot === motSecret) {
+
+        partieTerminee = true;
+
+
+        musiqueJeu.pause();
+        musiqueJeu.currentTime = 0;
+
+
+        musiqueVictoire.currentTime = 0;
+
+        musiqueVictoire.play();
+
+
+        for (let i = 0; i < 5; i++) {
+
+            cases[
+                debut + i
+            ].classList.add("vert");
+
+
+            mettreAJourClavier(
+                mot[i],
+                "vert"
             );
 
+
+            setTimeout(function() {
+
+                cases[
+                    debut + i
+                ].classList.add("victoire");
+
+            }, i * 100);
+
+        }
+
+
+        return;
     }
 
-    45% {
 
-        transform:
-            translateY(3px);
+    // =========================
+    // MAUVAIS MOT
+    // =========================
 
-        box-shadow:
-            0 0 0 #a49a86,
-            0 1px 2px
-            rgba(
-                60,
-                50,
-                35,
-                0.12
+    let lettresDisponibles =
+        motSecret.split("");
+
+
+    // Lettres vertes
+
+    for (let i = 0; i < 5; i++) {
+
+        if (
+            mot[i] === motSecret[i]
+        ) {
+
+            cases[
+                debut + i
+            ].classList.add("vert");
+
+
+            mettreAJourClavier(
+                mot[i],
+                "vert"
             );
 
+
+            lettresDisponibles[i] = null;
+
+        }
+
     }
 
-    100% {
 
-        transform:
-            translateY(0);
+    // Jaune / gris
 
-        box-shadow:
-            0 2px 0 #a49a86,
-            0 3px 5px
-            rgba(
-                60,
-                50,
-                35,
-                0.15
+    for (let i = 0; i < 5; i++) {
+
+        if (
+            mot[i] === motSecret[i]
+        ) {
+
+            continue;
+
+        }
+
+
+        let positionLettre =
+            lettresDisponibles.indexOf(
+                mot[i]
             );
 
-    }
 
-}
+        // Jaune
 
+        if (positionLettre !== -1) {
 
-/* =========================================
-   ENRAYEMENT
-   ========================================= */
-
-.touche.gris.touche-appuyee {
-
-    animation:
-        enrayement
-        0.18s
-        ease-in-out;
-
-}
+            cases[
+                debut + i
+            ].classList.add("jaune");
 
 
-@keyframes enrayement {
+            mettreAJourClavier(
+                mot[i],
+                "jaune"
+            );
 
-    0% {
 
-        transform:
-            translateX(0);
+            lettresDisponibles[
+                positionLettre
+            ] = null;
 
-    }
+        }
 
-    20% {
 
-        transform:
-            translateX(-3px);
+        // Gris
 
-    }
+        else {
 
-    40% {
+            cases[
+                debut + i
+            ].classList.add("gris");
 
-        transform:
-            translateX(3px);
 
-    }
+            mettreAJourClavier(
+                mot[i],
+                "gris"
+            );
 
-    60% {
 
-        transform:
-            translateX(-2px);
+            // Petit son d'enrayement
+
+            sonFalse.currentTime = 0;
+            sonFalse.play();
+
+        }
 
     }
 
-    80% {
 
-        transform:
-            translateX(2px);
+    // Ligne suivante
 
-    }
+    ligne++;
 
-    100% {
 
-        transform:
-            translateX(0);
+    if (ligne === 6) {
+
+        window.location = "perdu.html";
 
     }
 
-}
+    else {
 
-
-/* =========================================
-   COULEURS DU CLAVIER
-   ========================================= */
-
-.touche.vert {
-
-    background: #65745b;
-
-    border-color: #596650;
-
-    color: #fffdf5;
-
-    box-shadow:
-        0 2px 0 #4f5948;
-
-}
-
-
-.touche.jaune {
-
-    background: #b69a5a;
-
-    border-color: #a3874d;
-
-    color: #fffdf5;
-
-    box-shadow:
-        0 2px 0 #8d7542;
-
-}
-
-
-.touche.gris {
-
-    background: #625f57;
-
-    border-color: #55524b;
-
-    color: #eee9dc;
-
-    box-shadow:
-        0 2px 0 #484640;
-
-}
-
-
-/* =========================================
-   PAPIER
-   ========================================= */
-
-body::before {
-
-    content: "";
-
-    position: fixed;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    opacity: 0.08;
-
-    background-image:
-        repeating-linear-gradient(
-            0deg,
-            rgba(
-                80,
-                65,
-                40,
-                0.08
-            ) 0px,
-            rgba(
-                80,
-                65,
-                40,
-                0.08
-            ) 1px,
-            transparent 1px,
-            transparent 4px
-        );
-
-}
-
-
-/* =========================================
-   MOBILE
-   ========================================= */
-
-@media (max-width: 600px) {
-
-    body {
-
-        padding:
-            25px 10px;
-
-    }
-
-
-    h1 {
-
-        font-size:
-            2.7rem;
-
-    }
-
-
-    .grille {
-
-        gap: 6px;
-
-        padding: 10px;
-
-    }
-
-
-    .ligne {
-
-        gap: 6px;
-
-    }
-
-
-    .case {
-
-        width: 57px;
-
-        height: 57px;
-
-        font-size: 1.7rem;
-
-    }
-
-
-    .touche {
-
-        width: 34px;
-
-        height: 46px;
-
-        font-size: 0.85rem;
-
-    }
-
-
-    .ligne-clavier {
-
-        gap: 4px;
+        debut += 5;
+        position = 0;
 
     }
 
