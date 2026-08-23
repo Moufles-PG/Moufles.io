@@ -23,6 +23,7 @@ let motSecret = "";
 
 let partieTerminee = false;
 
+
 // Laisse vide pour un mot aléatoire
 let motChoisi = "";
 
@@ -36,7 +37,7 @@ musiqueVictoire.volume = 0.25;
 
 
 // =========================
-// ENLEVER LES ACCENTS
+// ACCENTS
 // =========================
 
 function enleverAccents(texte) {
@@ -49,7 +50,7 @@ function enleverAccents(texte) {
 
 
 // =========================
-// AFFICHER UN MESSAGE
+// MESSAGE
 // =========================
 
 function afficherMessage(texte) {
@@ -67,7 +68,7 @@ function afficherMessage(texte) {
 
 
 // =========================
-// METTRE LE CLAVIER À JOUR
+// CLAVIER
 // =========================
 
 function mettreAJourClavier(lettre, couleur) {
@@ -126,31 +127,7 @@ function mettreAJourClavier(lettre, couleur) {
 
 
 // =========================
-// MUSIQUE DU JEU
-// =========================
-
-function lancerMusiqueJeu() {
-
-    // Ne rien faire si elle joue déjà
-
-    if (!musiqueJeu.paused) {
-        return;
-    }
-
-    musiqueJeu.play().catch(function(erreur) {
-
-        console.log(
-            "Wordle1 ne peut pas démarrer :",
-            erreur
-        );
-
-    });
-
-}
-
-
-// =========================
-// CHARGER LE DICTIONNAIRE
+// CHARGER LES MOTS
 // =========================
 
 fetch("mots.txt")
@@ -191,7 +168,7 @@ fetch("mots.txt")
 
 
         console.log(
-            "Nombre de mots :",
+            "Mots chargés :",
             mots.length
         );
 
@@ -231,7 +208,7 @@ fetch("mots.txt")
     .catch(function(erreur) {
 
         console.error(
-            "Erreur avec mots.txt :",
+            "Erreur mots.txt :",
             erreur
         );
 
@@ -255,7 +232,7 @@ document.addEventListener(
 
 
         // =========================
-        // ÉCRIRE UNE LETTRE
+        // LETTRE
         // =========================
 
         if (
@@ -263,13 +240,14 @@ document.addEventListener(
             position < 5
         ) {
 
+
             let lettre =
                 enleverAccents(
                     event.key.toUpperCase()
                 );
 
 
-            // Vérifier que c'est une lettre
+            // Seulement A-Z
 
             if (!/^[A-Z]$/.test(lettre)) {
                 return;
@@ -277,10 +255,14 @@ document.addEventListener(
 
 
             // =========================
-            // MUSIQUE
+            // MUSIQUE DU JEU
             // =========================
 
-            lancerMusiqueJeu();
+            if (musiqueJeu.paused) {
+
+                musiqueJeu.play();
+
+            }
 
 
             // =========================
@@ -321,6 +303,7 @@ document.addEventListener(
         if (
             event.key === "Backspace"
         ) {
+
 
             if (position > 0) {
 
@@ -435,7 +418,6 @@ function validerMot() {
         // =========================
 
         musiqueJeu.pause();
-
         musiqueJeu.currentTime = 0;
 
 
@@ -444,15 +426,7 @@ function validerMot() {
         // =========================
 
         musiqueVictoire.currentTime = 0;
-
-        musiqueVictoire.play().catch(function(erreur) {
-
-            console.error(
-                "Impossible de lancer Victory :",
-                erreur
-            );
-
-        });
+        musiqueVictoire.play();
 
 
         // =========================
@@ -507,7 +481,7 @@ function validerMot() {
 
 
     // =========================
-    // PREMIÈRE PASSE : VERT
+    // LETTRES VERTES
     // =========================
 
     for (
@@ -516,9 +490,11 @@ function validerMot() {
         i++
     ) {
 
+
         if (
             mot[i] === motSecret[i]
         ) {
+
 
             cases[
                 debut + i
@@ -539,7 +515,7 @@ function validerMot() {
 
 
     // =========================
-    // DEUXIÈME PASSE : JAUNE / GRIS
+    // JAUNE / GRIS
     // =========================
 
     for (
@@ -548,8 +524,6 @@ function validerMot() {
         i++
     ) {
 
-
-        // Déjà vert
 
         if (
             mot[i] === motSecret[i]
@@ -572,6 +546,7 @@ function validerMot() {
             positionLettre !== -1
         ) {
 
+
             cases[
                 debut + i
             ].classList.add("jaune");
@@ -593,6 +568,7 @@ function validerMot() {
         // GRIS
 
         else {
+
 
             cases[
                 debut + i
