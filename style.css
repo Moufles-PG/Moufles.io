@@ -1,15 +1,20 @@
+/* =========================================
+   POLICES
+   ========================================= */
+
 @import url(
     'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
 );
 
 
-/* =========================
+/* =========================================
    BASE
-   ========================= */
+   ========================================= */
 
 * {
     box-sizing: border-box;
 }
+
 
 body {
 
@@ -27,7 +32,9 @@ body {
 
     color: #29261f;
 
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     display: flex;
 
@@ -40,9 +47,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================
    EFFET PAPIER
-   ========================= */
+   ========================================= */
 
 body::before {
 
@@ -59,8 +66,18 @@ body::before {
     background-image:
         repeating-linear-gradient(
             0deg,
-            rgba(80, 65, 40, 0.08) 0px,
-            rgba(80, 65, 40, 0.08) 1px,
+            rgba(
+                80,
+                65,
+                40,
+                0.08
+            ) 0px,
+            rgba(
+                80,
+                65,
+                40,
+                0.08
+            ) 1px,
             transparent 1px,
             transparent 4px
         );
@@ -68,15 +85,17 @@ body::before {
 }
 
 
-/* =========================
+/* =========================================
    TITRE
-   ========================= */
+   ========================================= */
 
 h1 {
 
     margin: 0;
 
-    font-family: "Cinzel", serif;
+    font-family:
+        "Cinzel",
+        serif;
 
     font-size: 4rem;
 
@@ -106,9 +125,9 @@ h1::after {
 }
 
 
-/* =========================
+/* =========================================
    MESSAGE
-   ========================= */
+   ========================================= */
 
 #message {
 
@@ -116,20 +135,25 @@ h1::after {
 
     margin-top: 15px;
 
+    font-family:
+        "Special Elite",
+        monospace;
+
     font-size: 1rem;
 
     color: #514a3d;
 
     opacity: 0;
 
-    transition: opacity 0.25s ease;
+    transition:
+        opacity 0.25s ease;
 
 }
 
 
-/* =========================
+/* =========================================
    JEU
-   ========================= */
+   ========================================= */
 
 .jeu {
 
@@ -148,9 +172,9 @@ h1::after {
 }
 
 
-/* =========================
+/* =========================================
    GRILLE
-   ========================= */
+   ========================================= */
 
 .grille {
 
@@ -184,9 +208,16 @@ h1::after {
 
     flex-shrink: 0;
 
-    border: 1px solid #aaa08b;
+    border:
+        1px solid #aaa08b;
 
-    background: rgba(255, 252, 242, 0.45);
+    background:
+        rgba(
+            255,
+            252,
+            242,
+            0.45
+        );
 
     display: flex;
 
@@ -194,7 +225,9 @@ h1::after {
 
     justify-content: center;
 
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     font-size: 2rem;
 
@@ -203,6 +236,7 @@ h1::after {
     transition:
         background 0.25s ease,
         border-color 0.25s ease,
+        color 0.25s ease,
         transform 0.2s ease;
 
 }
@@ -212,10 +246,20 @@ h1::after {
 
     border-color: #6f6758;
 
-    background: rgba(255, 252, 242, 0.8);
+    background:
+        rgba(
+            255,
+            252,
+            242,
+            0.8
+        );
 
 }
 
+
+/* =========================================
+   COULEURS CASES
+   ========================================= */
 
 .case.vert {
 
@@ -250,13 +294,16 @@ h1::after {
 }
 
 
-/* =========================
+/* =========================================
    ANIMATION LETTRE
-   ========================= */
+   ========================================= */
 
 .letter-animation {
 
-    animation: apparitionLettre 0.15s ease-out;
+    animation:
+        apparitionLettre
+        0.15s
+        ease-out;
 
 }
 
@@ -264,27 +311,39 @@ h1::after {
 @keyframes apparitionLettre {
 
     0% {
-        transform: scale(0.8);
+
+        transform:
+            scale(0.8);
+
     }
 
     70% {
-        transform: scale(1.08);
+
+        transform:
+            scale(1.08);
+
     }
 
     100% {
-        transform: scale(1);
+
+        transform:
+            scale(1);
+
     }
 
 }
 
 
-/* =========================
-   VICTOIRE
-   ========================= */
+/* =========================================
+   VICTOIRE DES CASES
+   ========================================= */
 
 .case.victoire {
 
-    animation: victoire 0.55s ease-in-out;
+    animation:
+        victoire
+        0.55s
+        ease-in-out;
 
 }
 
@@ -292,27 +351,43 @@ h1::after {
 @keyframes victoire {
 
     0% {
-        transform: translateY(0) rotate(0);
+
+        transform:
+            translateY(0)
+            rotate(0);
+
     }
 
     35% {
-        transform: translateY(-10px) rotate(-2deg);
+
+        transform:
+            translateY(-10px)
+            rotate(-2deg);
+
     }
 
     70% {
-        transform: translateY(3px) rotate(1deg);
+
+        transform:
+            translateY(3px)
+            rotate(1deg);
+
     }
 
     100% {
-        transform: translateY(0) rotate(0);
+
+        transform:
+            translateY(0)
+            rotate(0);
+
     }
 
 }
 
 
-/* =========================
+/* =========================================
    CLAVIER
-   ========================= */
+   ========================================= */
 
 #clavier {
 
@@ -340,8 +415,6 @@ h1::after {
     gap: 6px;
 
     justify-content: center;
-
-    width: 100%;
 
 }
 
@@ -371,26 +444,45 @@ h1::after {
             #dcd3c0
         );
 
-    border: 1px solid #aaa08d;
+    border:
+        1px solid #aaa08d;
 
     border-radius: 4px;
 
     box-shadow:
         0 2px 0 #a49a86,
-        0 3px 5px rgba(60, 50, 35, 0.15);
+        0 3px 5px
+        rgba(
+            60,
+            50,
+            35,
+            0.15
+        );
 
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     font-size: 1.05rem;
 
     color: #312e27;
 
+    transition:
+        transform 0.08s ease;
+
 }
 
 
+/* =========================================
+   TOUCHE ENFONCÉE
+   ========================================= */
+
 .touche-appuyee {
 
-    animation: frappeTouche 0.12s ease-out;
+    animation:
+        frappeTouche
+        0.12s
+        ease-out;
 
 }
 
@@ -398,27 +490,39 @@ h1::after {
 @keyframes frappeTouche {
 
     0% {
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
+
     }
 
     45% {
-        transform: translateY(3px);
+
+        transform:
+            translateY(3px);
+
     }
 
     100% {
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
+
     }
 
 }
 
 
-/* =========================
+/* =========================================
    ENRAYEMENT
-   ========================= */
+   ========================================= */
 
 .touche.gris.touche-appuyee {
 
-    animation: enrayement 0.18s ease-in-out;
+    animation:
+        enrayement
+        0.18s
+        ease-in-out;
 
 }
 
@@ -426,35 +530,53 @@ h1::after {
 @keyframes enrayement {
 
     0% {
-        transform: translateX(0);
+
+        transform:
+            translateX(0);
+
     }
 
     20% {
-        transform: translateX(-3px);
+
+        transform:
+            translateX(-3px);
+
     }
 
     40% {
-        transform: translateX(3px);
+
+        transform:
+            translateX(3px);
+
     }
 
     60% {
-        transform: translateX(-2px);
+
+        transform:
+            translateX(-2px);
+
     }
 
     80% {
-        transform: translateX(2px);
+
+        transform:
+            translateX(2px);
+
     }
 
     100% {
-        transform: translateX(0);
+
+        transform:
+            translateX(0);
+
     }
 
 }
 
 
-/* =========================
+/* =========================================
    COULEURS CLAVIER
-   ========================= */
+   ========================================= */
 
 .touche.vert {
 
@@ -463,6 +585,9 @@ h1::after {
     border-color: #596650;
 
     color: #fffdf5;
+
+    box-shadow:
+        0 2px 0 #4f5948;
 
 }
 
@@ -475,6 +600,9 @@ h1::after {
 
     color: #fffdf5;
 
+    box-shadow:
+        0 2px 0 #8d7542;
+
 }
 
 
@@ -486,14 +614,17 @@ h1::after {
 
     color: #eee9dc;
 
+    box-shadow:
+        0 2px 0 #484640;
+
 }
 
 
-/* =========================
-   ÉCRAN DE DÉFAITE
-   ========================= */
+/* =========================================
+   ÉCRAN DE FIN
+   ========================================= */
 
-#ecranDefaite {
+#ecranFin {
 
     position: fixed;
 
@@ -507,21 +638,29 @@ h1::after {
 
     text-align: center;
 
-    background: rgba(242, 236, 220, 0.96);
+    background:
+        rgba(
+            242,
+            236,
+            220,
+            0.96
+        );
 
     z-index: 100;
 
 }
 
 
-.defaite-contenu {
+.fin-contenu {
 
-    font-family: "Cinzel", serif;
+    font-family:
+        "Cinzel",
+        serif;
 
 }
 
 
-.defaite-contenu h2 {
+.fin-contenu h2 {
 
     margin: 0;
 
@@ -531,10 +670,12 @@ h1::after {
 
     letter-spacing: 0.12em;
 
+    color: #29261f;
+
 }
 
 
-.defaite-contenu h2::after {
+.fin-contenu h2::after {
 
     content: "◇";
 
@@ -549,22 +690,33 @@ h1::after {
 }
 
 
-.defaite-contenu p {
+#texteFin {
 
-    margin: 30px 0 8px;
+    margin:
+        30px 0 8px;
+
+    font-family:
+        "Cinzel",
+        serif;
 
     font-size: 1.1rem;
+
+    color: #514a3d;
 
 }
 
 
-#motPerdu {
+#motFin {
 
-    font-family: "Special Elite", monospace;
+    font-family:
+        "Special Elite",
+        monospace;
 
     font-size: 2rem;
 
     letter-spacing: 0.15em;
+
+    color: #29261f;
 
 }
 
@@ -573,15 +725,21 @@ h1::after {
 
     margin-top: 35px;
 
-    padding: 13px 30px;
+    padding:
+        13px 30px;
 
-    background: #65745b;
+    background:
+        #65745b;
 
-    border: 1px solid #596650;
+    border:
+        1px solid #596650;
 
-    color: #fffdf5;
+    color:
+        #fffdf5;
 
-    font-family: "Cinzel", serif;
+    font-family:
+        "Cinzel",
+        serif;
 
     font-size: 1rem;
 
@@ -591,59 +749,107 @@ h1::after {
 
     border-radius: 3px;
 
-    box-shadow: 0 3px 0 #4f5948;
+    box-shadow:
+        0 3px 0 #4f5948;
+
+    transition:
+        transform 0.1s ease,
+        box-shadow 0.1s ease;
 
 }
 
 
-/* =========================
-   MOBILE
-   ========================= */
+#boutonRejouer:hover {
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+#boutonRejouer:active {
+
+    transform:
+        translateY(2px);
+
+    box-shadow:
+        0 1px 0 #4f5948;
+
+}
+
+
+/* =========================================
+   PAPIER
+   ========================================= */
 
 @media (max-width: 600px) {
 
     body {
-        padding: 25px 10px;
+
+        padding:
+            25px 10px;
+
     }
 
 
     h1 {
-        font-size: 2.7rem;
+
+        font-size:
+            2.7rem;
+
     }
 
 
     .grille {
+
         gap: 6px;
+
         padding: 10px;
+
     }
 
 
     .ligne {
+
         gap: 6px;
+
     }
 
 
     .case {
+
         width: 57px;
+
         height: 57px;
+
         font-size: 1.7rem;
+
     }
 
 
     .touche {
+
         width: 34px;
+
         height: 46px;
+
         font-size: 0.85rem;
+
     }
 
 
     .ligne-clavier {
+
         gap: 4px;
+
     }
 
 
-    .defaite-contenu h2 {
-        font-size: 3rem;
+    .fin-contenu h2 {
+
+        font-size:
+            3rem;
+
     }
 
 }
