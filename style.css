@@ -1,4 +1,4 @@
-```javascript
+
 function ecrireLettre(lettre) {
 
     if (partieTerminee) {
@@ -80,4 +80,3 @@ function ecrireLettre(lettre) {
     position++;
 
 }
-```
