@@ -9,6 +9,11 @@ let message = document.querySelector("#message");
 
 let musiqueJeu = document.querySelector("#musiqueJeu");
 let musiqueVictoire = document.querySelector("#musiqueVictoire");
+let musiqueDefaite = document.querySelector("#musiqueDefaite");
+
+let ecranDefaite = document.querySelector("#ecranDefaite");
+let motPerdu = document.querySelector("#motPerdu");
+let boutonRejouer = document.querySelector("#boutonRejouer");
 
 
 // =========================
@@ -24,43 +29,25 @@ let motSecret = "";
 
 let partieTerminee = false;
 
-let motChoisi = "";
-
 
 // =========================
-// MUSIQUE
+// VOLUME
 // =========================
 
 musiqueJeu.volume = 0.15;
 musiqueVictoire.volume = 0.25;
+musiqueDefaite.volume = 0.25;
 
 
 // =========================
-// PETIT SON DE MACHINE
+// SONS
 // =========================
 
-let audioContext = null;
+let sonGood = new Audio("Good.mp3");
+let sonFalse = new Audio("False.mp3");
 
-function sonTouche() {
-
-    if (!audioContext) {
-        audioContext = new AudioContext();
-    }
-
-    let oscillateur = audioContext.createOscillator();
-    let volume = audioContext.createGain();
-
-    oscillateur.type = "square";
-    oscillateur.frequency.value = 150;
-
-    volume.gain.value = 0.02;
-
-    oscillateur.connect(volume);
-    volume.connect(audioContext.destination);
-
-    oscillateur.start();
-    oscillateur.stop(audioContext.currentTime + 0.04);
-}
+sonGood.volume = 0.15;
+sonFalse.volume = 0.15;
 
 
 // =========================
@@ -83,67 +70,20 @@ function enleverAccents(texte) {
 function afficherMessage(texte) {
 
     message.textContent = texte;
+
     message.style.opacity = "1";
 
     setTimeout(function() {
+
         message.style.opacity = "0";
+
     }, 1500);
 
 }
 
 
 // =========================
-// CLAVIER
-// =========================
-
-function mettreAJourClavier(lettre, couleur) {
-
-    touches.forEach(function(touche) {
-
-        if (touche.textContent !== lettre) {
-            return;
-        }
-
-        if (couleur === "vert") {
-
-            touche.classList.remove("jaune");
-            touche.classList.remove("gris");
-
-            touche.classList.add("vert");
-
-        }
-
-        else if (couleur === "jaune") {
-
-            if (!touche.classList.contains("vert")) {
-
-                touche.classList.remove("gris");
-                touche.classList.add("jaune");
-
-            }
-
-        }
-
-        else if (couleur === "gris") {
-
-            if (
-                !touche.classList.contains("vert") &&
-                !touche.classList.contains("jaune")
-            ) {
-
-                touche.classList.add("gris");
-
-            }
-
-        }
-
-    });
-
-}
-
-
-// =========================
-// ANIMATION TOUCHE
+// ANIMATION DU CLAVIER
 // =========================
 
 function animerTouche(lettre) {
@@ -166,6 +106,60 @@ function animerTouche(lettre) {
 
 
 // =========================
+// COULEUR DU CLAVIER
+// =========================
+
+function mettreAJourClavier(lettre, couleur) {
+
+    touches.forEach(function(touche) {
+
+        if (touche.textContent !== lettre) {
+            return;
+        }
+
+
+        if (couleur === "vert") {
+
+            touche.classList.remove("jaune");
+            touche.classList.remove("gris");
+
+            touche.classList.add("vert");
+
+        }
+
+
+        if (couleur === "jaune") {
+
+            if (!touche.classList.contains("vert")) {
+
+                touche.classList.remove("gris");
+
+                touche.classList.add("jaune");
+
+            }
+
+        }
+
+
+        if (couleur === "gris") {
+
+            if (
+                !touche.classList.contains("vert") &&
+                !touche.classList.contains("jaune")
+            ) {
+
+                touche.classList.add("gris");
+
+            }
+
+        }
+
+    });
+
+}
+
+
+// =========================
 // ÉCRIRE UNE LETTRE
 // =========================
 
@@ -175,48 +169,79 @@ function ecrireLettre(lettre) {
         return;
     }
 
+
     if (position >= 5) {
         return;
     }
 
 
+    // Chercher la touche
+
+    let touche = null;
+
+    touches.forEach(function(element) {
+
+        if (element.textContent === lettre) {
+            touche = element;
+        }
+
+    });
+
+
+    // Son
+
+    if (
+        touche &&
+        touche.classList.contains("gris")
+    ) {
+
+        sonFalse.currentTime = 0;
+
+        sonFalse.play().catch(function() {});
+
+    }
+
+    else {
+
+        sonGood.currentTime = 0;
+
+        sonGood.play().catch(function() {});
+
+    }
+
+
     // Écrire
 
-    cases[debut + position].textContent = lettre;
+    cases[
+        debut + position
+    ].textContent = lettre;
 
 
-    // Animation de la lettre
+    // Animation
 
-    cases[debut + position].classList.remove(
-        "letter-animation"
-    );
+    cases[
+        debut + position
+    ].classList.remove("letter-animation");
 
-    void cases[debut + position].offsetWidth;
+    void cases[
+        debut + position
+    ].offsetWidth;
 
-    cases[debut + position].classList.add(
-        "letter-animation"
-    );
+    cases[
+        debut + position
+    ].classList.add("letter-animation");
 
 
-    // Animation du clavier
+    // Animation clavier
 
     animerTouche(lettre);
-
-
-    // Petit son
-
-    sonTouche();
 
 
     // Musique
 
     if (musiqueJeu.paused) {
 
-        musiqueJeu.play().catch(function(erreur) {
-
-            console.log(erreur);
-
-        });
+        musiqueJeu.play().catch(function() {});
 
     }
 
@@ -244,6 +269,7 @@ document.addEventListener("keydown", function(event) {
         let lettre = enleverAccents(
             event.key.toUpperCase()
         );
+
 
         if (/^[A-Z]$/.test(lettre)) {
 
@@ -273,7 +299,7 @@ document.addEventListener("keydown", function(event) {
     }
 
 
-    // Valider
+    // Entrée
 
     if (event.key === "Enter") {
 
@@ -337,33 +363,7 @@ fetch("mots.txt")
         );
 
 
-        // Choisir le mot
-
-        if (motChoisi === "") {
-
-            motSecret =
-                mots[
-                    Math.floor(
-                        Math.random() * mots.length
-                    )
-                ];
-
-        }
-
-        else {
-
-            motSecret =
-                enleverAccents(
-                    motChoisi.toUpperCase()
-                );
-
-        }
-
-
-        console.log(
-            "Mot secret :",
-            motSecret
-        );
+        choisirNouveauMot();
 
     })
 
@@ -378,7 +378,29 @@ fetch("mots.txt")
 
 
 // =========================
-// VALIDER LE MOT
+// NOUVEAU MOT
+// =========================
+
+function choisirNouveauMot() {
+
+    motSecret =
+        mots[
+            Math.floor(
+                Math.random() * mots.length
+            )
+        ];
+
+
+    console.log(
+        "Mot secret :",
+        motSecret
+    );
+
+}
+
+
+// =========================
+// VALIDER
 // =========================
 
 function validerMot() {
@@ -397,6 +419,7 @@ function validerMot() {
         );
 
         return;
+
     }
 
 
@@ -406,12 +429,17 @@ function validerMot() {
 
     for (let i = 0; i < 5; i++) {
 
-        mot +=
-            cases[
-                debut + i
-            ].textContent;
+        mot += cases[
+            debut + i
+        ].textContent;
 
     }
+
+
+    console.log(
+        "Mot proposé :",
+        mot
+    );
 
 
     // Mot inexistant
@@ -423,6 +451,7 @@ function validerMot() {
         );
 
         return;
+
     }
 
 
@@ -435,19 +464,15 @@ function validerMot() {
         partieTerminee = true;
 
 
-        // Arrêter Wordle1
-
         musiqueJeu.pause();
+
         musiqueJeu.currentTime = 0;
 
 
-        // Lancer Victory
-
         musiqueVictoire.currentTime = 0;
-        musiqueVictoire.play();
 
+        musiqueVictoire.play().catch(function() {});
 
-        // Animation
 
         for (let i = 0; i < 5; i++) {
 
@@ -474,18 +499,19 @@ function validerMot() {
 
 
         return;
+
     }
 
 
     // =========================
-    // MAUVAIS MOT
+    // MAUVAISE RÉPONSE
     // =========================
 
     let lettresDisponibles =
         motSecret.split("");
 
 
-    // Lettres vertes
+    // Vert
 
     for (let i = 0; i < 5; i++) {
 
@@ -530,8 +556,6 @@ function validerMot() {
             );
 
 
-        // Jaune
-
         if (positionLettre !== -1) {
 
             cases[
@@ -552,8 +576,6 @@ function validerMot() {
         }
 
 
-        // Gris
-
         else {
 
             cases[
@@ -571,22 +593,121 @@ function validerMot() {
     }
 
 
-    // Ligne suivante
+    // =========================
+    // FIN DES 6 ESSAIS
+    // =========================
 
     ligne++;
 
 
     if (ligne === 6) {
 
-        window.location = "perdu.html";
+        partieTerminee = true;
+
+
+        musiqueJeu.pause();
+
+        musiqueJeu.currentTime = 0;
+
+
+        musiqueDefaite.currentTime = 0;
+
+        musiqueDefaite.play().catch(function() {});
+
+
+        motPerdu.textContent = motSecret;
+
+
+        ecranDefaite.style.display = "flex";
+
+
+        return;
 
     }
 
-    else {
 
-        debut += 5;
-        position = 0;
+    // Ligne suivante
 
-    }
+    debut += 5;
+
+    position = 0;
 
 }
+
+
+// =========================
+// REJOUER
+// =========================
+
+boutonRejouer.addEventListener("click", function() {
+
+
+    // Fermer l'écran
+
+    ecranDefaite.style.display = "none";
+
+
+    // Réinitialiser les variables
+
+    position = 0;
+
+    ligne = 0;
+
+    debut = 0;
+
+    partieTerminee = false;
+
+
+    // Réinitialiser les cases
+
+    cases.forEach(function(caseJeu) {
+
+        caseJeu.textContent = "";
+
+        caseJeu.classList.remove(
+            "vert",
+            "jaune",
+            "gris",
+            "victoire",
+            "letter-animation"
+        );
+
+    });
+
+
+    // Réinitialiser le clavier
+
+    touches.forEach(function(touche) {
+
+        touche.classList.remove(
+            "vert",
+            "jaune",
+            "gris",
+            "touche-appuyee"
+        );
+
+    });
+
+
+    // Arrêter les musiques
+
+    musiqueDefaite.pause();
+
+    musiqueDefaite.currentTime = 0;
+
+
+    musiqueVictoire.pause();
+
+    musiqueVictoire.currentTime = 0;
+
+
+    musiqueJeu.pause();
+
+    musiqueJeu.currentTime = 0;
+
+
+    // Nouveau mot
+
+    choisirNouveauMot();
+
+});
