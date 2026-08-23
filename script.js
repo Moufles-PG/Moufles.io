@@ -46,8 +46,8 @@ musiqueDefaite.volume = 0.25;
 let sonGood = new Audio("Good.mp3");
 let sonFalse = new Audio("False.mp3");
 
-sonGood.volume = 0.15;
-sonFalse.volume = 0.15;
+sonGood.volume = 0.08;
+sonFalse.volume = 0.08;
 
 
 // =========================
