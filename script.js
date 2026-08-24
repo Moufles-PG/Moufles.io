@@ -32,6 +32,9 @@ let motFin =
 let boutonRejouer =
     document.querySelector("#boutonRejouer");
 
+let chariot =
+    document.querySelector("#chariot");
+
 
 // =========================================
 // VARIABLES
@@ -49,7 +52,7 @@ let motSecret = "";
 
 let partieTerminee = false;
 
-// La musique n'a pas encore commencé
+// La musique du jeu n'a pas encore commencé
 let musiqueLancee = false;
 
 
@@ -167,6 +170,8 @@ function mettreAJourClavier(
         }
 
 
+        // VERT
+
         if (couleur === "vert") {
 
             touche.classList.remove(
@@ -183,6 +188,8 @@ function mettreAJourClavier(
 
         }
 
+
+        // JAUNE
 
         if (couleur === "jaune") {
 
@@ -204,6 +211,8 @@ function mettreAJourClavier(
 
         }
 
+
+        // GRIS
 
         if (couleur === "gris") {
 
@@ -230,6 +239,95 @@ function mettreAJourClavier(
 
 
 // =========================================
+// POSITION DU CHARIOT
+// =========================================
+
+function positionnerChariot() {
+
+    if (position >= 5) {
+
+        return;
+
+    }
+
+
+    let caseActuelle =
+        cases[debut + position];
+
+
+    if (!caseActuelle) {
+
+        return;
+
+    }
+
+
+    let positionCase =
+        caseActuelle.offsetLeft;
+
+
+    let positionHaut =
+        caseActuelle.offsetTop;
+
+
+    chariot.style.left =
+        (
+            positionCase +
+            caseActuelle.offsetWidth -
+            3
+        ) + "px";
+
+
+    chariot.style.top =
+        (
+            positionHaut
+        ) + "px";
+
+
+    chariot.classList.add(
+        "visible"
+    );
+
+}
+
+
+// =========================================
+// RETOUR DE CHARIOT
+// =========================================
+
+function animerRetourChariot() {
+
+    chariot.classList.remove(
+        "retour"
+    );
+
+
+    // Force le navigateur à
+    // recommencer l'animation
+
+    void chariot.offsetWidth;
+
+
+    chariot.classList.add(
+        "retour"
+    );
+
+
+    setTimeout(
+        function() {
+
+            chariot.classList.remove(
+                "retour"
+            );
+
+        },
+        450
+    );
+
+}
+
+
+// =========================================
 // ÉCRIRE UNE LETTRE
 // =========================================
 
@@ -249,7 +347,9 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Trouver la touche
+    // =====================================
+    // TROUVER LA TOUCHE
+    // =====================================
 
     let touche = null;
 
@@ -305,27 +405,46 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // Animation de la case
+    // =====================================
+    // ANIMATION DE LA LETTRE
+    // =====================================
 
     caseActuelle.classList.remove(
         "letter-animation"
     );
 
+
     void caseActuelle.offsetWidth;
+
 
     caseActuelle.classList.add(
         "letter-animation"
     );
 
 
-    // Animation du clavier
+    // =====================================
+    // ANIMATION DU CLAVIER
+    // =====================================
 
     animerTouche(lettre);
 
 
-    // Passer à la position suivante
+    // =====================================
+    // PASSER À LA POSITION SUIVANTE
+    // =====================================
 
     position++;
+
+
+    // =====================================
+    // DÉPLACER LE CHARIOT
+    // =====================================
+
+    if (position < 5) {
+
+        positionnerChariot();
+
+    }
 
 }
 
@@ -346,7 +465,9 @@ document.addEventListener(
         }
 
 
-        // Lettre
+        // =====================================
+        // LETTRE
+        // =====================================
 
         if (event.key.length === 1) {
 
@@ -370,7 +491,9 @@ document.addEventListener(
         }
 
 
-        // Retour arrière
+        // =====================================
+        // RETOUR ARRIÈRE
+        // =====================================
 
         if (
             event.key === "Backspace"
@@ -380,9 +503,13 @@ document.addEventListener(
 
                 position--;
 
+
                 cases[
                     debut + position
                 ].textContent = "";
+
+
+                positionnerChariot();
 
             }
 
@@ -392,7 +519,9 @@ document.addEventListener(
         }
 
 
-        // Entrée
+        // =====================================
+        // ENTRÉE
+        // =====================================
 
         if (
             event.key === "Enter"
@@ -597,14 +726,14 @@ function validerMot() {
         partieTerminee = true;
 
 
-        // Arrêter musique jeu
+        // Arrêter musique du jeu
 
         musiqueJeu.pause();
 
         musiqueJeu.currentTime = 0;
 
 
-        // Jouer victoire
+        // Musique victoire
 
         musiqueVictoire.currentTime = 0;
 
@@ -645,6 +774,13 @@ function validerMot() {
             );
 
         }
+
+
+        // Cacher le chariot
+
+        chariot.classList.remove(
+            "visible"
+        );
 
 
         // Écran de victoire
@@ -782,6 +918,13 @@ function validerMot() {
 
 
     // =====================================
+    // RETOUR DE CHARIOT
+    // =====================================
+
+    animerRetourChariot();
+
+
+    // =====================================
     // PASSER À LA LIGNE SUIVANTE
     // =====================================
 
@@ -806,12 +949,19 @@ function validerMot() {
         musiqueJeu.currentTime = 0;
 
 
-        // Jouer Fail
+        // Musique de défaite
 
         musiqueDefaite.currentTime = 0;
 
         musiqueDefaite.play()
             .catch(function() {});
+
+
+        // Cacher le chariot
+
+        chariot.classList.remove(
+            "visible"
+        );
 
 
         // Afficher le mot
@@ -840,12 +990,21 @@ function validerMot() {
 
 
     // =====================================
-    // LIGNE SUIVANTE
+    // NOUVELLE LIGNE
     // =====================================
 
-    debut += 5;
+    setTimeout(
+        function() {
 
-    position = 0;
+            debut += 5;
+
+            position = 0;
+
+            positionnerChariot();
+
+        },
+        450
+    );
 
 }
 
@@ -859,13 +1018,17 @@ boutonRejouer.addEventListener(
     function() {
 
 
-        // Cacher écran
+        // =====================================
+        // CACHER ÉCRAN DE FIN
+        // =====================================
 
         ecranFin.style.display =
             "none";
 
 
-        // Réinitialiser variables
+        // =====================================
+        // RÉINITIALISER VARIABLES
+        // =====================================
 
         position = 0;
 
@@ -878,7 +1041,9 @@ boutonRejouer.addEventListener(
         musiqueLancee = false;
 
 
-        // Effacer grille
+        // =====================================
+        // EFFACER GRILLE
+        // =====================================
 
         cases.forEach(
             function(caseJeu) {
@@ -897,7 +1062,9 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Réinitialiser clavier
+        // =====================================
+        // RÉINITIALISER CLAVIER
+        // =====================================
 
         touches.forEach(
             function(touche) {
@@ -913,7 +1080,9 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Arrêter les musiques
+        // =====================================
+        // ARRÊTER LES MUSIQUES
+        // =====================================
 
         musiqueJeu.pause();
 
@@ -930,9 +1099,35 @@ boutonRejouer.addEventListener(
         musiqueDefaite.currentTime = 0;
 
 
-        // Nouveau mot
+        // =====================================
+        // RÉINITIALISER CHARIOT
+        // =====================================
+
+        chariot.classList.remove(
+            "visible",
+            "retour"
+        );
+
+
+        // =====================================
+        // NOUVEAU MOT
+        // =====================================
 
         choisirNouveauMot();
 
+
+        // =====================================
+        // POSITIONNER CHARIOT
+        // =====================================
+
+        positionnerChariot();
+
     }
 );
+
+
+// =========================================
+// PREMIÈRE POSITION DU CHARIOT
+// =========================================
+
+positionnerChariot();
