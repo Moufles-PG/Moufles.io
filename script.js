@@ -327,7 +327,7 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Écrire la lettre
+    // Écriture
 
     let caseActuelle =
         cases[
@@ -339,7 +339,7 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // Animation de la lettre
+    // Animation
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -352,14 +352,12 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Animation du clavier
-
     animerTouche(
         lettre
     );
 
 
-    // Musique dès la première lettre
+    // Musique
 
     if (
         musiqueJeu.paused
@@ -397,8 +395,6 @@ document.addEventListener(
         }
 
 
-        // Lettre
-
         if (
             event.key.length === 1
         ) {
@@ -425,8 +421,6 @@ document.addEventListener(
         }
 
 
-        // Retour arrière
-
         if (
             event.key === "Backspace"
         ) {
@@ -449,8 +443,6 @@ document.addEventListener(
 
         }
 
-
-        // Entrée
 
         if (
             event.key === "Enter"
@@ -528,12 +520,6 @@ fetch("mots.txt")
                     );
 
 
-            console.log(
-                "Mots chargés :",
-                mots.length
-            );
-
-
             choisirNouveauMot();
 
         }
@@ -552,7 +538,7 @@ fetch("mots.txt")
 
 
 // =========================================
-// CHOISIR UN MOT
+// CHOISIR MOT
 // =========================================
 
 function choisirNouveauMot() {
@@ -584,78 +570,22 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// ANIMATION DE LA FEUILLE
-// =========================================
-
-function faireMonterLaFeuille() {
-
-    /*
-       Chaque ligne mesure :
-
-       65 px de hauteur
-       + 9 px d'espace
-
-       = 74 px
-    */
-
-    let decalage =
-        74 -
-        (ligne * 74);
-
-
-    return grille.animate(
-        [
-            {
-                transform:
-                    "translateY(" +
-                    (74 - ((ligne - 1) * 74)) +
-                    "px)"
-            },
-
-            {
-                transform:
-                    "translateY(" +
-                    (decalage + 8) +
-                    "px)"
-            },
-
-            {
-                transform:
-                    "translateY(" +
-                    decalage +
-                    "px)"
-            }
-        ],
-        {
-            duration: 600,
-
-            easing:
-                "cubic-bezier(0.22, 0.61, 0.36, 1)",
-
-            fill: "forwards"
-        }
-    );
-
-}
-
-
-// =========================================
 // ANIMATION DU CHARIOT
 // =========================================
 
 function animerChariot() {
 
+    let ligneActuelle =
+        lignes[ligne - 1];
+
+
     if (
-        !lignes[ligne]
+        !ligneActuelle
     ) {
 
         return Promise.resolve();
 
     }
-
-
-    let ligneActuelle =
-        lignes[ligne];
 
 
     let premiereCase =
@@ -673,10 +603,8 @@ function animerChariot() {
     let grilleRect =
         grille.getBoundingClientRect();
 
-
     let premiereRect =
         premiereCase.getBoundingClientRect();
-
 
     let derniereRect =
         derniereCase.getBoundingClientRect();
@@ -703,18 +631,14 @@ function animerChariot() {
     chariot.style.left =
         depart + "px";
 
-
     chariot.style.top =
         haut + "px";
 
-
     chariot.style.opacity =
-        "0.85";
+        "1";
 
 
-    // =====================================
-    // CHARIOT PART À DROITE
-    // =====================================
+    // Aller
 
     let aller =
         chariot.animate(
@@ -740,8 +664,6 @@ function animerChariot() {
         );
 
 
-    // Son de machine à écrire
-
     sonChariot.currentTime =
         0;
 
@@ -755,13 +677,6 @@ function animerChariot() {
 
         .then(
             function() {
-
-                /*
-                   Petit arrêt à droite.
-                   C'est le moment où une vraie
-                   machine à écrire attend avant
-                   de faire revenir le chariot.
-                */
 
                 return new Promise(
                     function(resolve) {
@@ -780,9 +695,7 @@ function animerChariot() {
         .then(
             function() {
 
-                // =================================
-                // RETOUR DU CHARIOT
-                // =================================
+                // Retour du chariot
 
                 let retour =
                     chariot.animate(
@@ -790,11 +703,6 @@ function animerChariot() {
                             {
                                 left:
                                     arrivee + "px"
-                            },
-
-                            {
-                                left:
-                                    arrivee + 5 + "px"
                             },
 
                             {
@@ -813,12 +721,54 @@ function animerChariot() {
                     );
 
 
-                // =================================
-                // LA FEUILLE MONTE
-                // =================================
+                // Feuille
+
+                /*
+                   Une ligne = 65 px
+                   + 9 px d'espace
+                   = 74 px.
+
+                   On monte la feuille de 14 px.
+                   C'est volontairement subtil.
+                */
 
                 let feuille =
-                    faireMonterLaFeuille();
+                    grille.animate(
+                        [
+                            {
+                                transform:
+                                    "translateY(0)"
+                            },
+
+                            {
+                                transform:
+                                    "translateY(-9px)"
+                            },
+
+                            {
+                                transform:
+                                    "translateY(-14px)"
+                            },
+
+                            {
+                                transform:
+                                    "translateY(-11px)"
+                            },
+
+                            {
+                                transform:
+                                    "translateY(-14px)"
+                            }
+                        ],
+                        {
+                            duration: 650,
+
+                            easing:
+                                "cubic-bezier(0.22, 0.61, 0.36, 1)",
+
+                            fill: "forwards"
+                        }
+                    );
 
 
                 return Promise.all([
@@ -866,8 +816,6 @@ function validerMot() {
     }
 
 
-    // Pas assez de lettres
-
     if (
         position < 5
     ) {
@@ -880,8 +828,6 @@ function validerMot() {
 
     }
 
-
-    // Construire le mot
 
     let mot = "";
 
@@ -899,8 +845,6 @@ function validerMot() {
 
     }
 
-
-    // Mot inexistant
 
     if (
         !mots.includes(mot)
@@ -983,14 +927,11 @@ function validerMot() {
                 titreFin.textContent =
                     "GAGNÉ";
 
-
                 texteFin.textContent =
                     "Le mot était :";
 
-
                 motFin.textContent =
                     motSecret;
-
 
                 ecranFin.style.display =
                     "flex";
@@ -1006,14 +947,12 @@ function validerMot() {
 
 
     // =========================================
-    // VÉRIFICATION DES LETTRES
+    // VÉRIFICATION
     // =========================================
 
     let lettresDisponibles =
         motSecret.split("");
 
-
-    // Lettres vertes
 
     for (
         let i = 0;
@@ -1045,8 +984,6 @@ function validerMot() {
 
     }
 
-
-    // Lettres jaunes ou grises
 
     for (
         let i = 0;
@@ -1113,7 +1050,7 @@ function validerMot() {
 
 
     // =========================================
-    // PASSAGE À LA LIGNE SUIVANTE
+    // LIGNE SUIVANTE
     // =========================================
 
     ligne++;
@@ -1168,7 +1105,7 @@ function validerMot() {
 
 
     // =========================================
-    // ANIMATION MACHINE À ÉCRIRE
+    // ANIMATION
     // =========================================
 
     animationEnCours =
@@ -1179,12 +1116,6 @@ function validerMot() {
 
         .then(
             function() {
-
-                /*
-                   On ne permet de taper le mot
-                   suivant qu'une fois que la
-                   feuille a fini de monter.
-                */
 
                 debut += 5;
 
@@ -1208,13 +1139,9 @@ boutonRejouer.addEventListener(
     function() {
 
 
-        // Écran de fin
-
         ecranFin.style.display =
             "none";
 
-
-        // Variables
 
         position = 0;
 
@@ -1229,9 +1156,7 @@ boutonRejouer.addEventListener(
             false;
 
 
-        // =====================================
-        // EFFACER GRILLE
-        // =====================================
+        // Grille
 
         cases.forEach(
             function(caseJeu) {
@@ -1251,10 +1176,6 @@ boutonRejouer.addEventListener(
         );
 
 
-        // =====================================
-        // REPLACER LA FEUILLE
-        // =====================================
-
         grille.getAnimations()
             .forEach(
                 function(animation) {
@@ -1266,12 +1187,10 @@ boutonRejouer.addEventListener(
 
 
         grille.style.transform =
-            "translateY(74px)";
+            "translateY(0)";
 
 
-        // =====================================
-        // RÉINITIALISER CLAVIER
-        // =====================================
+        // Clavier
 
         touches.forEach(
             function(touche) {
@@ -1287,9 +1206,7 @@ boutonRejouer.addEventListener(
         );
 
 
-        // =====================================
-        // ARRÊTER MUSIQUES
-        // =====================================
+        // Musiques
 
         musiqueJeu.pause();
 
@@ -1309,21 +1226,13 @@ boutonRejouer.addEventListener(
             0;
 
 
-        // =====================================
-        // CHARIOT
-        // =====================================
+        // Chariot
 
         chariot.style.opacity =
             "0";
 
 
-        chariot.style.left =
-            "8px";
-
-
-        // =====================================
-        // NOUVEAU MOT
-        // =====================================
+        // Nouveau mot
 
         choisirNouveauMot();
 
