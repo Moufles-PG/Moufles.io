@@ -12,7 +12,9 @@
    ========================================= */
 
 * {
+
     box-sizing: border-box;
+
 }
 
 
@@ -51,8 +53,6 @@ h1 {
 
     margin: 45px 0 0;
 
-    font-family: "Cinzel", serif;
-
     font-size: 4.5rem;
 
     font-weight: 600;
@@ -73,8 +73,6 @@ h1 {
 h2 {
 
     margin: 3px 0 0;
-
-    font-family: "Cinzel", serif;
 
     font-size: 1.2rem;
 
@@ -133,12 +131,44 @@ h2 {
 
 
 /* =========================================
+   FENÊTRE DE LA FEUILLE
+   ========================================= */
+
+/*
+   On ne montre qu'une partie de la feuille.
+
+   La ligne active est toujours placée
+   au milieu de cette fenêtre.
+*/
+
+.fenetre-grille {
+
+    position: relative;
+
+    width: 365px;
+
+    height: 213px;
+
+    overflow: hidden;
+
+    margin-top: 12px;
+
+}
+
+
+/* =========================================
    GRILLE
    ========================================= */
 
 .grille {
 
-    position: relative;
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
 
     display: flex;
 
@@ -146,9 +176,15 @@ h2 {
 
     gap: 9px;
 
-    margin-top: 12px;
+    /*
+       La première ligne commence
+       à la hauteur de la ligne centrale.
+    */
 
-    transform: translateY(0);
+    transform:
+        translateY(74px);
+
+    will-change: transform;
 
 }
 
@@ -164,6 +200,10 @@ h2 {
     justify-content: center;
 
     gap: 9px;
+
+    height: 65px;
+
+    flex-shrink: 0;
 
 }
 
@@ -198,8 +238,6 @@ h2 {
 
     border-radius: 2px;
 
-    font-family: "Cinzel", serif;
-
     font-size: 2rem;
 
     font-weight: 600;
@@ -214,7 +252,7 @@ h2 {
 
 
 /* =========================================
-   PETIT TRAIT SOUS LA LETTRE
+   TRAIT D'ÉCRITURE
    ========================================= */
 
 .case::after {
@@ -299,7 +337,7 @@ h2 {
 
 
 /* =========================================
-   APPARITION D'UNE LETTRE
+   APPARITION LETTRE
    ========================================= */
 
 .letter-animation {
@@ -316,19 +354,22 @@ h2 {
 
     0% {
 
-        transform: scale(0.75);
+        transform:
+            scale(0.75);
 
     }
 
     70% {
 
-        transform: scale(1.08);
+        transform:
+            scale(1.08);
 
     }
 
     100% {
 
-        transform: scale(1);
+        transform:
+            scale(1);
 
     }
 
@@ -353,25 +394,29 @@ h2 {
 
     0% {
 
-        transform: translateY(0);
+        transform:
+            translateY(0);
 
     }
 
     30% {
 
-        transform: translateY(-8px);
+        transform:
+            translateY(-8px);
 
     }
 
     60% {
 
-        transform: translateY(3px);
+        transform:
+            translateY(3px);
 
     }
 
     100% {
 
-        transform: translateY(0);
+        transform:
+            translateY(0);
 
     }
 
@@ -385,6 +430,10 @@ h2 {
 #chariot {
 
     position: absolute;
+
+    left: 8px;
+
+    top: 70px;
 
     width: 4px;
 
@@ -400,12 +449,12 @@ h2 {
 
     z-index: 20;
 
-    transform-origin: center;
+    will-change: left;
 
 }
 
 
-/* Petite poignée du chariot */
+/* Petite poignée */
 
 #chariot::before {
 
@@ -424,159 +473,6 @@ h2 {
     background: #29261f;
 
     border-radius: 2px;
-
-}
-
-
-/* =========================================
-   CHARIOT : ALLER À DROITE
-   ========================================= */
-
-#chariot.chariot-droite {
-
-    opacity: 0.8;
-
-    animation:
-        chariotDroite
-        0.32s
-        cubic-bezier(
-            0.18,
-            0.8,
-            0.25,
-            1
-        );
-
-}
-
-
-@keyframes chariotDroite {
-
-    0% {
-
-        transform:
-            translateX(-2px);
-
-    }
-
-    65% {
-
-        transform:
-            translateX(4px);
-
-    }
-
-    100% {
-
-        transform:
-            translateX(0);
-
-    }
-
-}
-
-
-/* =========================================
-   CHARIOT : RETOUR
-   ========================================= */
-
-#chariot.chariot-retour {
-
-    opacity: 0.85;
-
-    animation:
-        chariotRetour
-        0.42s
-        cubic-bezier(
-            0.55,
-            0.05,
-            0.68,
-            0.19
-        );
-
-}
-
-
-@keyframes chariotRetour {
-
-    0% {
-
-        transform:
-            translateX(0);
-
-    }
-
-    10% {
-
-        transform:
-            translateX(4px);
-
-    }
-
-    100% {
-
-        transform:
-            translateX(0);
-
-    }
-
-}
-
-
-/* =========================================
-   PAPIER QUI AVANCE
-   ========================================= */
-
-.grille.papier-avance {
-
-    animation:
-        papierAvance
-        0.62s
-        cubic-bezier(
-            0.22,
-            0.61,
-            0.36,
-            1
-        );
-
-}
-
-
-@keyframes papierAvance {
-
-    0% {
-
-        transform:
-            translateY(0);
-
-    }
-
-    12% {
-
-        transform:
-            translateY(3px);
-
-    }
-
-    48% {
-
-        transform:
-            translateY(-18px);
-
-    }
-
-    72% {
-
-        transform:
-            translateY(-13px);
-
-    }
-
-    100% {
-
-        transform:
-            translateY(-15px);
-
-    }
 
 }
 
@@ -601,10 +497,6 @@ h2 {
 
 }
 
-
-/* =========================================
-   LIGNES CLAVIER
-   ========================================= */
 
 .ligne-clavier {
 
@@ -646,14 +538,7 @@ h2 {
     box-shadow:
         0 2px 0 #776c55,
         0 3px 5px
-        rgba(
-            0,
-            0,
-            0,
-            0.12
-        );
-
-    font-family: "Cinzel", serif;
+        rgba(0, 0, 0, 0.12);
 
     font-size: 0.95rem;
 
@@ -791,8 +676,6 @@ h2 {
 
     margin: 0;
 
-    font-family: "Cinzel", serif;
-
     font-size: 5rem;
 
     font-weight: 600;
@@ -830,10 +713,6 @@ h2 {
 
 }
 
-
-/* =========================================
-   BOUTON
-   ========================================= */
 
 #boutonRejouer {
 
