@@ -58,7 +58,7 @@ header {
 
     text-align: center;
 
-    z-index: 20;
+    z-index: 70;
 }
 
 
@@ -99,7 +99,7 @@ h1 {
     transition:
         opacity 0.3s ease;
 
-    z-index: 30;
+    z-index: 70;
 
     white-space: nowrap;
 }
@@ -121,15 +121,20 @@ h1 {
    ========================================= */
 
 .zone-grille {
-    position: absolute;
+    position: fixed;
 
-    top: 120px;
-    bottom: 190px;
+    inset: 0;
 
-    left: 0;
-    right: 0;
+    /*
+       La feuille peut maintenant exister
+       derrière tout le clavier.
+    */
 
-    overflow: hidden;
+    overflow: visible;
+
+    pointer-events: none;
+
+    z-index: 10;
 }
 
 
@@ -140,10 +145,16 @@ h1 {
 .feuille {
     position: absolute;
 
-    top: 40px;
+    top: 0;
     left: 50%;
 
     width: 455px;
+
+    /*
+       Centrage horizontal permanent.
+       Le JS ajoute ensuite uniquement
+       un translateY.
+    */
 
     transform:
         translateX(-50%);
@@ -154,7 +165,10 @@ h1 {
 
     gap: 15px;
 
-    will-change: auto;
+    will-change:
+        transform;
+
+    z-index: 10;
 }
 
 
@@ -351,17 +365,26 @@ h1 {
     left: 50%;
     bottom: 18px;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
 
     gap: 10px;
 
     padding: 14px 20px;
 
-    background: rgba(35, 32, 27, 0.92);
+    background:
+        rgba(
+            35,
+            32,
+            27,
+            0.92
+        );
 
     border-radius: 18px;
 
@@ -369,7 +392,12 @@ h1 {
         0 6px 15px
         rgba(0, 0, 0, 0.25);
 
-    z-index: 20;
+    /*
+       LE CLAVIER EST DEVANT LA GRILLE.
+       C'est lui qui masque la feuille.
+    */
+
+    z-index: 50;
 }
 
 
@@ -587,3 +615,4 @@ h1 {
 
     color:
         #d8c9a9;
+}
