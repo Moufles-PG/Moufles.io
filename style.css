@@ -292,46 +292,30 @@ h1::after {
    ========================================= */
 
 .case {
-
-    width: 80px;
-
-    height: 80px;
-
-    flex-shrink: 0;
-
-    border:
-        1px solid #9e947e;
-
-    background:
-        rgba(
-            238,
-            227,
-            200,
-            0.30
-        );
+    width: 75px;
+    height: 58px;
 
     display: flex;
-
-    align-items: center;
-
+    align-items: flex-end;
     justify-content: center;
 
-    font-family:
-        "Cinzel",
-        serif;
+    padding-bottom: 7px;
 
-    font-size: 2.35rem;
+    border: none;
+    border-bottom: 2px solid #6f6758;
 
-    font-weight: 600;
+    background: transparent;
+
+    font-family: "Cinzel", serif;
+    font-size: 2rem;
+    font-weight: 500;
 
     color: #29261f;
 
     transition:
-        background 0.25s ease,
-        border-color 0.25s ease,
         color 0.25s ease,
+        border-color 0.25s ease,
         transform 0.2s ease;
-
 }
 
 
