@@ -92,7 +92,7 @@ h1 {
 #sous-titre {
     position: fixed;
 
-    top: 120px;
+    top: 110px;
     left: 50%;
 
     transform:
@@ -124,7 +124,7 @@ h1 {
 #message {
     position: fixed;
 
-    top: 135px;
+    top: 130px;
     left: 50%;
 
     transform:
