@@ -74,7 +74,7 @@ h1 {
 
 
 /* =========================================
-   MESSAGE
+   MESSAGES
    ========================================= */
 
 #message {
@@ -118,20 +118,22 @@ h1 {
 
 
 /* =========================================
-   ZONE DE LA GRILLE
+   ZONE GRILLE
    ========================================= */
 
 .zone-grille {
     position: absolute;
 
-    top: 120px;
+    top: 0;
 
-    bottom: 190px;
+    bottom: 0;
 
     left: 0;
     right: 0;
 
     overflow: hidden;
+
+    pointer-events: none;
 }
 
 
@@ -144,7 +146,13 @@ h1 {
 
     left: 50%;
 
-    bottom: 0;
+    /*
+       Position verticale de base.
+       Le JS déplacera ensuite toute
+       la feuille.
+    */
+
+    top: 0;
 
     width: 455px;
 
@@ -187,7 +195,7 @@ h1 {
     visibility: hidden;
 
     transition:
-        opacity 0.3s ease;
+        opacity 0.35s ease;
 }
 
 
@@ -260,7 +268,7 @@ h1 {
 
 
 /* =========================================
-   COULEURS CASES
+   COULEURS
    ========================================= */
 
 .case.vert {
@@ -321,7 +329,6 @@ h1 {
         transform:
             scale(1);
     }
-
 }
 
 
@@ -358,7 +365,6 @@ h1 {
         transform:
             translateY(0);
     }
-
 }
 
 
@@ -480,6 +486,8 @@ h1 {
     cursor: pointer;
 
     user-select: none;
+
+    pointer-events: auto;
 }
 
 
@@ -513,7 +521,6 @@ h1 {
         transform:
             scale(1);
     }
-
 }
 
 
