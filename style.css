@@ -345,36 +345,20 @@ h1 {
 
 
 /* =========================================
-   ZONE NOIRE DE MASQUAGE
+   RECTANGLE NOIR DU CLAVIER
    ========================================= */
 
 #clavier {
     position: fixed;
 
-    left: 0;
-    right: 0;
-
-    /*
-       Le haut du rectangle reste
-       à la position du clavier.
-
-       Le bas descend jusqu'au
-       bas de la fenêtre.
-    */
+    left: 50%;
 
     bottom: 0;
 
-    /*
-       Cette valeur correspond à la
-       hauteur nécessaire pour que
-       le clavier reste placé comme avant.
+    width: max-content;
 
-       Le JS ne dépend pas de cette
-       hauteur : il regarde directement
-       la position du rectangle.
-    */
-
-    min-height: 190px;
+    transform:
+        translateX(-50%);
 
     display: flex;
 
@@ -390,28 +374,25 @@ h1 {
         14px 20px 18px;
 
     /*
-       NOIR OPAQUE.
-       Plus aucune transparence.
+       Rectangle totalement opaque.
+       Il masque la grille située derrière.
     */
 
     background:
         #23201b;
 
     /*
-       On supprime les coins arrondis
-       pour que le rectangle descende
-       vraiment jusqu'en bas.
+       On garde les coins supérieurs
+       arrondis, mais le rectangle
+       descend jusqu'au bas de l'écran.
     */
 
-    border-radius: 0;
+    border-radius:
+        18px 18px 0 0;
 
     box-shadow:
         0 -6px 15px
         rgba(0, 0, 0, 0.20);
-
-    /*
-       Le rectangle masque la feuille.
-    */
 
     z-index: 50;
 }
@@ -552,6 +533,7 @@ h1 {
     display: none;
 
     align-items: center;
+
     justify-content: center;
 
     background:
