@@ -1,3 +1,4 @@
+```css
 /* =========================================
    POLICE
    ========================================= */
@@ -41,14 +42,14 @@ body {
 
     align-items: center;
 
-    padding: 40px 20px;
+    padding: 35px 20px;
 
     position: relative;
 }
 
 
 /* =========================================
-   TEXTURE DU PAPIER
+   TEXTURE PAPIER
    ========================================= */
 
 body::before {
@@ -162,24 +163,17 @@ h1 {
         "Cinzel",
         serif;
 
-    font-size: 4rem;
+    font-size: 5rem;
 
     font-weight: 600;
 
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
 
     color: #29261f;
 
     text-align: center;
 
-    text-shadow:
-        1px 1px 0
-        rgba(
-            255,
-            255,
-            255,
-            0.45
-        );
+    line-height: 1;
 }
 
 
@@ -189,13 +183,9 @@ h1::after {
 
     display: block;
 
-    font-family:
-        "Cinzel",
-        serif;
+    font-size: 1rem;
 
-    font-size: 0.85rem;
-
-    margin-top: 8px;
+    margin-top: 12px;
 
     color: #75694f;
 }
@@ -207,7 +197,7 @@ h1::after {
 
 #message {
 
-    height: 30px;
+    height: 32px;
 
     margin-top: 8px;
 
@@ -215,11 +205,11 @@ h1::after {
         "Cinzel",
         serif;
 
-    font-size: 0.9rem;
+    font-size: 1rem;
 
     font-weight: 500;
 
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
 
     color: #514a3d;
 
@@ -244,9 +234,9 @@ h1::after {
 
     width: 100%;
 
-    max-width: 620px;
+    max-width: 800px;
 
-    margin-top: -8px;
+    margin-top: -10px;
 }
 
 
@@ -260,10 +250,10 @@ h1::after {
 
     flex-direction: column;
 
-    gap: 9px;
+    gap: 11px;
 
     padding:
-        10px 20px 18px;
+        10px 20px 22px;
 }
 
 
@@ -271,9 +261,7 @@ h1::after {
 
     display: flex;
 
-    flex-direction: row;
-
-    gap: 9px;
+    gap: 11px;
 }
 
 
@@ -283,11 +271,9 @@ h1::after {
 
 .case {
 
-    width: 68px;
+    width: 80px;
 
-    height: 68px;
-
-    flex-shrink: 0;
+    height: 80px;
 
     border:
         1px solid #9e947e;
@@ -310,7 +296,7 @@ h1::after {
         "Cinzel",
         serif;
 
-    font-size: 2rem;
+    font-size: 2.35rem;
 
     font-weight: 600;
 
@@ -412,7 +398,7 @@ h1::after {
 
 
 /* =========================================
-   VICTOIRE DES CASES
+   VICTOIRE
    ========================================= */
 
 .case.victoire {
@@ -468,9 +454,9 @@ h1::after {
 
     align-items: center;
 
-    gap: 7px;
+    gap: 9px;
 
-    margin-top: 2px;
+    margin-top: 3px;
 
     width: 100%;
 }
@@ -480,9 +466,7 @@ h1::after {
 
     display: flex;
 
-    flex-direction: row;
-
-    gap: 11px;
+    gap: 14px;
 
     justify-content: center;
 }
@@ -494,11 +478,9 @@ h1::after {
 
 .touche {
 
-    width: 48px;
+    width: 55px;
 
-    height: 48px;
-
-    flex-shrink: 0;
+    height: 55px;
 
     display: flex;
 
@@ -524,7 +506,7 @@ h1::after {
 
     box-shadow:
         0 3px 0 #9d927c,
-        0 4px 6px
+        0 4px 7px
         rgba(
             60,
             50,
@@ -536,7 +518,7 @@ h1::after {
         "Cinzel",
         serif;
 
-    font-size: 0.95rem;
+    font-size: 1rem;
 
     font-weight: 600;
 
@@ -568,48 +550,18 @@ h1::after {
 
         transform:
             translateY(0);
-
-        box-shadow:
-            0 3px 0 #9d927c,
-            0 4px 6px
-            rgba(
-                60,
-                50,
-                35,
-                0.18
-            );
     }
 
     45% {
 
         transform:
             translateY(3px);
-
-        box-shadow:
-            0 0 0 #9d927c,
-            0 1px 2px
-            rgba(
-                60,
-                50,
-                35,
-                0.12
-            );
     }
 
     100% {
 
         transform:
             translateY(0);
-
-        box-shadow:
-            0 3px 0 #9d927c,
-            0 4px 6px
-            rgba(
-                60,
-                50,
-                35,
-                0.18
-            );
     }
 }
 
@@ -668,7 +620,7 @@ h1::after {
 
 
 /* =========================================
-   COULEURS DU CLAVIER
+   COULEURS CLAVIER
    ========================================= */
 
 .touche.vert {
@@ -755,10 +707,6 @@ h1::after {
 }
 
 
-/* =========================================
-   CONTENU DE FIN
-   ========================================= */
-
 .fin-contenu {
 
     font-family:
@@ -778,11 +726,11 @@ h1::after {
         "Cinzel",
         serif;
 
-    font-size: 4.5rem;
+    font-size: 5rem;
 
     font-weight: 600;
 
-    letter-spacing: 0.10em;
+    letter-spacing: 0.12em;
 
     color: #29261f;
 }
@@ -794,9 +742,9 @@ h1::after {
 
     display: block;
 
-    font-size: 0.85rem;
+    font-size: 1rem;
 
-    margin-top: 8px;
+    margin-top: 12px;
 
     color: #75694f;
 }
@@ -809,17 +757,17 @@ h1::after {
 #texteFin {
 
     margin:
-        25px 0 8px;
+        28px 0 8px;
 
     font-family:
         "Cinzel",
         serif;
 
-    font-size: 1.05rem;
+    font-size: 1.1rem;
 
     font-weight: 500;
 
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
 
     color: #514a3d;
 }
@@ -831,11 +779,11 @@ h1::after {
         "Cinzel",
         serif;
 
-    font-size: 2rem;
+    font-size: 2.3rem;
 
     font-weight: 600;
 
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
 
     color: #29261f;
 }
@@ -847,10 +795,10 @@ h1::after {
 
 #boutonRejouer {
 
-    margin-top: 25px;
+    margin-top: 28px;
 
     padding:
-        13px 30px;
+        14px 34px;
 
     background:
         #65745b;
@@ -869,7 +817,7 @@ h1::after {
 
     font-weight: 600;
 
-    letter-spacing: 0.08em;
+    letter-spacing: 0.10em;
 
     cursor: pointer;
 
@@ -902,7 +850,50 @@ h1::after {
 
 
 /* =========================================
-   MOBILE
+   PETITS ÉCRANS
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    h1 {
+
+        font-size: 4rem;
+    }
+
+
+    .case {
+
+        width: 72px;
+
+        height: 72px;
+
+        font-size: 2.1rem;
+    }
+
+
+    .ligne {
+
+        gap: 9px;
+    }
+
+
+    .touche {
+
+        width: 48px;
+
+        height: 48px;
+    }
+
+
+    .ligne-clavier {
+
+        gap: 10px;
+    }
+}
+
+
+/* =========================================
+   TÉLÉPHONE
    ========================================= */
 
 @media (max-width: 600px) {
@@ -910,14 +901,17 @@ h1::after {
     body {
 
         padding:
-            25px 10px;
+            25px 8px;
     }
 
 
     h1 {
 
         font-size:
-            2.7rem;
+            2.6rem;
+
+        letter-spacing:
+            0.10em;
     }
 
 
@@ -933,24 +927,24 @@ h1::after {
         gap: 6px;
 
         padding:
-            10px 10px 15px;
+            8px 5px 15px;
     }
 
 
     .ligne {
 
-        gap: 6px;
+        gap: 5px;
     }
 
 
     .case {
 
-        width: 57px;
+        width: 56px;
 
-        height: 57px;
+        height: 56px;
 
         font-size:
-            1.65rem;
+            1.55rem;
     }
 
 
@@ -963,32 +957,47 @@ h1::after {
 
     .touche {
 
-        width: 38px;
+        width: 37px;
 
-        height: 38px;
+        height: 37px;
 
         font-size:
-            0.72rem;
+            0.68rem;
     }
 
 
     .ligne-clavier {
 
-        gap: 7px;
+        gap: 6px;
     }
 
 
     .fin-contenu {
 
         transform:
-            translateY(-15px);
+            translateY(-10px);
     }
 
 
     .fin-contenu h2 {
 
         font-size:
-            3rem;
+            2.7rem;
+    }
+
+
+    #texteFin {
+
+        font-size:
+            0.9rem;
+    }
+
+
+    #motFin {
+
+        font-size:
+            1.7rem;
     }
 
 }
+```
