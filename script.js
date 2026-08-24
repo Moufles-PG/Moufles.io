@@ -73,25 +73,103 @@ let partieTerminee = false;
 
 
 // =========================================
-// ANIMATION DE LA GRILLE
+// POSITION DE LA GRILLE
 // =========================================
 
-let decalageGrille = 0;
+let positionGrille = 0;
 
 
 // =========================================
-// POSITION INITIALE
+// CALCUL DE LA POSITION INITIALE
 // =========================================
 
 function positionInitialeGrille() {
 
     /*
-        On récupère la position du rectangle noir.
+        Position du rectangle noir du clavier.
     */
 
     const rectClavier =
         clavier.getBoundingClientRect();
 
+
+    /*
+        Hauteur réelle d'une ligne.
+    */
+
+    const hauteurLigne =
+        lignes[0].getBoundingClientRect().height;
+
+
+    /*
+        Espacement réel entre les lignes.
+    */
+
+    const styleGrille =
+        getComputedStyle(grille);
+
+
+    const gap =
+        parseFloat(
+            styleGrille.rowGap ||
+            styleGrille.gap
+        ) || 0;
+
+
+    /*
+        On veut que le HAUT du clavier
+        arrive exactement au milieu
+        de l'espace entre la ligne 1
+        et la ligne 2.
+
+        Donc :
+
+        bas ligne 1
+        +
+        moitié du gap
+        =
+        haut du clavier
+    */
+
+    const basLigne =
+        rectClavier.top -
+        (gap / 2);
+
+
+    /*
+        On remonte de la hauteur
+        de la première ligne pour
+        trouver son sommet.
+    */
+
+    const hautLigne =
+        basLigne -
+        hauteurLigne;
+
+
+    /*
+        Position de la feuille.
+    */
+
+    positionGrille =
+        hautLigne;
+
+
+    grille.style.transition =
+        "none";
+
+
+    grille.style.transform =
+        `translateX(-50%) translateY(${positionGrille}px)`;
+
+}
+
+
+// =========================================
+// MONTER D'UNE SEULE LIGNE
+// =========================================
+
+function monterGrille() {
 
     /*
         Hauteur d'une ligne.
@@ -102,7 +180,7 @@ function positionInitialeGrille() {
 
 
     /*
-        Espacement entre les lignes.
+        Espacement entre deux lignes.
     */
 
     const styleGrille =
@@ -117,89 +195,21 @@ function positionInitialeGrille() {
 
 
     /*
-        Le déplacement d'une ligne
-        est toujours exactement le même.
+        Une ligne complète =
+        hauteur + espacement.
     */
 
     const pas =
-        hauteurLigne + gap;
+        hauteurLigne +
+        gap;
 
 
     /*
-        On veut que le BAS de la ligne 1
-        soit 10 px au-dessus du clavier.
+        UNE SEULE ligne vers le haut.
     */
 
-    const basLigne =
-        rectClavier.top - 10;
-
-
-    /*
-        Position du haut de la ligne 1.
-    */
-
-    const hautLigne =
-        basLigne - hauteurLigne;
-
-
-    /*
-        La feuille commence à la position
-        de la ligne 1.
-    */
-
-    decalageGrille =
-        hautLigne;
-
-
-    grille.style.transition =
-        "none";
-
-
-    grille.style.transform =
-        `translateX(-50%) translateY(${decalageGrille}px)`;
-
-}
-
-
-// =========================================
-// MONTER D'UNE LIGNE
-// =========================================
-
-function monterGrille() {
-
-    /*
-        Une ligne = 76 px
-        + 15 px d'espacement.
-
-        On récupère les vraies valeurs
-        directement dans le navigateur.
-    */
-
-    const hauteurLigne =
-        lignes[0].getBoundingClientRect().height;
-
-
-    const styleGrille =
-        getComputedStyle(grille);
-
-
-    const gap =
-        parseFloat(
-            styleGrille.rowGap ||
-            styleGrille.gap
-        ) || 0;
-
-
-    const pas =
-        hauteurLigne + gap;
-
-
-    /*
-        Une seule ligne.
-        Toujours exactement la même distance.
-    */
-
-    decalageGrille -= pas;
+    positionGrille -=
+        pas;
 
 
     /*
@@ -211,13 +221,13 @@ function monterGrille() {
 
 
     grille.style.transform =
-        `translateX(-50%) translateY(${decalageGrille}px)`;
+        `translateX(-50%) translateY(${positionGrille}px)`;
 
 }
 
 
 // =========================================
-// ACCENTS
+// ENLEVER LES ACCENTS
 // =========================================
 
 function enleverAccents(texte) {
@@ -370,7 +380,7 @@ function mettreAJourClavier(
 
 
 // =========================================
-// ÉCRIRE
+// ÉCRIRE UNE LETTRE
 // =========================================
 
 function ecrireLettre(lettre) {
@@ -390,7 +400,8 @@ function ecrireLettre(lettre) {
 
 
     const index =
-        debut + position;
+        debut +
+        position;
 
 
     const caseActuelle =
@@ -421,6 +432,7 @@ function ecrireLettre(lettre) {
 
     sonGood.currentTime =
         0;
+
 
     sonGood.play().catch(
         () => {}
@@ -458,6 +470,10 @@ document.addEventListener(
         }
 
 
+        /*
+            LETTRE
+        */
+
         if (
             event.key.length === 1
         ) {
@@ -486,6 +502,10 @@ document.addEventListener(
         }
 
 
+        /*
+            RETOUR ARRIÈRE
+        */
+
         if (
             event.key === "Backspace"
         ) {
@@ -499,7 +519,8 @@ document.addEventListener(
 
                 const caseActuelle =
                     cases[
-                        debut + position
+                        debut +
+                        position
                     ];
 
 
@@ -518,6 +539,10 @@ document.addEventListener(
 
         }
 
+
+        /*
+            ENTRÉE
+        */
 
         if (
             event.key === "Enter"
@@ -554,7 +579,7 @@ touches.forEach(
 
 
 // =========================================
-// DICTIONNAIRE
+// CHARGEMENT DU DICTIONNAIRE
 // =========================================
 
 fetch("mots.txt")
@@ -597,10 +622,10 @@ fetch("mots.txt")
 
         choisirNouveauMot();
 
+
         /*
-            Une fois le clavier et la grille
-            complètement chargés, on place
-            la ligne 1.
+            On attend que le navigateur
+            ait calculé les dimensions.
         */
 
         requestAnimationFrame(() => {
@@ -622,7 +647,7 @@ fetch("mots.txt")
 
 
 // =========================================
-// NOUVEAU MOT
+// CHOISIR UN NOUVEAU MOT
 // =========================================
 
 function choisirNouveauMot() {
@@ -652,7 +677,7 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// VALIDER
+// VALIDER LE MOT
 // =========================================
 
 function validerMot() {
@@ -664,6 +689,10 @@ function validerMot() {
     }
 
 
+    /*
+        Pas assez de lettres.
+    */
+
     if (
         position < 5
     ) {
@@ -672,10 +701,15 @@ function validerMot() {
             "Pas assez de lettres."
         );
 
+
         return;
 
     }
 
+
+    /*
+        Construire le mot.
+    */
 
     let mot = "";
 
@@ -688,14 +722,15 @@ function validerMot() {
 
         mot +=
             cases[
-                debut + i
+                debut +
+                i
             ].textContent;
 
     }
 
 
     /*
-        MOT INEXISTANT
+        Mot inexistant.
     */
 
     if (
@@ -722,7 +757,9 @@ function validerMot() {
 
 
     /*
+        =====================================
         VICTOIRE
+        =====================================
     */
 
     if (
@@ -756,7 +793,8 @@ function validerMot() {
 
             const caseActuelle =
                 cases[
-                    debut + i
+                    debut +
+                    i
                 ];
 
 
@@ -814,7 +852,9 @@ function validerMot() {
 
 
     /*
-        ANALYSE
+        =====================================
+        ANALYSE DES LETTRES
+        =====================================
     */
 
     const disponibles =
@@ -822,7 +862,7 @@ function validerMot() {
 
 
     /*
-        VERT
+        LETTRES VERTES
     */
 
     for (
@@ -836,7 +876,8 @@ function validerMot() {
         ) {
 
             cases[
-                debut + i
+                debut +
+                i
             ].classList.add(
                 "vert"
             );
@@ -857,7 +898,7 @@ function validerMot() {
 
 
     /*
-        JAUNE / GRIS
+        LETTRES JAUNES / GRISES
     */
 
     for (
@@ -869,7 +910,9 @@ function validerMot() {
         if (
             mot[i] === motSecret[i]
         ) {
+
             continue;
+
         }
 
 
@@ -884,7 +927,8 @@ function validerMot() {
         ) {
 
             cases[
-                debut + i
+                debut +
+                i
             ].classList.add(
                 "jaune"
             );
@@ -904,7 +948,8 @@ function validerMot() {
         else {
 
             cases[
-                debut + i
+                debut +
+                i
             ].classList.add(
                 "gris"
             );
@@ -921,7 +966,9 @@ function validerMot() {
 
 
     /*
+        =====================================
         PASSAGE À LA LIGNE SUIVANTE
+        =====================================
     */
 
     ligneActuelle++;
@@ -932,8 +979,8 @@ function validerMot() {
 
 
     /*
-        La grille monte exactement
-        d'une ligne.
+        La feuille monte exactement
+        d'une ligne + un espacement.
     */
 
     if (
@@ -946,7 +993,9 @@ function validerMot() {
 
 
     /*
-        DERNIER ESSAI
+        =====================================
+        FIN APRÈS LE 6e ESSAI
+        =====================================
     */
 
     if (
@@ -1021,15 +1070,15 @@ boutonRejouer.addEventListener(
 
 
         /*
-            Recalcul de la position
-            par rapport au clavier noir.
+            Retour à la position initiale,
+            calculée par rapport au clavier.
         */
 
         positionInitialeGrille();
 
 
         /*
-            Vider la grille.
+            Nettoyage de la grille.
         */
 
         cases.forEach(
@@ -1052,7 +1101,7 @@ boutonRejouer.addEventListener(
 
 
         /*
-            Réinitialiser le clavier.
+            Nettoyage du clavier.
         */
 
         touches.forEach(
@@ -1070,7 +1119,7 @@ boutonRejouer.addEventListener(
 
 
         /*
-            Réinitialiser les sons.
+            Réinitialisation des musiques.
         */
 
         musiqueJeu.pause();
@@ -1083,10 +1132,6 @@ boutonRejouer.addEventListener(
         musiqueDefaite.currentTime = 0;
 
 
-        /*
-            Nouveau mot.
-        */
-
         choisirNouveauMot();
 
     }
@@ -1094,12 +1139,17 @@ boutonRejouer.addEventListener(
 
 
 // =========================================
-// RECALCUL SI LA FENÊTRE CHANGE
+// ADAPTATION À LA FENÊTRE
 // =========================================
 
 window.addEventListener(
     "resize",
     () => {
+
+        /*
+            On ne recalcule automatiquement
+            que lorsque la partie vient de commencer.
+        */
 
         if (
             ligneActuelle === 0
