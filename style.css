@@ -3,12 +3,12 @@
    ========================================= */
 
 @import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&display=swap'
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap'
 );
 
 
 /* =========================================
-   PAGE
+   BASE
    ========================================= */
 
 * {
@@ -18,33 +18,29 @@
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-
     width: 100%;
     height: 100%;
-
-    overflow: hidden;
 }
 
 
 body {
+    margin: 0;
+
+    overflow: hidden;
 
     background:
-        #eee9dc;
+        radial-gradient(
+            circle at center,
+            rgba(255, 249, 224, 0.35),
+            transparent 70%
+        ),
+        #d8c9a9;
 
-    color:
-        #211c17;
+    color: #29261f;
 
     font-family:
         "Cinzel",
         serif;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
 }
 
 
@@ -52,36 +48,28 @@ body {
    TITRE
    ========================================= */
 
-h1 {
-
+header {
     position: fixed;
 
-    top: 22px;
+    top: 18px;
     left: 0;
 
     width: 100%;
 
-    margin: 0;
-
     text-align: center;
 
-    font-family:
-        "Cinzel",
-        serif;
-
-    font-size: 48px;
-
-    font-weight: 700;
-
-    letter-spacing:
-        7px;
-
-    line-height: 1;
-
     z-index: 20;
+}
 
-    color:
-        #211c17;
+
+h1 {
+    margin: 0;
+
+    font-size: 4.5rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.16em;
 }
 
 
@@ -90,39 +78,42 @@ h1 {
    ========================================= */
 
 #message {
-
     position: fixed;
 
-    top: 92px;
+    top: 108px;
+
     left: 50%;
 
     transform:
         translateX(-50%);
 
-    width: 100%;
+    height: 35px;
 
-    text-align: center;
-
-    font-family:
-        "Cinzel",
-        serif;
-
-    font-size: 17px;
+    font-size: 1rem;
 
     font-weight: 600;
 
-    letter-spacing:
-        1px;
+    letter-spacing: 0.05em;
 
     opacity: 0;
 
     transition:
-        opacity 0.25s ease;
+        opacity 0.3s ease;
 
     z-index: 30;
 
-    pointer-events:
-        none;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   JEU
+   ========================================= */
+
+.jeu {
+    position: fixed;
+
+    inset: 0;
 }
 
 
@@ -131,52 +122,40 @@ h1 {
    ========================================= */
 
 .zone-grille {
+    position: absolute;
 
-    position: fixed;
+    top: 120px;
 
-    left: 50%;
+    bottom: 190px;
 
-    top: 135px;
+    left: 0;
+    right: 0;
 
-    width: 760px;
-
-    height:
-        calc(100vh - 390px);
-
-    transform:
-        translateX(-50%);
-
-    overflow:
-        hidden;
-
-    z-index: 5;
+    overflow: hidden;
 }
 
 
 /* =========================================
-   FEUILLE
+   FEUILLE / GRILLE
    ========================================= */
 
-#feuille {
-
+.feuille {
     position: absolute;
 
     left: 50%;
 
-    top: 0;
+    bottom: 0;
 
-    width: 760px;
+    width: 455px;
+
+    transform:
+        translateX(-50%);
 
     display: flex;
 
     flex-direction: column;
 
-    align-items: center;
-
-    gap: 18px;
-
-    transform:
-        translate(-50%, 0);
+    gap: 15px;
 
     will-change:
         transform;
@@ -188,43 +167,36 @@ h1 {
    ========================================= */
 
 .ligne {
-
-    display: none;
-
     width: 100%;
 
-    justify-content:
-        center;
-
-    align-items:
-        center;
-
-    gap: 13px;
+    height: 76px;
 
     flex-shrink: 0;
-}
-
-
-/*
-   Les trois premières lignes existent
-   dès le lancement.
-*/
-
-.ligne:nth-child(1),
-.ligne:nth-child(2),
-.ligne:nth-child(3) {
 
     display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 11px;
 }
 
 
 /*
-   Le JavaScript ajoute cette classe
-   progressivement aux lignes 4, 5 et 6.
+   Au lancement seules les trois premières
+   lignes sont visibles.
+
+   Le JavaScript ajoute .ligne-visible
+   aux lignes suivantes.
 */
 
-.ligne.ligne-visible {
+.ligne:nth-child(n + 4) {
+    display: none;
+}
 
+
+.ligne.ligne-visible {
     display: flex;
 }
 
@@ -234,202 +206,125 @@ h1 {
    ========================================= */
 
 .case {
-
     position: relative;
 
-    width: 125px;
+    width: 76px;
 
-    height: 105px;
-
-    flex-shrink: 0;
+    height: 76px;
 
     display: flex;
 
-    align-items: center;
-
     justify-content: center;
 
-    font-family:
-        "Cinzel",
-        serif;
+    align-items: center;
 
-    font-size: 54px;
+    background:
+        rgba(
+            196,
+            183,
+            151,
+            0.35
+        );
+
+    border:
+        1px solid
+        #77705f;
+
+    border-radius: 2px;
+
+    font-size: 2.35rem;
 
     font-weight: 600;
 
     color:
-        #211c17;
-
-    background:
-        rgba(255, 252, 244, 0.8);
-
-    border:
-        2px solid
-        #302820;
-
-    box-shadow:
-        0 2px 0 rgba(0, 0, 0, 0.12);
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease;
+        #29261f;
 }
 
 
 /* =========================================
-   CERCLE DERRIÈRE LA LETTRE
+   TRAIT
    ========================================= */
 
-.case.vert::before,
-.case.jaune::before {
-
+.case::after {
     content: "";
 
     position: absolute;
 
-    left: 50%;
-    top: 50%;
+    left: 5px;
+    right: 5px;
 
-    width: 68px;
-    height: 68px;
+    bottom: 4px;
 
-    transform:
-        translate(-50%, -50%);
-
-    border-radius:
-        50%;
-
-    z-index: 0;
-
-    animation:
-        apparitionCercle
-        0.25s ease-out;
-}
-
-
-.case.vert::before {
+    height: 2px;
 
     background:
-        #78946b;
-}
-
-
-.case.jaune::before {
-
-    background:
-        #c7a84b;
-}
-
-
-/*
-   La lettre reste au-dessus du cercle.
-*/
-
-.case.vert,
-.case.jaune {
-
-    background:
-        rgba(255, 252, 244, 0.8);
-
-    color:
-        #211c17;
-}
-
-
-.case::after {
-
-    content:
-        attr(data-letter);
-
-    position: absolute;
-
-    z-index: 2;
-}
-
-
-@keyframes apparitionCercle {
-
-    from {
-
-        width: 0;
-        height: 0;
-
-        opacity: 0;
-    }
-
-    to {
-
-        width: 68px;
-        height: 68px;
-
-        opacity: 1;
-    }
+        #625c4e;
 }
 
 
 /* =========================================
-   LETTRE
+   COULEURS
    ========================================= */
 
-.case {
+.case.vert {
+    background:
+        #738267;
 
-    line-height:
-        1;
+    border-color:
+        #56634d;
 }
 
 
-/*
-   Animation lorsqu'une lettre est tapée.
-*/
+.case.jaune {
+    background:
+        #b49a5d;
+
+    border-color:
+        #907a48;
+}
+
+
+.case.gris {
+    background:
+        #8a857a;
+
+    border-color:
+        #706c64;
+
+    color:
+        #e1d8c5;
+}
+
+
+/* =========================================
+   ANIMATION LETTRE
+   ========================================= */
 
 .letter-animation {
-
     animation:
-        frappeLettre
-        0.16s ease-out;
+        apparitionLettre
+        0.16s
+        ease-out;
 }
 
 
-@keyframes frappeLettre {
+@keyframes apparitionLettre {
 
     0% {
-
         transform:
-            scale(0.88);
-
+            scale(0.72);
     }
 
-    60% {
-
+    65% {
         transform:
             scale(1.08);
-
     }
 
     100% {
-
         transform:
             scale(1);
-
     }
-}
 
-
-/* =========================================
-   CASE GRISE
-   ========================================= */
-
-.case.gris {
-
-    background:
-        #b7b1a5;
-
-    border-color:
-        #8e887e;
-
-    color:
-        #5f5a52;
 }
 
 
@@ -438,35 +333,35 @@ h1 {
    ========================================= */
 
 .case.victoire {
-
     animation:
-        victoireCase
-        0.45s ease forwards;
+        victoire
+        0.45s
+        ease-in-out;
 }
 
 
-@keyframes victoireCase {
+@keyframes victoire {
 
     0% {
-
         transform:
-            scale(1);
-
+            translateY(0);
     }
 
-    40% {
-
+    35% {
         transform:
-            scale(1.12);
+            translateY(-8px);
+    }
 
+    65% {
+        transform:
+            translateY(3px);
     }
 
     100% {
-
         transform:
-            scale(1);
-
+            translateY(0);
     }
+
 }
 
 
@@ -475,33 +370,26 @@ h1 {
    ========================================= */
 
 #chariot {
-
     position: absolute;
 
-    width: 18px;
+    width: 4px;
 
-    height: 8px;
-
-    border-radius:
-        2px;
+    height: 84px;
 
     background:
-        #302820;
+        #29261f;
+
+    border-radius: 2px;
 
     opacity: 0;
 
-    z-index: 15;
+    pointer-events: none;
 
-    pointer-events:
-        none;
-
-    transform:
-        translateY(-2px);
+    z-index: 20;
 }
 
 
 #chariot::before {
-
     content: "";
 
     position: absolute;
@@ -510,31 +398,14 @@ h1 {
 
     top: -5px;
 
-    width: 4px;
+    width: 12px;
 
-    height: 18px;
-
-    background:
-        #302820;
-}
-
-
-#chariot::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: 4px;
-
-    top: 5px;
-
-    width: 10px;
-
-    height: 2px;
+    height: 4px;
 
     background:
-        #302820;
+        #29261f;
+
+    border-radius: 2px;
 }
 
 
@@ -543,19 +414,14 @@ h1 {
    ========================================= */
 
 #clavier {
-
     position: fixed;
 
     left: 50%;
 
-    bottom: 28px;
+    bottom: 18px;
 
     transform:
         translateX(-50%);
-
-    width: 900px;
-
-    z-index: 40;
 
     display: flex;
 
@@ -564,21 +430,17 @@ h1 {
     align-items: center;
 
     gap: 10px;
+
+    z-index: 20;
 }
 
 
-/* =========================================
-   LIGNES DU CLAVIER
-   ========================================= */
-
 .ligne-clavier {
-
     display: flex;
 
-    justify-content:
-        center;
+    justify-content: center;
 
-    gap: 8px;
+    gap: 12px;
 }
 
 
@@ -587,10 +449,9 @@ h1 {
    ========================================= */
 
 .touche {
+    width: 58px;
 
-    width: 78px;
-
-    height: 62px;
+    height: 58px;
 
     display: flex;
 
@@ -598,135 +459,98 @@ h1 {
 
     justify-content: center;
 
-    font-family:
-        "Cinzel",
-        serif;
+    border-radius: 50%;
 
-    font-size: 22px;
+    background:
+        #c7b792;
+
+    border:
+        1px solid
+        #6c634f;
+
+    box-shadow:
+        0 3px 0 #776c55,
+        0 4px 6px
+        rgba(0, 0, 0, 0.12);
+
+    font-size: 1.15rem;
 
     font-weight: 600;
 
     color:
-        #211c17;
+        #29261f;
 
-    background:
-        #d8d1c3;
+    cursor: pointer;
 
-    border:
-        1px solid
-        #777066;
-
-    border-bottom:
-        4px solid
-        #8c8478;
-
-    cursor:
-        pointer;
-
-    user-select:
-        none;
-
-    transition:
-        transform 0.08s ease,
-        background 0.15s ease,
-        color 0.15s ease;
+    user-select: none;
 }
 
 
 .touche:hover {
-
-    background:
-        #e2dccf;
-}
-
-
-.touche:active {
-
     transform:
-        translateY(3px);
-
-    border-bottom-width:
-        1px;
+        translateY(-2px);
 }
 
-
-/* =========================================
-   ANIMATION TOUCHE
-   ========================================= */
 
 .touche-appuyee {
-
     animation:
-        toucheFrappee
-        0.15s ease-out;
+        toucheAppuyee
+        0.15s
+        ease-out;
 }
 
 
-@keyframes toucheFrappee {
+@keyframes toucheAppuyee {
 
     0% {
-
         transform:
-            translateY(0);
-
+            scale(1);
     }
 
     50% {
-
         transform:
-            translateY(3px);
-
+            scale(0.87);
     }
 
     100% {
-
         transform:
-            translateY(0);
-
+            scale(1);
     }
+
 }
 
 
 /* =========================================
-   COULEURS DU CLAVIER
+   COULEURS CLAVIER
    ========================================= */
 
 .touche.vert {
-
     background:
-        #78946b;
+        #738267;
 
     border-color:
-        #5d7453;
-
-    color:
-        #211c17;
+        #56634d;
 }
 
 
 .touche.jaune {
-
     background:
-        #c7a84b;
+        #b49a5d;
 
     border-color:
-        #9e8539;
-
-    color:
-        #211c17;
+        #907a48;
 }
 
 
 .touche.gris {
-
     background:
-        #aaa398;
+        #8a857a;
 
     border-color:
-        #858078;
+        #706c64;
 
     color:
-        #68635c;
+        #d9d0bd;
 }
 
 
@@ -735,12 +559,9 @@ h1 {
    ========================================= */
 
 #ecranFin {
-
     position: fixed;
 
     inset: 0;
-
-    z-index: 100;
 
     display: none;
 
@@ -750,126 +571,81 @@ h1 {
 
     background:
         rgba(
-            238,
-            233,
-            220,
-            0.94
+            216,
+            201,
+            169,
+            0.96
         );
+
+    z-index: 100;
 }
 
 
 .fin-contenu {
-
-    width: 520px;
-
-    padding: 55px;
-
     text-align: center;
-
-    border:
-        2px solid
-        #302820;
-
-    background:
-        #eee9dc;
-
-    box-shadow:
-        0 8px 30px
-        rgba(0, 0, 0, 0.15);
 }
 
 
-.fin-contenu h2 {
+#titreFin {
+    margin: 0;
 
-    margin:
-        0 0 25px;
+    font-size: 5rem;
 
-    font-size:
-        42px;
+    font-weight: 600;
 
-    letter-spacing:
-        4px;
+    letter-spacing: 0.12em;
 }
 
 
-.fin-contenu p {
-
+#texteFin {
     margin:
-        0 0 15px;
-
-    font-size:
-        17px;
+        10px 0 5px;
 }
 
 
 #motFin {
+    font-size: 2.2rem;
 
-    margin:
-        15px 0 35px;
+    font-weight: 600;
 
-    font-size:
-        36px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        5px;
+    letter-spacing: 0.15em;
 }
 
 
-/* =========================================
-   BOUTON REJOUER
-   ========================================= */
-
 #boutonRejouer {
+    margin-top: 30px;
 
     padding:
-        14px 32px;
+        12px 28px;
+
+    background:
+        transparent;
+
+    border:
+        1px solid
+        #625c4e;
 
     font-family:
         "Cinzel",
         serif;
 
-    font-size:
-        15px;
+    font-size: 0.9rem;
 
-    font-weight:
-        600;
+    font-weight: 600;
 
-    letter-spacing:
-        2px;
+    letter-spacing: 0.12em;
 
     color:
-        #eee9dc;
+        #29261f;
 
-    background:
-        #302820;
-
-    border:
-        none;
-
-    cursor:
-        pointer;
-
-    transition:
-        transform 0.15s ease,
-        background 0.15s ease;
+    cursor: pointer;
 }
 
 
 #boutonRejouer:hover {
-
     background:
-        #4a4035;
+        #29261f;
 
-    transform:
-        translateY(-2px);
-}
-
-
-#boutonRejouer:active {
-
-    transform:
-        translateY(1px);
+    color:
+        #d8c9a9;
 }
