@@ -2,11 +2,17 @@
 // ÉLÉMENTS
 // =========================================
 
-let cases = document.querySelectorAll(".case");
-let touches = document.querySelectorAll(".touche");
-let lignes = document.querySelectorAll(".ligne");
+let cases =
+    document.querySelectorAll(".case");
 
-let message = document.querySelector("#message");
+let touches =
+    document.querySelectorAll(".touche");
+
+let lignes =
+    document.querySelectorAll(".ligne");
+
+let message =
+    document.querySelector("#message");
 
 let musiqueJeu =
     document.querySelector("#musiqueJeu");
@@ -33,7 +39,7 @@ let boutonRejouer =
     document.querySelector("#boutonRejouer");
 
 let feuille =
-    document.querySelector("#feuille");
+    document.querySelector(".feuille");
 
 let zoneGrille =
     document.querySelector(".zone-grille");
@@ -47,14 +53,16 @@ let chariot =
 // =========================================
 
 let position = 0;
+
 let ligne = 0;
+
 let debut = 0;
 
 let mots = [];
+
 let motSecret = "";
 
 let partieTerminee = false;
-let animationEnCours = false;
 
 
 // =========================================
@@ -62,7 +70,9 @@ let animationEnCours = false;
 // =========================================
 
 musiqueJeu.volume = 0.15;
+
 musiqueVictoire.volume = 0.25;
+
 musiqueDefaite.volume = 0.25;
 
 
@@ -79,8 +89,11 @@ let sonFalse =
 let sonChariot =
     new Audio("Typewirter.mp3");
 
+
 sonGood.volume = 0.05;
+
 sonFalse.volume = 0.05;
+
 sonChariot.volume = 0.25;
 
 
@@ -105,14 +118,18 @@ function enleverAccents(texte) {
 
 function afficherMessage(texte) {
 
-    message.textContent = texte;
+    message.textContent =
+        texte;
 
-    message.style.opacity = "1";
+    message.style.opacity =
+        "1";
+
 
     setTimeout(
         function() {
 
-            message.style.opacity = "0";
+            message.style.opacity =
+                "0";
 
         },
         1500
@@ -168,6 +185,8 @@ function mettreAJourClavier(
             }
 
 
+            // VERT
+
             if (
                 couleur === "vert"
             ) {
@@ -182,6 +201,8 @@ function mettreAJourClavier(
                 );
             }
 
+
+            // JAUNE
 
             if (
                 couleur === "jaune"
@@ -203,6 +224,8 @@ function mettreAJourClavier(
                 }
             }
 
+
+            // GRIS
 
             if (
                 couleur === "gris"
@@ -233,15 +256,23 @@ function mettreAJourClavier(
 
 function ecrireLettre(lettre) {
 
-    if (partieTerminee) {
+    if (
+        partieTerminee
+    ) {
+
         return;
     }
 
 
-    if (position >= 5) {
+    if (
+        position >= 5
+    ) {
+
         return;
     }
 
+
+    // Trouver la touche
 
     let touche = null;
 
@@ -266,7 +297,8 @@ function ecrireLettre(lettre) {
         touche.classList.contains("gris")
     ) {
 
-        sonFalse.currentTime = 0;
+        sonFalse.currentTime =
+            0;
 
         sonFalse.play()
             .catch(
@@ -275,7 +307,8 @@ function ecrireLettre(lettre) {
 
     } else {
 
-        sonGood.currentTime = 0;
+        sonGood.currentTime =
+            0;
 
         sonGood.play()
             .catch(
@@ -284,17 +317,19 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Écrire la lettre
+    // Case actuelle
 
     let caseActuelle =
-        cases[debut + position];
+        cases[
+            debut + position
+        ];
 
 
     caseActuelle.textContent =
         lettre;
 
 
-    // Animation
+    // Animation lettre
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -307,12 +342,21 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Clavier
+    // Animation touche
 
-    animerTouche(lettre);
+    animerTouche(
+        lettre
+    );
 
 
-    // Musique du jeu
+    // =====================================
+    // MUSIQUE
+    // =====================================
+
+    /*
+       La musique commence uniquement
+       quand la première lettre est écrite.
+    */
 
     if (
         musiqueJeu.paused
@@ -337,7 +381,10 @@ document.addEventListener(
     "keydown",
     function(event) {
 
-        if (partieTerminee) {
+        if (
+            partieTerminee
+        ) {
+
             return;
         }
 
@@ -358,7 +405,9 @@ document.addEventListener(
                 /^[A-Z]$/.test(lettre)
             ) {
 
-                ecrireLettre(lettre);
+                ecrireLettre(
+                    lettre
+                );
             }
 
 
@@ -380,7 +429,14 @@ document.addEventListener(
 
                 cases[
                     debut + position
-                ].textContent = "";
+                ].textContent =
+                    "";
+
+                cases[
+                    debut + position
+                ].classList.remove(
+                    "letter-animation"
+                );
             }
 
 
@@ -396,6 +452,7 @@ document.addEventListener(
 
             validerMot();
         }
+
     }
 );
 
@@ -513,27 +570,24 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// AFFICHER LES BONNES LIGNES
+// LIGNES VISIBLES
 // =========================================
 
 function mettreAJourLignesVisibles() {
 
-    /*
-       Au départ :
-       lignes 1, 2 et 3 visibles.
-
-       Après essai 1 :
-       ligne 4 apparaît.
-
-       Après essai 2 :
-       ligne 5 apparaît.
-
-       Après essai 3 :
-       ligne 6 apparaît.
-    */
-
     lignes.forEach(
         function(uneLigne, index) {
+
+            /*
+               Au début :
+
+               0 = visible
+               1 = visible
+               2 = visible
+               3 = cachée
+               4 = cachée
+               5 = cachée
+            */
 
             if (
                 index <= ligne + 2
@@ -558,45 +612,54 @@ function mettreAJourLignesVisibles() {
 // POSITION DE LA GRILLE
 // =========================================
 
-function calculerPositionGrille() {
+function obtenirPosition() {
 
-    let zone =
-        zoneGrille.getBoundingClientRect();
+    /*
+       Position de départ :
+       grille très basse.
+
+       Position finale :
+       grille très haute.
+
+       La progression se fait sur
+       les six essais.
+    */
 
 
-    let feuilleHauteur =
-        feuille.offsetHeight;
+    let hauteurZone =
+        zoneGrille.clientHeight;
+
+
+    let hauteurFeuille =
+        feuille.scrollHeight;
 
 
     /*
-       Départ très bas.
+       Position basse.
 
-       La grille commence près du clavier.
+       On place le bas de la feuille
+       près du clavier.
     */
 
     let positionBasse =
-        zone.height -
-        feuilleHauteur +
-        80;
+        hauteurZone -
+        hauteurFeuille;
 
 
     /*
-       Position finale.
+       Position haute.
 
-       Au sixième essai, le haut de la
-       grille arrive près du titre/message.
+       Au sixième essai,
+       le haut de la grille arrive
+       près du message.
     */
 
     let positionHaute =
-        -80;
+        -35;
 
 
     /*
-       ligne = 0
-       ligne = 1
-       ligne = 2
-       ...
-       ligne = 5
+       Progression de 0 à 5.
     */
 
     let progression =
@@ -620,156 +683,104 @@ function calculerPositionGrille() {
 
 function positionInitiale() {
 
+    /*
+       On commence avec uniquement
+       trois lignes visibles.
+    */
+
+    ligne = 0;
+
     mettreAJourLignesVisibles();
 
 
-    let position =
-        calculerPositionGrille();
+    /*
+       On attend un tout petit peu que
+       le navigateur recalcule la hauteur.
+    */
+
+    requestAnimationFrame(
+        function() {
+
+            let position =
+                obtenirPosition();
 
 
-    feuille.style.transform =
-        `translate(-50%, ${position}px)`;
+            feuille.style.transform =
+                `translate(
+                    -50%,
+                    ${position}px
+                )`;
+        }
+    );
 }
 
 
 // =========================================
-// POSITION ACTUELLE
+// MONTER LA GRILLE
 // =========================================
 
-function positionActuelle() {
-
-    let matrice =
-        new DOMMatrix(
-            getComputedStyle(
-                feuille
-            ).transform
-        );
-
-
-    if (
-        !matrice
-    ) {
-
-        return 0;
-    }
-
-
-    return matrice.m42;
-}
-
-
-// =========================================
-// ANIMATION DE LA GRILLE
-// =========================================
-
-function animerGrille() {
-
-    let anciennePosition =
-        positionActuelle();
-
+function monterGrille() {
 
     /*
-       On affiche d'abord la nouvelle ligne.
+       Nouvelle ligne visible.
     */
 
     mettreAJourLignesVisibles();
 
 
-    let nouvellePosition =
-        calculerPositionGrille();
+    /*
+       Le navigateur recalcule la taille
+       de la feuille avant le déplacement.
+    */
+
+    requestAnimationFrame(
+        function() {
+
+            let nouvellePosition =
+                obtenirPosition();
 
 
-    let animation =
-        feuille.animate(
-
-            [
-
-                {
-                    transform:
-                        `translate(
-                            -50%,
-                            ${anciennePosition}px
-                        )`
-                },
-
-                {
-                    transform:
-                        `translate(
-                            -50%,
-                            ${
-                                anciennePosition +
-                                (
-                                    nouvellePosition -
-                                    anciennePosition
-                                ) * 0.45
-                            }px
-                        )`
-                },
-
-                {
-                    transform:
-                        `translate(
-                            -50%,
-                            ${nouvellePosition}px
-                        )`
-                }
-
-            ],
-
-            {
-
-                duration: 800,
-
-                easing:
-                    "cubic-bezier(
-                        0.22,
-                        0.61,
-                        0.36,
-                        1
-                    )",
-
-                fill: "forwards"
-            }
-        );
+            feuille.style.transition =
+                "transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1)";
 
 
-    return animation.finished
-
-        .then(
-            function() {
-
-                feuille.style.transform =
-                    `translate(
-                        -50%,
-                        ${nouvellePosition}px
-                    )`;
-            }
-        );
+            feuille.style.transform =
+                `translate(
+                    -50%,
+                    ${nouvellePosition}px
+                )`;
+        }
+    );
 }
 
 
 // =========================================
-// ANIMATION DU CHARIOT
+// CHARIOT
 // =========================================
 
 function animerChariot() {
 
-    let ligneActuelle =
+    /*
+       On récupère la ligne que l'on vient
+       de valider.
+    */
+
+    let ligneValidee =
         lignes[
             ligne - 1
         ];
 
 
     if (
-        !ligneActuelle
+        !ligneValidee
     ) {
 
-        return Promise.resolve();
+        return;
     }
 
 
     let casesLigne =
-        ligneActuelle.querySelectorAll(
+        ligneValidee.querySelectorAll(
             ".case"
         );
 
@@ -784,29 +795,44 @@ function animerChariot() {
     let feuilleRect =
         feuille.getBoundingClientRect();
 
+
     let premiereRect =
         premiereCase.getBoundingClientRect();
+
 
     let derniereRect =
         derniereCase.getBoundingClientRect();
 
 
+    /*
+       Position de départ
+       du chariot.
+    */
+
     let depart =
         premiereRect.left -
         feuilleRect.left -
-        10;
+        8;
 
+
+    /*
+       Position d'arrivée.
+    */
 
     let arrivee =
         derniereRect.right -
         feuilleRect.left +
-        10;
+        8;
 
+
+    /*
+       Position verticale.
+    */
 
     let haut =
         premiereRect.top -
         feuilleRect.top -
-        5;
+        4;
 
 
     chariot.style.left =
@@ -819,7 +845,9 @@ function animerChariot() {
         "1";
 
 
-    // Son du chariot
+    /*
+       Son de vraie machine à écrire.
+    */
 
     sonChariot.currentTime =
         0;
@@ -830,9 +858,11 @@ function animerChariot() {
         );
 
 
-    // Déplacement vers la droite
+    /*
+       Le chariot traverse la ligne.
+    */
 
-    let aller =
+    let animation =
         chariot.animate(
 
             [
@@ -848,43 +878,26 @@ function animerChariot() {
             ],
 
             {
-
-                duration: 420,
+                duration: 450,
 
                 easing:
-                    "cubic-bezier(
-                        0.12,
-                        0.8,
-                        0.25,
-                        1
-                    )",
+                    "ease-out",
 
-                fill: "forwards"
+                fill:
+                    "forwards"
             }
         );
 
 
-    return aller.finished
+    /*
+       Lorsqu'il arrive au bout,
+       il revient brutalement comme
+       une vraie machine à écrire.
+    */
 
+    animation.finished
         .then(
             function() {
-
-                return new Promise(
-                    function(resolve) {
-
-                        setTimeout(
-                            resolve,
-                            80
-                        );
-                    }
-                );
-            }
-        )
-
-        .then(
-            function() {
-
-                // Retour du chariot
 
                 let retour =
                     chariot.animate(
@@ -897,50 +910,33 @@ function animerChariot() {
 
                             {
                                 left:
-                                    arrivee - 8 + "px"
-                            },
-
-                            {
-                                left:
                                     depart + "px"
                             }
                         ],
 
                         {
-
-                            duration: 340,
+                            duration: 320,
 
                             easing:
-                                "cubic-bezier(
-                                    0.55,
-                                    0.05,
-                                    0.68,
-                                    0.19
-                                )",
+                                "ease-in",
 
-                            fill: "forwards"
+                            fill:
+                                "forwards"
                         }
                     );
 
 
                 /*
-                   La grille monte en même temps
-                   que le retour du chariot.
+                   La grille monte pendant
+                   le retour du chariot.
                 */
 
-                let mouvement =
-                    animerGrille();
+                monterGrille();
 
 
-                return Promise.all(
-                    [
-                        retour.finished,
-                        mouvement
-                    ]
-                );
+                return retour.finished;
             }
         )
-
         .then(
             function() {
 
@@ -958,8 +954,7 @@ function animerChariot() {
 function validerMot() {
 
     if (
-        partieTerminee ||
-        animationEnCours
+        partieTerminee
     ) {
 
         return;
@@ -1039,8 +1034,6 @@ function validerMot() {
             );
 
 
-        // Cases vertes
-
         for (
             let i = 0;
             i < 5;
@@ -1075,8 +1068,6 @@ function validerMot() {
         }
 
 
-        // Écran final
-
         setTimeout(
             function() {
 
@@ -1105,7 +1096,7 @@ function validerMot() {
 
 
     // =====================================
-    // VÉRIFICATION DES LETTRES
+    // VÉRIFICATION
     // =====================================
 
     let lettresDisponibles =
@@ -1143,7 +1134,7 @@ function validerMot() {
     }
 
 
-    // Jaune / gris
+    // Lettres jaunes / grises
 
     for (
         let i = 0;
@@ -1204,7 +1195,7 @@ function validerMot() {
 
 
     // =====================================
-    // PASSER À LA LIGNE SUIVANTE
+    // PASSAGE À LA LIGNE SUIVANTE
     // =====================================
 
     ligne++;
@@ -1258,26 +1249,20 @@ function validerMot() {
 
 
     // =====================================
-    // ANIMATION
+    // CHARIOT + MONTÉE
     // =====================================
 
-    animationEnCours =
-        true;
+    animerChariot();
 
 
-    animerChariot()
+    /*
+       On passe immédiatement à la nouvelle
+       ligne pour pouvoir écrire dedans.
+    */
 
-        .then(
-            function() {
+    debut += 5;
 
-                debut += 5;
-
-                position = 0;
-
-                animationEnCours =
-                    false;
-            }
-        );
+    position = 0;
 }
 
 
@@ -1289,7 +1274,7 @@ boutonRejouer.addEventListener(
     "click",
     function() {
 
-        // Cacher écran final
+        // Écran
 
         ecranFin.style.display =
             "none";
@@ -1298,17 +1283,16 @@ boutonRejouer.addEventListener(
         // Variables
 
         position = 0;
+
         ligne = 0;
+
         debut = 0;
 
         partieTerminee =
             false;
 
-        animationEnCours =
-            false;
 
-
-        // Effacer cases
+        // Cases
 
         cases.forEach(
             function(caseJeu) {
@@ -1327,7 +1311,7 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Réinitialiser clavier
+        // Clavier
 
         touches.forEach(
             function(touche) {
@@ -1342,16 +1326,24 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Musiques
+        // Musique
 
         musiqueJeu.pause();
-        musiqueJeu.currentTime = 0;
+
+        musiqueJeu.currentTime =
+            0;
+
 
         musiqueVictoire.pause();
-        musiqueVictoire.currentTime = 0;
+
+        musiqueVictoire.currentTime =
+            0;
+
 
         musiqueDefaite.pause();
-        musiqueDefaite.currentTime = 0;
+
+        musiqueDefaite.currentTime =
+            0;
 
 
         // Chariot
@@ -1360,65 +1352,41 @@ boutonRejouer.addEventListener(
             "0";
 
 
-        chariot.getAnimations().forEach(
-            function(animation) {
+        /*
+           On enlève la transition pour
+           éviter de voir la grille revenir
+           lentement.
+        */
 
-                animation.cancel();
-            }
-        );
+        feuille.style.transition =
+            "none";
 
-
-        feuille.getAnimations().forEach(
-            function(animation) {
-
-                animation.cancel();
-            }
-        );
-
-
-        // =====================================
-        // RETOUR À LA POSITION DE DÉPART
-        // =====================================
 
         /*
-           On remet explicitement les trois
-           premières lignes visibles.
+           Trois lignes seulement.
         */
 
         mettreAJourLignesVisibles();
 
 
         /*
-           On supprime l'ancienne transformation.
+           Retour à la position de départ.
         */
 
-        feuille.style.transform =
-            "none";
+        requestAnimationFrame(
+            function() {
+
+                let positionInitiale =
+                    obtenirPosition();
 
 
-        /*
-           Force le navigateur à recalculer
-           la hauteur maintenant que seules
-           les trois premières lignes sont
-           visibles.
-        */
-
-        void feuille.offsetHeight;
-
-
-        /*
-           Recalcul de la position de départ.
-        */
-
-        let position =
-            calculerPositionGrille();
-
-
-        feuille.style.transform =
-            `translate(
-                -50%,
-                ${position}px
-            )`;
+                feuille.style.transform =
+                    `translate(
+                        -50%,
+                        ${positionInitiale}px
+                    )`;
+            }
+        );
 
 
         // Nouveau mot
