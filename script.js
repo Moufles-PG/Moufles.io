@@ -38,14 +38,14 @@ let motFin =
 let boutonRejouer =
     document.querySelector("#boutonRejouer");
 
-let chariot =
-    document.querySelector("#chariot");
-
 let feuille =
-    document.querySelector(".feuille");
+    document.querySelector("#feuille");
 
 let zoneGrille =
     document.querySelector(".zone-grille");
+
+let chariot =
+    document.querySelector("#chariot");
 
 
 // =========================================
@@ -173,7 +173,7 @@ function animerTouche(lettre) {
 
 
 // =========================================
-// COULEUR DU CLAVIER
+// COULEUR CLAVIER
 // =========================================
 
 function mettreAJourClavier(
@@ -354,7 +354,7 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Musique après première lettre
+    // Musique après la première lettre
 
     if (
         musiqueJeu.paused
@@ -535,7 +535,7 @@ fetch("mots.txt")
 
 
 // =========================================
-// CHOISIR UN MOT
+// CHOISIR LE MOT
 // =========================================
 
 function choisirNouveauMot() {
@@ -567,106 +567,122 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// POSITIONNER LA FEUILLE
+// CALCUL DE LA POSITION
 // =========================================
 
-function positionnerLigneActuelle() {
+function calculerPositionsGrille() {
 
-    if (
-        !lignes[ligne]
-    ) {
-
-        return;
-
-    }
-
-
-    let zoneRect =
+    let zone =
         zoneGrille.getBoundingClientRect();
 
 
-    let ligneRect =
-        lignes[ligne].getBoundingClientRect();
-
-
-    let centreZone =
-        zoneRect.top +
-        zoneRect.height / 2;
-
-
-    let centreLigne =
-        ligneRect.top +
-        ligneRect.height / 2;
-
-
-    let difference =
-        centreZone -
-        centreLigne;
-
-
-    let transformation =
-        feuille.getBoundingClientRect();
+    let feuilleHauteur =
+        feuille.offsetHeight;
 
 
     /*
-       On récupère la transformation
-       actuelle et on ajoute uniquement
-       la distance nécessaire.
+       Position basse :
+       le bas de la feuille touche
+       presque le clavier.
     */
 
-    return difference;
+    let positionBasse =
+        zone.height -
+        feuilleHauteur;
+
+
+    /*
+       Position haute :
+       le haut de la feuille touche
+       presque le titre.
+    */
+
+    let positionHaute =
+        0;
+
+
+    /*
+       5 déplacements entre
+       l'essai 1 et l'essai 6.
+    */
+
+    let progression =
+        ligne / 5;
+
+
+    /*
+       Ligne 0 = position basse
+       Ligne 5 = position haute
+    */
+
+    let position =
+        positionBasse +
+        (
+            positionHaute -
+            positionBasse
+        ) *
+        progression;
+
+
+    return position;
 
 }
+
+
+// =========================================
+// POSITION INITIALE
+// =========================================
+
+function positionInitiale() {
+
+    let position =
+        calculerPositionsGrille();
+
+
+    feuille.style.transform =
+        `translate(
+            -50%,
+            ${position}px
+        )`;
+
+}
+
+
+window.addEventListener(
+    "load",
+    function() {
+
+        positionInitiale();
+
+    }
+);
 
 
 // =========================================
 // ANIMATION DE LA FEUILLE
 // =========================================
 
-function faireMonterLaFeuille() {
+function animerFeuille() {
 
-    let difference =
-        positionnerLigneActuelle();
-
-
-    if (
-        difference === undefined
-    ) {
-
-        return Promise.resolve();
-
-    }
-
-
-    let matrice =
-        new DOMMatrix(
-            getComputedStyle(
-                feuille
-            ).transform
-        );
-
-
-    let departY =
-        matrice.m42;
-
-
-    let arriveeY =
-        departY + difference;
+    let anciennePosition =
+        calculerPositionActuelle();
 
 
     /*
-       Mouvement de papier :
+       On augmente ligne AVANT
+       d'appeler cette fonction.
 
-       départ
-       ↓
-       accélération
-       ↓
-       montée
-       ↓
-       petit dépassement
-       ↓
-       retour
+       Donc :
+
+       ligne 1 → 0
+       ligne 2 → 1
+       ligne 3 → 2
+       etc.
     */
+
+    let nouvellePosition =
+        calculerPositionsGrille();
+
 
     let animation =
         feuille.animate(
@@ -675,29 +691,37 @@ function faireMonterLaFeuille() {
 
                 {
                     transform:
-                        `translate(-50%, calc(-50% + ${departY}px))`
+                        `translate(
+                            -50%,
+                            ${anciennePosition}px
+                        )`
                 },
 
                 {
                     transform:
-                        `translate(-50%, calc(-50% + ${arriveeY * 0.72}px))`
+                        `translate(
+                            -50%,
+                            ${anciennePosition +
+                            (
+                                nouvellePosition -
+                                anciennePosition
+                            ) * 0.82}px
+                        )`
                 },
 
                 {
                     transform:
-                        `translate(-50%, calc(-50% + ${arriveeY * 1.04}px))`
-                },
-
-                {
-                    transform:
-                        `translate(-50%, calc(-50% + ${arriveeY}px))`
+                        `translate(
+                            -50%,
+                            ${nouvellePosition}px
+                        )`
                 }
 
             ],
 
             {
 
-                duration: 800,
+                duration: 750,
 
                 easing:
                     "cubic-bezier(0.22, 0.61, 0.36, 1)",
@@ -718,11 +742,34 @@ function faireMonterLaFeuille() {
                 feuille.style.transform =
                     `translate(
                         -50%,
-                        calc(-50% + ${arriveeY}px)
+                        ${nouvellePosition}px
                     )`;
 
             }
         );
+
+}
+
+
+// =========================================
+// POSITION ACTUELLE
+// =========================================
+
+function calculerPositionActuelle() {
+
+    let style =
+        getComputedStyle(
+            feuille
+        );
+
+
+    let matrice =
+        new DOMMatrix(
+            style.transform
+        );
+
+
+    return matrice.m42;
 
 }
 
@@ -734,7 +781,9 @@ function faireMonterLaFeuille() {
 function animerChariot() {
 
     let ligneActuelle =
-        lignes[ligne - 1];
+        lignes[
+            ligne - 1
+        ];
 
 
     if (
@@ -752,13 +801,17 @@ function animerChariot() {
         );
 
 
-    let derniereCase =
+    let casesLigne =
         ligneActuelle.querySelectorAll(
             ".case"
-        )[4];
+        );
 
 
-    let grilleRect =
+    let derniereCase =
+        casesLigne[4];
+
+
+    let feuilleRect =
         feuille.getBoundingClientRect();
 
 
@@ -771,28 +824,30 @@ function animerChariot() {
 
 
     let depart =
-        premiereRect.left
-        - grilleRect.left
-        - 10;
+        premiereRect.left -
+        feuilleRect.left -
+        10;
 
 
     let arrivee =
-        derniereRect.right
-        - grilleRect.left
-        + 10;
+        derniereRect.right -
+        feuilleRect.left +
+        10;
 
 
     let haut =
-        premiereRect.top
-        - grilleRect.top
-        - 5;
+        premiereRect.top -
+        feuilleRect.top -
+        5;
 
 
     chariot.style.left =
         depart + "px";
 
+
     chariot.style.top =
         haut + "px";
+
 
     chariot.style.opacity =
         "1";
@@ -808,7 +863,7 @@ function animerChariot() {
 
 
     /*
-       CHARIOT → DROITE
+       CHARIOT PART
     */
 
     let aller =
@@ -830,7 +885,7 @@ function animerChariot() {
 
             {
 
-                duration: 400,
+                duration: 420,
 
                 easing:
                     "cubic-bezier(0.12, 0.8, 0.25, 1)",
@@ -853,7 +908,7 @@ function animerChariot() {
 
                         setTimeout(
                             resolve,
-                            100
+                            80
                         );
 
                     }
@@ -866,7 +921,7 @@ function animerChariot() {
             function() {
 
                 /*
-                   CHARIOT ← RETOUR
+                   LE CHARIOT REVIENT
                 */
 
                 let retour =
@@ -893,7 +948,7 @@ function animerChariot() {
 
                         {
 
-                            duration: 360,
+                            duration: 340,
 
                             easing:
                                 "cubic-bezier(0.55, 0.05, 0.68, 0.19)",
@@ -907,17 +962,18 @@ function animerChariot() {
 
 
                 /*
-                   LE PAPIER MONTE EN MÊME TEMPS
+                   ET LA FEUILLE MONTE
+                   EN MÊME TEMPS.
                 */
 
-                let feuilleMonte =
-                    faireMonterLaFeuille();
+                let mouvement =
+                    animerFeuille();
 
 
                 return Promise.all(
                     [
                         retour.finished,
-                        feuilleMonte
+                        mouvement
                     ]
                 );
 
@@ -931,22 +987,13 @@ function animerChariot() {
                     "0";
 
             }
-        )
-
-        .catch(
-            function() {
-
-                chariot.style.opacity =
-                    "0";
-
-            }
         );
 
 }
 
 
 // =========================================
-// VALIDER LE MOT
+// VALIDER
 // =========================================
 
 function validerMot() {
@@ -1092,7 +1139,7 @@ function validerMot() {
 
 
     // =====================================
-    // LETTRES VERTES
+    // VERT
     // =====================================
 
     let lettresDisponibles =
@@ -1198,7 +1245,7 @@ function validerMot() {
 
 
     // =====================================
-    // LIGNE SUIVANTE
+    // ESSAI SUIVANT
     // =====================================
 
     ligne++;
@@ -1304,7 +1351,7 @@ boutonRejouer.addEventListener(
             false;
 
 
-        // Effacer grille
+        // Effacer les cases
 
         cases.forEach(
             function(caseJeu) {
@@ -1324,24 +1371,7 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Revenir à la position initiale
-
-        feuille
-            .getAnimations()
-            .forEach(
-                function(animation) {
-
-                    animation.cancel();
-
-                }
-            );
-
-
-        feuille.style.transform =
-            "translate(-50%, -50%)";
-
-
-        // Clavier
+        // Réinitialiser le clavier
 
         touches.forEach(
             function(touche) {
@@ -1381,6 +1411,12 @@ boutonRejouer.addEventListener(
 
         chariot.style.opacity =
             "0";
+
+
+        // Replacer la grille
+        // tout en bas
+
+        positionInitiale();
 
 
         // Nouveau mot
