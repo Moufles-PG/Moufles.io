@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -5,108 +6,183 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>The letterpress</title>
+    <title>Le Typographe</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
 
 <body>
 
+    <!-- =========================================
+         TITRE
+         ========================================= -->
+
     <h1>LE TYPOGRAPHE</h1>
 
-    <h2> Cinq lettres, un mot. </h2>
+    <h2>Cinq lettres, un mot.</h2>
 
     <div id="message"></div>
 
 
-    <!-- =========================
-         MUSIQUES
-         ========================= -->
+    <!-- =========================================
+         MUSIQUE
+         ========================================= -->
 
-    <audio id="musiqueJeu" loop>
-        <source src="Wordle1.mp3" type="audio/mpeg">
+    <audio
+        id="musiqueJeu"
+        loop
+    >
+
+        <source
+            src="Wordle1.mp3"
+            type="audio/mpeg"
+        >
+
     </audio>
 
-    <audio id="musiqueVictoire">
-        <source src="Victory.mp3" type="audio/mpeg">
+
+    <audio
+        id="musiqueVictoire"
+    >
+
+        <source
+            src="Victory.mp3"
+            type="audio/mpeg"
+        >
+
     </audio>
 
-    <audio id="musiqueDefaite">
-        <source src="Fail.mp3" type="audio/mpeg">
+
+    <audio
+        id="musiqueDefaite"
+    >
+
+        <source
+            src="Fail.mp3"
+            type="audio/mpeg"
+        >
+
     </audio>
 
 
-    <!-- =========================
+    <!-- =========================================
          JEU
-         ========================= -->
+         ========================================= -->
 
     <div class="jeu">
 
 
-        <!-- GRILLE -->
+        <!-- =====================================
+             GRILLE
+             ===================================== -->
 
         <div class="grille">
 
-            <div class="ligne">
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-            </div>
+
+            <!-- CHARIOT DE MACHINE À ÉCRIRE -->
+
+            <div id="chariot"></div>
+
+
+            <!-- LIGNE 1 -->
 
             <div class="ligne">
+
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
+
             </div>
 
-            <div class="ligne">
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-            </div>
+
+            <!-- LIGNE 2 -->
 
             <div class="ligne">
+
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
+
             </div>
 
-            <div class="ligne">
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-                <div class="case"></div>
-            </div>
+
+            <!-- LIGNE 3 -->
 
             <div class="ligne">
+
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
                 <div class="case"></div>
+
             </div>
+
+
+            <!-- LIGNE 4 -->
+
+            <div class="ligne">
+
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+
+            </div>
+
+
+            <!-- LIGNE 5 -->
+
+            <div class="ligne">
+
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+
+            </div>
+
+
+            <!-- LIGNE 6 -->
+
+            <div class="ligne">
+
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+                <div class="case"></div>
+
+            </div>
+
 
         </div>
 
 
-        <!-- =========================
+        <!-- =====================================
              CLAVIER AZERTY
-             ========================= -->
+             ===================================== -->
 
         <div id="clavier">
+
+
+            <!-- PREMIÈRE LIGNE -->
 
             <div class="ligne-clavier">
 
@@ -124,6 +200,8 @@
             </div>
 
 
+            <!-- DEUXIÈME LIGNE -->
+
             <div class="ligne-clavier">
 
                 <div class="touche">Q</div>
@@ -140,6 +218,8 @@
             </div>
 
 
+            <!-- TROISIÈME LIGNE -->
+
             <div class="ligne-clavier">
 
                 <div class="touche">W</div>
@@ -151,36 +231,52 @@
 
             </div>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- =========================
+    <!-- =========================================
          ÉCRAN DE FIN
-         ========================= -->
+         ========================================= -->
 
     <div id="ecranFin">
 
+
         <div class="fin-contenu">
+
 
             <h2 id="titreFin"></h2>
 
+
             <p id="texteFin"></p>
+
 
             <div id="motFin"></div>
 
+
             <button id="boutonRejouer">
+
                 REJOUER
+
             </button>
+
 
         </div>
 
+
     </div>
 
+
+    <!-- =========================================
+         JAVASCRIPT
+         ========================================= -->
 
     <script src="script.js"></script>
 
 </body>
 
 </html>
+```
