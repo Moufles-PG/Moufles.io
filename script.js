@@ -6,19 +6,53 @@ const cases = document.querySelectorAll(".case");
 const touches = document.querySelectorAll(".touche");
 const lignes = document.querySelectorAll(".ligne");
 
+const grille = document.querySelector(".feuille");
+const clavier = document.querySelector("#clavier");
+
 const message = document.querySelector("#message");
 
-const musiqueJeu = document.querySelector("#musiqueJeu");
-const musiqueVictoire = document.querySelector("#musiqueVictoire");
-const musiqueDefaite = document.querySelector("#musiqueDefaite");
+const musiqueJeu =
+    document.querySelector("#musiqueJeu");
 
-const ecranFin = document.querySelector("#ecranFin");
-const titreFin = document.querySelector("#titreFin");
-const texteFin = document.querySelector("#texteFin");
-const motFin = document.querySelector("#motFin");
-const boutonRejouer = document.querySelector("#boutonRejouer");
+const musiqueVictoire =
+    document.querySelector("#musiqueVictoire");
 
-const grille = document.querySelector(".feuille");
+const musiqueDefaite =
+    document.querySelector("#musiqueDefaite");
+
+const ecranFin =
+    document.querySelector("#ecranFin");
+
+const titreFin =
+    document.querySelector("#titreFin");
+
+const texteFin =
+    document.querySelector("#texteFin");
+
+const motFin =
+    document.querySelector("#motFin");
+
+const boutonRejouer =
+    document.querySelector("#boutonRejouer");
+
+
+// =========================================
+// SONS
+// =========================================
+
+const sonGood =
+    new Audio("Good.mp3");
+
+const sonFalse =
+    new Audio("False.mp3");
+
+
+sonGood.volume = 0.05;
+sonFalse.volume = 0.05;
+
+musiqueJeu.volume = 0.15;
+musiqueVictoire.volume = 0.25;
+musiqueDefaite.volume = 0.25;
 
 
 // =========================================
@@ -26,79 +60,95 @@ const grille = document.querySelector(".feuille");
 // =========================================
 
 let position = 0;
+
 let ligneActuelle = 0;
+
 let debut = 0;
 
 let mots = [];
+
 let motSecret = "";
 
 let partieTerminee = false;
 
 
 // =========================================
-// DÉPLACEMENT DE LA GRILLE
+// ANIMATION DE LA GRILLE
 // =========================================
 
 let decalageGrille = 0;
 
 
-function monterGrille() {
+// =========================================
+// POSITION INITIALE
+// =========================================
+
+function positionInitialeGrille() {
 
     /*
-        Une ligne =
-        hauteur de la ligne
-        + espace entre deux lignes
+        On récupère la position du rectangle noir.
+    */
+
+    const rectClavier =
+        clavier.getBoundingClientRect();
+
+
+    /*
+        Hauteur d'une ligne.
     */
 
     const hauteurLigne =
         lignes[0].getBoundingClientRect().height;
 
 
-    const style =
+    /*
+        Espacement entre les lignes.
+    */
+
+    const styleGrille =
         getComputedStyle(grille);
 
 
     const gap =
-        parseFloat(style.rowGap || style.gap) || 0;
+        parseFloat(
+            styleGrille.rowGap ||
+            styleGrille.gap
+        ) || 0;
 
+
+    /*
+        Le déplacement d'une ligne
+        est toujours exactement le même.
+    */
 
     const pas =
         hauteurLigne + gap;
 
 
     /*
-        On ajoute TOUJOURS exactement
-        un seul pas.
+        On veut que le BAS de la ligne 1
+        soit 10 px au-dessus du clavier.
     */
 
-    decalageGrille += pas;
+    const basLigne =
+        rectClavier.top - 10;
 
 
     /*
-        Animation douce.
+        Position du haut de la ligne 1.
     */
 
-    grille.style.transition =
-        "transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)";
+    const hautLigne =
+        basLigne - hauteurLigne;
 
 
     /*
-        On conserve le centrage horizontal.
+        La feuille commence à la position
+        de la ligne 1.
     */
 
-    grille.style.transform =
-        `translateX(-50%) translateY(-${decalageGrille}px)`;
-
-}
-
-
-// =========================================
-// REMETTRE LA GRILLE À SA POSITION INITIALE
-// =========================================
-
-function remettreGrilleEnPlace() {
-
-    decalageGrille = 0;
+    decalageGrille =
+        hautLigne;
 
 
     grille.style.transition =
@@ -106,20 +156,78 @@ function remettreGrilleEnPlace() {
 
 
     grille.style.transform =
-        "translateX(-50%)";
+        `translateX(-50%) translateY(${decalageGrille}px)`;
 
 }
 
 
 // =========================================
-// ENLEVER LES ACCENTS
+// MONTER D'UNE LIGNE
+// =========================================
+
+function monterGrille() {
+
+    /*
+        Une ligne = 76 px
+        + 15 px d'espacement.
+
+        On récupère les vraies valeurs
+        directement dans le navigateur.
+    */
+
+    const hauteurLigne =
+        lignes[0].getBoundingClientRect().height;
+
+
+    const styleGrille =
+        getComputedStyle(grille);
+
+
+    const gap =
+        parseFloat(
+            styleGrille.rowGap ||
+            styleGrille.gap
+        ) || 0;
+
+
+    const pas =
+        hauteurLigne + gap;
+
+
+    /*
+        Une seule ligne.
+        Toujours exactement la même distance.
+    */
+
+    decalageGrille -= pas;
+
+
+    /*
+        Animation.
+    */
+
+    grille.style.transition =
+        "transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)";
+
+
+    grille.style.transform =
+        `translateX(-50%) translateY(${decalageGrille}px)`;
+
+}
+
+
+// =========================================
+// ACCENTS
 // =========================================
 
 function enleverAccents(texte) {
 
     return texte
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        );
 
 }
 
@@ -132,7 +240,6 @@ function afficherMessage(texte) {
 
     message.textContent =
         texte;
-
 
     message.style.opacity =
         "1";
@@ -197,10 +304,6 @@ function mettreAJourClavier(
         }
 
 
-        /*
-            VERT
-        */
-
         if (
             couleur === "vert"
         ) {
@@ -210,17 +313,12 @@ function mettreAJourClavier(
                 "gris"
             );
 
-
             touche.classList.add(
                 "vert"
             );
 
         }
 
-
-        /*
-            JAUNE
-        */
 
         else if (
             couleur === "jaune"
@@ -236,7 +334,6 @@ function mettreAJourClavier(
                     "gris"
                 );
 
-
                 touche.classList.add(
                     "jaune"
                 );
@@ -245,10 +342,6 @@ function mettreAJourClavier(
 
         }
 
-
-        /*
-            GRIS
-        */
 
         else if (
             couleur === "gris"
@@ -277,7 +370,7 @@ function mettreAJourClavier(
 
 
 // =========================================
-// ÉCRIRE UNE LETTRE
+// ÉCRIRE
 // =========================================
 
 function ecrireLettre(lettre) {
@@ -288,10 +381,6 @@ function ecrireLettre(lettre) {
         return;
     }
 
-
-    /*
-        Une ligne contient 5 lettres.
-    */
 
     if (
         position >= 5
@@ -312,10 +401,6 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    /*
-        Animation de la lettre.
-    */
-
     caseActuelle.classList.remove(
         "letter-animation"
     );
@@ -329,31 +414,18 @@ function ecrireLettre(lettre) {
     );
 
 
-    /*
-        Animation de la touche.
-    */
-
     animerTouche(
         lettre
     );
 
 
-    /*
-        Son de frappe.
-    */
-
     sonGood.currentTime =
         0;
-
 
     sonGood.play().catch(
         () => {}
     );
 
-
-    /*
-        Musique de fond.
-    */
 
     if (
         musiqueJeu.paused
@@ -372,38 +444,6 @@ function ecrireLettre(lettre) {
 
 
 // =========================================
-// SONS DE FRAPPE
-// =========================================
-
-const sonGood =
-    new Audio("Good.mp3");
-
-
-const sonFalse =
-    new Audio("False.mp3");
-
-
-sonGood.volume =
-    0.05;
-
-
-sonFalse.volume =
-    0.05;
-
-
-musiqueJeu.volume =
-    0.15;
-
-
-musiqueVictoire.volume =
-    0.25;
-
-
-musiqueDefaite.volume =
-    0.25;
-
-
-// =========================================
 // CLAVIER PHYSIQUE
 // =========================================
 
@@ -417,10 +457,6 @@ document.addEventListener(
             return;
         }
 
-
-        /*
-            LETTRE
-        */
 
         if (
             event.key.length === 1
@@ -449,10 +485,6 @@ document.addEventListener(
 
         }
 
-
-        /*
-            RETOUR ARRIÈRE
-        */
 
         if (
             event.key === "Backspace"
@@ -486,10 +518,6 @@ document.addEventListener(
 
         }
 
-
-        /*
-            ENTRÉE
-        */
 
         if (
             event.key === "Enter"
@@ -526,69 +554,75 @@ touches.forEach(
 
 
 // =========================================
-// CHARGEMENT DU DICTIONNAIRE
+// DICTIONNAIRE
 // =========================================
 
 fetch("mots.txt")
 
-    .then(
-        response => {
+    .then(response => {
 
-            if (
-                !response.ok
-            ) {
+        if (
+            !response.ok
+        ) {
 
-                throw new Error(
-                    "Impossible de charger mots.txt"
-                );
-
-            }
-
-
-            return response.text();
-
-        }
-    )
-
-    .then(
-        texte => {
-
-            mots =
-                texte
-                    .split(/\r?\n/)
-                    .map(
-                        mot =>
-                            enleverAccents(
-                                mot
-                                    .trim()
-                                    .toUpperCase()
-                            )
-                    )
-                    .filter(
-                        mot =>
-                            mot.length === 5
-                    );
-
-
-            choisirNouveauMot();
-
-        }
-    )
-
-    .catch(
-        erreur => {
-
-            console.error(
-                "Erreur avec mots.txt :",
-                erreur
+            throw new Error(
+                "Impossible de charger mots.txt"
             );
 
         }
-    );
+
+
+        return response.text();
+
+    })
+
+    .then(texte => {
+
+        mots =
+            texte
+                .split(/\r?\n/)
+                .map(
+                    mot =>
+                        enleverAccents(
+                            mot
+                                .trim()
+                                .toUpperCase()
+                        )
+                )
+                .filter(
+                    mot =>
+                        mot.length === 5
+                );
+
+
+        choisirNouveauMot();
+
+        /*
+            Une fois le clavier et la grille
+            complètement chargés, on place
+            la ligne 1.
+        */
+
+        requestAnimationFrame(() => {
+
+            positionInitialeGrille();
+
+        });
+
+    })
+
+    .catch(erreur => {
+
+        console.error(
+            "Erreur avec mots.txt :",
+            erreur
+        );
+
+    });
 
 
 // =========================================
-// CHOISIR LE MOT SECRET
+// NOUVEAU MOT
 // =========================================
 
 function choisirNouveauMot() {
@@ -618,7 +652,7 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// VALIDER LE MOT
+// VALIDER
 // =========================================
 
 function validerMot() {
@@ -630,10 +664,6 @@ function validerMot() {
     }
 
 
-    /*
-        Pas assez de lettres.
-    */
-
     if (
         position < 5
     ) {
@@ -642,15 +672,10 @@ function validerMot() {
             "Pas assez de lettres."
         );
 
-
         return;
 
     }
 
-
-    /*
-        Construire le mot.
-    */
 
     let mot = "";
 
@@ -670,7 +695,7 @@ function validerMot() {
 
 
     /*
-        Mot inexistant.
+        MOT INEXISTANT
     */
 
     if (
@@ -697,9 +722,7 @@ function validerMot() {
 
 
     /*
-        =====================================
         VICTOIRE
-        =====================================
     */
 
     if (
@@ -711,7 +734,6 @@ function validerMot() {
 
 
         musiqueJeu.pause();
-
 
         musiqueJeu.currentTime =
             0;
@@ -725,10 +747,6 @@ function validerMot() {
             () => {}
         );
 
-
-        /*
-            Colorer les cases.
-        */
 
         for (
             let i = 0;
@@ -767,10 +785,6 @@ function validerMot() {
         }
 
 
-        /*
-            Écran de victoire.
-        */
-
         setTimeout(
             () => {
 
@@ -800,9 +814,7 @@ function validerMot() {
 
 
     /*
-        =====================================
-        ANALYSE DES LETTRES
-        =====================================
+        ANALYSE
     */
 
     const disponibles =
@@ -810,7 +822,7 @@ function validerMot() {
 
 
     /*
-        LETTRES VERTES
+        VERT
     */
 
     for (
@@ -845,7 +857,7 @@ function validerMot() {
 
 
     /*
-        LETTRES JAUNES / GRISES
+        JAUNE / GRIS
     */
 
     for (
@@ -857,9 +869,7 @@ function validerMot() {
         if (
             mot[i] === motSecret[i]
         ) {
-
             continue;
-
         }
 
 
@@ -911,9 +921,7 @@ function validerMot() {
 
 
     /*
-        =====================================
-        PASSER À LA LIGNE SUIVANTE
-        =====================================
+        PASSAGE À LA LIGNE SUIVANTE
     */
 
     ligneActuelle++;
@@ -924,8 +932,8 @@ function validerMot() {
 
 
     /*
-        On fait monter la grille
-        d'UNE SEULE ligne.
+        La grille monte exactement
+        d'une ligne.
     */
 
     if (
@@ -938,9 +946,7 @@ function validerMot() {
 
 
     /*
-        =====================================
         DERNIER ESSAI
-        =====================================
     */
 
     if (
@@ -952,7 +958,6 @@ function validerMot() {
 
 
         musiqueJeu.pause();
-
 
         musiqueJeu.currentTime =
             0;
@@ -995,17 +1000,9 @@ boutonRejouer.addEventListener(
     "click",
     () => {
 
-        /*
-            Écran de fin.
-        */
-
         ecranFin.style.display =
             "none";
 
-
-        /*
-            Variables.
-        */
 
         partieTerminee =
             false;
@@ -1024,15 +1021,15 @@ boutonRejouer.addEventListener(
 
 
         /*
-            Remettre la grille
-            à sa position initiale.
+            Recalcul de la position
+            par rapport au clavier noir.
         */
 
-        remettreGrilleEnPlace();
+        positionInitialeGrille();
 
 
         /*
-            Vider les cases.
+            Vider la grille.
         */
 
         cases.forEach(
@@ -1073,7 +1070,7 @@ boutonRejouer.addEventListener(
 
 
         /*
-            Musiques.
+            Réinitialiser les sons.
         */
 
         musiqueJeu.pause();
@@ -1091,6 +1088,26 @@ boutonRejouer.addEventListener(
         */
 
         choisirNouveauMot();
+
+    }
+);
+
+
+// =========================================
+// RECALCUL SI LA FENÊTRE CHANGE
+// =========================================
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (
+            ligneActuelle === 0
+        ) {
+
+            positionInitialeGrille();
+
+        }
 
     }
 );
