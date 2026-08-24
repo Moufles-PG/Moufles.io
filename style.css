@@ -320,58 +320,25 @@ h1::after {
 
 
 /* =========================================
-   CASE AVEC LETTRE
-   ========================================= */
-
-.case:not(:empty) {
-
-    border-color: #716957;
-
-    background:
-        rgba(
-            238,
-            227,
-            200,
-            0.30
-        );
-
-}
-
-
-/* =========================================
    CASES COLORÉES
    ========================================= */
 
 .case.vert {
-
-    background: #65745b;
-
-    border-color: #596650;
-
-    color: #fffdf5;
-
+    background: transparent;
+    border-bottom-color: #65745b;
+    color: #65745b;
 }
-
 
 .case.jaune {
-
-    background: #b69a5a;
-
-    border-color: #a3874d;
-
-    color: #fffdf5;
-
+    background: transparent;
+    border-bottom-color: #b69a5a;
+    color: #b69a5a;
 }
 
-
 .case.gris {
-
-    background: #625f57;
-
-    border-color: #55524b;
-
-    color: #f7f2e7;
-
+    background: transparent;
+    border-bottom-color: #625f57;
+    color: #625f57;
 }
 
 
