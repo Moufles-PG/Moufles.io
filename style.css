@@ -125,18 +125,19 @@ h1 {
     position: absolute;
 
     /*
-       La zone commence juste sous
-       le message.
+       On commence plus haut pour
+       donner davantage de place
+       au déplacement de la grille.
     */
 
-    top: 145px;
+    top: 120px;
 
     /*
-       Elle s'arrête juste au-dessus
-       du clavier.
+       On laisse la grille descendre
+       plus près du clavier.
     */
 
-    bottom: 225px;
+    bottom: 190px;
 
     left: 0;
     right: 0;
@@ -156,10 +157,6 @@ h1 {
 
     bottom: 0;
 
-    /*
-       Grille plus grande
-    */
-
     width: 455px;
 
     transform:
@@ -168,10 +165,6 @@ h1 {
     display: flex;
 
     flex-direction: column;
-
-    /*
-       Espacement vertical
-    */
 
     gap: 15px;
 
@@ -242,7 +235,7 @@ h1 {
 
 
 /* =========================================
-   TRAIT D'ÉCRITURE
+   TRAIT
    ========================================= */
 
 .case::after {
@@ -263,7 +256,7 @@ h1 {
 
 
 /* =========================================
-   CASES COLORÉES
+   COULEURS
    ========================================= */
 
 .case.vert {
@@ -429,12 +422,6 @@ h1 {
 
     align-items: center;
 
-    /*
-       Clavier légèrement plus compact
-       verticalement pour libérer de
-       l'espace à la grille.
-    */
-
     gap: 10px;
 
     z-index: 20;
@@ -489,7 +476,6 @@ h1 {
     cursor: pointer;
 
     user-select: none;
-
 }
 
 
