@@ -79,7 +79,7 @@ h1 {
 #sous-titre {
     position: fixed;
 
-    top: 90px;
+    top: 85px;
     left: 50%;
 
     transform: translateX(-50%);
@@ -88,9 +88,9 @@ h1 {
 
     gap: 25px;
 
-    font-size: 0.75rem;
+    font-size: 1.25rem;
 
-    font-weight: 500;
+    font-weight: 700;
 
     letter-spacing: 0.12em;
 
