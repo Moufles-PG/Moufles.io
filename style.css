@@ -12,23 +12,18 @@
    ========================================= */
 
 * {
-
     box-sizing: border-box;
-
 }
 
 
 html,
 body {
-
     width: 100%;
     height: 100%;
-
 }
 
 
 body {
-
     margin: 0;
 
     overflow: hidden;
@@ -46,7 +41,6 @@ body {
     font-family:
         "Cinzel",
         serif;
-
 }
 
 
@@ -55,10 +49,9 @@ body {
    ========================================= */
 
 header {
-
     position: fixed;
 
-    top: 22px;
+    top: 18px;
     left: 0;
 
     width: 100%;
@@ -66,20 +59,17 @@ header {
     text-align: center;
 
     z-index: 20;
-
 }
 
 
 h1 {
-
     margin: 0;
 
-    font-size: 4.2rem;
+    font-size: 4.5rem;
 
     font-weight: 600;
 
     letter-spacing: 0.16em;
-
 }
 
 
@@ -88,19 +78,18 @@ h1 {
    ========================================= */
 
 #message {
-
     position: fixed;
 
-    top: 115px;
+    top: 108px;
 
     left: 50%;
 
     transform:
         translateX(-50%);
 
-    height: 30px;
+    height: 35px;
 
-    font-size: 0.9rem;
+    font-size: 1rem;
 
     font-weight: 600;
 
@@ -113,6 +102,7 @@ h1 {
 
     z-index: 30;
 
+    white-space: nowrap;
 }
 
 
@@ -121,52 +111,56 @@ h1 {
    ========================================= */
 
 .jeu {
-
     position: fixed;
 
     inset: 0;
-
 }
 
 
 /* =========================================
-   ZONE ENTRE TITRE ET CLAVIER
+   ZONE DE LA GRILLE
    ========================================= */
 
 .zone-grille {
-
     position: absolute;
 
-    top: 125px;
+    /*
+       La zone commence juste sous
+       le message.
+    */
 
-    bottom: 205px;
+    top: 145px;
+
+    /*
+       Elle s'arrête juste au-dessus
+       du clavier.
+    */
+
+    bottom: 225px;
 
     left: 0;
     right: 0;
 
     overflow: hidden;
-
 }
 
 
 /* =========================================
-   FEUILLE
+   FEUILLE / GRILLE
    ========================================= */
 
 .feuille {
-
     position: absolute;
 
     left: 50%;
 
-    /*
-       La grille commence volontairement
-       en bas de la zone.
-    */
-
     bottom: 0;
 
-    width: 365px;
+    /*
+       Grille plus grande
+    */
+
+    width: 455px;
 
     transform:
         translateX(-50%);
@@ -175,11 +169,14 @@ h1 {
 
     flex-direction: column;
 
-    gap: 14px;
+    /*
+       Espacement vertical
+    */
+
+    gap: 15px;
 
     will-change:
         transform;
-
 }
 
 
@@ -188,10 +185,9 @@ h1 {
    ========================================= */
 
 .ligne {
-
     width: 100%;
 
-    height: 65px;
+    height: 76px;
 
     flex-shrink: 0;
 
@@ -201,8 +197,7 @@ h1 {
 
     align-items: center;
 
-    gap: 9px;
-
+    gap: 11px;
 }
 
 
@@ -211,12 +206,11 @@ h1 {
    ========================================= */
 
 .case {
-
     position: relative;
 
-    width: 65px;
+    width: 76px;
 
-    height: 65px;
+    height: 76px;
 
     display: flex;
 
@@ -238,21 +232,20 @@ h1 {
 
     border-radius: 2px;
 
-    font-size: 2rem;
+    font-size: 2.35rem;
 
     font-weight: 600;
 
-    color: #29261f;
-
+    color:
+        #29261f;
 }
 
 
 /* =========================================
-   TRAIT
+   TRAIT D'ÉCRITURE
    ========================================= */
 
 .case::after {
-
     content: "";
 
     position: absolute;
@@ -260,13 +253,12 @@ h1 {
     left: 5px;
     right: 5px;
 
-    bottom: 3px;
+    bottom: 4px;
 
     height: 2px;
 
     background:
         #625c4e;
-
 }
 
 
@@ -275,29 +267,24 @@ h1 {
    ========================================= */
 
 .case.vert {
-
     background:
         #738267;
 
     border-color:
         #56634d;
-
 }
 
 
 .case.jaune {
-
     background:
         #b49a5d;
 
     border-color:
         #907a48;
-
 }
 
 
 .case.gris {
-
     background:
         #8a857a;
 
@@ -306,7 +293,6 @@ h1 {
 
     color:
         #e1d8c5;
-
 }
 
 
@@ -315,36 +301,28 @@ h1 {
    ========================================= */
 
 .letter-animation {
-
     animation:
         apparitionLettre
         0.16s
         ease-out;
-
 }
 
 
 @keyframes apparitionLettre {
 
     0% {
-
         transform:
             scale(0.72);
-
     }
 
     65% {
-
         transform:
             scale(1.08);
-
     }
 
     100% {
-
         transform:
             scale(1);
-
     }
 
 }
@@ -355,43 +333,33 @@ h1 {
    ========================================= */
 
 .case.victoire {
-
     animation:
         victoire
         0.45s
         ease-in-out;
-
 }
 
 
 @keyframes victoire {
 
     0% {
-
         transform:
             translateY(0);
-
     }
 
     35% {
-
         transform:
             translateY(-8px);
-
     }
 
     65% {
-
         transform:
             translateY(3px);
-
     }
 
     100% {
-
         transform:
             translateY(0);
-
     }
 
 }
@@ -402,12 +370,11 @@ h1 {
    ========================================= */
 
 #chariot {
-
     position: absolute;
 
     width: 4px;
 
-    height: 74px;
+    height: 84px;
 
     background:
         #29261f;
@@ -419,12 +386,10 @@ h1 {
     pointer-events: none;
 
     z-index: 20;
-
 }
 
 
 #chariot::before {
-
     content: "";
 
     position: absolute;
@@ -441,7 +406,6 @@ h1 {
         #29261f;
 
     border-radius: 2px;
-
 }
 
 
@@ -450,12 +414,11 @@ h1 {
    ========================================= */
 
 #clavier {
-
     position: fixed;
 
     left: 50%;
 
-    bottom: 22px;
+    bottom: 18px;
 
     transform:
         translateX(-50%);
@@ -466,21 +429,24 @@ h1 {
 
     align-items: center;
 
-    gap: 13px;
+    /*
+       Clavier légèrement plus compact
+       verticalement pour libérer de
+       l'espace à la grille.
+    */
+
+    gap: 10px;
 
     z-index: 20;
-
 }
 
 
 .ligne-clavier {
-
     display: flex;
 
     justify-content: center;
 
-    gap: 13px;
-
+    gap: 12px;
 }
 
 
@@ -489,10 +455,9 @@ h1 {
    ========================================= */
 
 .touche {
+    width: 58px;
 
-    width: 48px;
-
-    height: 48px;
+    height: 58px;
 
     display: flex;
 
@@ -510,11 +475,11 @@ h1 {
         #6c634f;
 
     box-shadow:
-        0 2px 0 #776c55,
-        0 3px 5px
+        0 3px 0 #776c55,
+        0 4px 6px
         rgba(0, 0, 0, 0.12);
 
-    font-size: 0.95rem;
+    font-size: 1.15rem;
 
     font-weight: 600;
 
@@ -529,44 +494,34 @@ h1 {
 
 
 .touche:hover {
-
     transform:
         translateY(-2px);
-
 }
 
 
 .touche-appuyee {
-
     animation:
         toucheAppuyee
         0.15s
         ease-out;
-
 }
 
 
 @keyframes toucheAppuyee {
 
     0% {
-
         transform:
             scale(1);
-
     }
 
     50% {
-
         transform:
             scale(0.87);
-
     }
 
     100% {
-
         transform:
             scale(1);
-
     }
 
 }
@@ -577,29 +532,24 @@ h1 {
    ========================================= */
 
 .touche.vert {
-
     background:
         #738267;
 
     border-color:
         #56634d;
-
 }
 
 
 .touche.jaune {
-
     background:
         #b49a5d;
 
     border-color:
         #907a48;
-
 }
 
 
 .touche.gris {
-
     background:
         #8a857a;
 
@@ -608,7 +558,6 @@ h1 {
 
     color:
         #d9d0bd;
-
 }
 
 
@@ -617,7 +566,6 @@ h1 {
    ========================================= */
 
 #ecranFin {
-
     position: fixed;
 
     inset: 0;
@@ -637,19 +585,15 @@ h1 {
         );
 
     z-index: 100;
-
 }
 
 
 .fin-contenu {
-
     text-align: center;
-
 }
 
 
 #titreFin {
-
     margin: 0;
 
     font-size: 5rem;
@@ -657,31 +601,25 @@ h1 {
     font-weight: 600;
 
     letter-spacing: 0.12em;
-
 }
 
 
 #texteFin {
-
     margin:
         10px 0 5px;
-
 }
 
 
 #motFin {
-
     font-size: 2.2rem;
 
     font-weight: 600;
 
     letter-spacing: 0.15em;
-
 }
 
 
 #boutonRejouer {
-
     margin-top: 30px;
 
     padding:
@@ -708,16 +646,13 @@ h1 {
         #29261f;
 
     cursor: pointer;
-
 }
 
 
 #boutonRejouer:hover {
-
     background:
         #29261f;
 
     color:
         #d8c9a9;
-
 }
