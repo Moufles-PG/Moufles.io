@@ -125,11 +125,6 @@ h1 {
 
     inset: 0;
 
-    /*
-       La feuille peut maintenant exister
-       derrière tout le clavier.
-    */
-
     overflow: visible;
 
     pointer-events: none;
@@ -149,12 +144,6 @@ h1 {
     left: 50%;
 
     width: 455px;
-
-    /*
-       Centrage horizontal permanent.
-       Le JS ajoute ensuite uniquement
-       un translateY.
-    */
 
     transform:
         translateX(-50%);
@@ -356,17 +345,36 @@ h1 {
 
 
 /* =========================================
-   CLAVIER
+   ZONE NOIRE DE MASQUAGE
    ========================================= */
 
 #clavier {
     position: fixed;
 
-    left: 50%;
-    bottom: 18px;
+    left: 0;
+    right: 0;
 
-    transform:
-        translateX(-50%);
+    /*
+       Le haut du rectangle reste
+       à la position du clavier.
+
+       Le bas descend jusqu'au
+       bas de la fenêtre.
+    */
+
+    bottom: 0;
+
+    /*
+       Cette valeur correspond à la
+       hauteur nécessaire pour que
+       le clavier reste placé comme avant.
+
+       Le JS ne dépend pas de cette
+       hauteur : il regarde directement
+       la position du rectangle.
+    */
+
+    min-height: 190px;
 
     display: flex;
 
@@ -374,27 +382,35 @@ h1 {
 
     align-items: center;
 
+    justify-content: flex-end;
+
     gap: 10px;
 
-    padding: 14px 20px;
-
-    background:
-        rgba(
-            35,
-            32,
-            27,
-            0.92
-        );
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 6px 15px
-        rgba(0, 0, 0, 0.25);
+    padding:
+        14px 20px 18px;
 
     /*
-       LE CLAVIER EST DEVANT LA GRILLE.
-       C'est lui qui masque la feuille.
+       NOIR OPAQUE.
+       Plus aucune transparence.
+    */
+
+    background:
+        #23201b;
+
+    /*
+       On supprime les coins arrondis
+       pour que le rectangle descende
+       vraiment jusqu'en bas.
+    */
+
+    border-radius: 0;
+
+    box-shadow:
+        0 -6px 15px
+        rgba(0, 0, 0, 0.20);
+
+    /*
+       Le rectangle masque la feuille.
     */
 
     z-index: 50;
@@ -426,6 +442,8 @@ h1 {
 
     align-items: center;
     justify-content: center;
+
+    flex-shrink: 0;
 
     border-radius: 50%;
 
