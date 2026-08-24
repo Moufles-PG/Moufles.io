@@ -25,7 +25,7 @@ body {
     background:
         radial-gradient(
             circle at center,
-            rgba(255, 249, 224, 0.35),
+            rgba(255, 249, 224, 0.32),
             transparent 70%
         ),
         #d8c9a9;
@@ -90,16 +90,14 @@ h2 {
 
 
 /* =========================================
-   MESSAGES
+   MESSAGE
    ========================================= */
 
 #message {
 
-    height: 28px;
+    height: 30px;
 
     margin-top: 10px;
-
-    font-family: "Cinzel", serif;
 
     font-size: 0.9rem;
 
@@ -111,7 +109,8 @@ h2 {
 
     opacity: 0;
 
-    transition: opacity 0.3s ease;
+    transition:
+        opacity 0.3s ease;
 
 }
 
@@ -148,6 +147,8 @@ h2 {
     gap: 9px;
 
     margin-top: 12px;
+
+    transform: translateY(0);
 
 }
 
@@ -207,14 +208,13 @@ h2 {
 
     transition:
         background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease;
+        border-color 0.2s ease;
 
 }
 
 
 /* =========================================
-   TRAIT SOUS LA LETTRE
+   PETIT TRAIT SOUS LA LETTRE
    ========================================= */
 
 .case::after {
@@ -223,11 +223,11 @@ h2 {
 
     position: absolute;
 
-    left: 0;
+    left: 5px;
 
-    right: 0;
+    right: 5px;
 
-    bottom: -1px;
+    bottom: 3px;
 
     height: 2px;
 
@@ -245,8 +245,6 @@ h2 {
     background: #738267;
 
     border-color: #56634d;
-
-    color: #29261f;
 
 }
 
@@ -267,8 +265,6 @@ h2 {
     background: #b49a5d;
 
     border-color: #907a48;
-
-    color: #29261f;
 
 }
 
@@ -303,7 +299,7 @@ h2 {
 
 
 /* =========================================
-   ANIMATION LETTRE
+   APPARITION D'UNE LETTRE
    ========================================= */
 
 .letter-animation {
@@ -340,7 +336,7 @@ h2 {
 
 
 /* =========================================
-   ANIMATION VICTOIRE
+   VICTOIRE
    ========================================= */
 
 .case.victoire {
@@ -390,60 +386,195 @@ h2 {
 
     position: absolute;
 
-    width: 3px;
+    width: 4px;
 
-    height: 55px;
+    height: 74px;
 
     background: #29261f;
+
+    border-radius: 2px;
 
     pointer-events: none;
 
     opacity: 0;
 
-    z-index: 5;
+    z-index: 20;
 
-    transition:
-        left 0.18s ease,
-        top 0.18s ease,
-        opacity 0.15s ease;
+    transform-origin: center;
 
 }
 
 
-#chariot.visible {
+/* Petite poignée du chariot */
 
-    opacity: 0.65;
+#chariot::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 11px;
+
+    height: 4px;
+
+    left: -3.5px;
+
+    top: -5px;
+
+    background: #29261f;
+
+    border-radius: 2px;
 
 }
 
 
-#chariot.retour {
+/* =========================================
+   CHARIOT : ALLER À DROITE
+   ========================================= */
+
+#chariot.chariot-droite {
+
+    opacity: 0.8;
 
     animation:
-        retourChariot
-        0.45s
-        ease-in-out;
+        chariotDroite
+        0.32s
+        cubic-bezier(
+            0.18,
+            0.8,
+            0.25,
+            1
+        );
 
 }
 
 
-@keyframes retourChariot {
+@keyframes chariotDroite {
 
     0% {
 
-        transform: translateX(0);
+        transform:
+            translateX(-2px);
 
     }
 
-    35% {
+    65% {
 
-        transform: translateX(12px);
+        transform:
+            translateX(4px);
 
     }
 
     100% {
 
-        transform: translateX(0);
+        transform:
+            translateX(0);
+
+    }
+
+}
+
+
+/* =========================================
+   CHARIOT : RETOUR
+   ========================================= */
+
+#chariot.chariot-retour {
+
+    opacity: 0.85;
+
+    animation:
+        chariotRetour
+        0.42s
+        cubic-bezier(
+            0.55,
+            0.05,
+            0.68,
+            0.19
+        );
+
+}
+
+
+@keyframes chariotRetour {
+
+    0% {
+
+        transform:
+            translateX(0);
+
+    }
+
+    10% {
+
+        transform:
+            translateX(4px);
+
+    }
+
+    100% {
+
+        transform:
+            translateX(0);
+
+    }
+
+}
+
+
+/* =========================================
+   PAPIER QUI AVANCE
+   ========================================= */
+
+.grille.papier-avance {
+
+    animation:
+        papierAvance
+        0.62s
+        cubic-bezier(
+            0.22,
+            0.61,
+            0.36,
+            1
+        );
+
+}
+
+
+@keyframes papierAvance {
+
+    0% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    12% {
+
+        transform:
+            translateY(3px);
+
+    }
+
+    48% {
+
+        transform:
+            translateY(-18px);
+
+    }
+
+    72% {
+
+        transform:
+            translateY(-13px);
+
+    }
+
+    100% {
+
+        transform:
+            translateY(-15px);
 
     }
 
@@ -539,14 +670,11 @@ h2 {
 
 .touche:hover {
 
-    transform: translateY(-2px);
+    transform:
+        translateY(-2px);
 
 }
 
-
-/* =========================================
-   TOUCHE APPUYÉE
-   ========================================= */
 
 .touche-appuyee {
 
@@ -562,19 +690,22 @@ h2 {
 
     0% {
 
-        transform: scale(1);
+        transform:
+            scale(1);
 
     }
 
     50% {
 
-        transform: scale(0.88);
+        transform:
+            scale(0.88);
 
     }
 
     100% {
 
-        transform: scale(1);
+        transform:
+            scale(1);
 
     }
 
@@ -582,7 +713,7 @@ h2 {
 
 
 /* =========================================
-   COULEURS DU CLAVIER
+   COULEURS CLAVIER
    ========================================= */
 
 .touche.vert {
@@ -643,10 +774,6 @@ h2 {
 }
 
 
-/* =========================================
-   CONTENU DE FIN
-   ========================================= */
-
 .fin-contenu {
 
     display: flex;
@@ -682,8 +809,6 @@ h2 {
     margin:
         10px 0 5px;
 
-    font-family: "Cinzel", serif;
-
     font-size: 1rem;
 
     color: #625c4e;
@@ -694,8 +819,6 @@ h2 {
 #motFin {
 
     margin-top: 5px;
-
-    font-family: "Cinzel", serif;
 
     font-size: 2.2rem;
 
@@ -709,7 +832,7 @@ h2 {
 
 
 /* =========================================
-   BOUTON REJOUER
+   BOUTON
    ========================================= */
 
 #boutonRejouer {
@@ -754,6 +877,7 @@ h2 {
 
 #boutonRejouer:active {
 
-    transform: scale(0.96);
+    transform:
+        scale(0.96);
 
 }
