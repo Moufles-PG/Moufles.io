@@ -101,7 +101,7 @@ h2 {
 
 
 /* =========================================
-   MESSAGE
+   MESSAGES
    ========================================= */
 
 #message {
@@ -134,13 +134,13 @@ h2 {
 
 .jeu {
 
+    width: 100%;
+
     display: flex;
 
     flex-direction: column;
 
     align-items: center;
-
-    width: 100%;
 
 }
 
@@ -157,7 +157,7 @@ h2 {
 
     flex-direction: column;
 
-    gap: 15px;
+    gap: 9px;
 
     margin-top: 12px;
 
@@ -165,7 +165,7 @@ h2 {
 
 
 /* =========================================
-   LIGNES
+   LIGNE
    ========================================= */
 
 .ligne {
@@ -174,22 +174,20 @@ h2 {
 
     justify-content: center;
 
-    gap: 15px;
+    gap: 9px;
 
 }
 
 
 /* =========================================
-   CASES / TIRETS
+   CASES
    ========================================= */
 
 .case {
 
-    width: 72px;
+    width: 65px;
 
-    height: 62px;
-
-    position: relative;
+    height: 65px;
 
     display: flex;
 
@@ -197,128 +195,103 @@ h2 {
 
     justify-content: center;
 
-    padding-bottom: 0;
+    position: relative;
 
-    border: none;
+    background: rgba(
+        196,
+        183,
+        151,
+        0.35
+    );
 
-    border-bottom:
-        2px solid #625c4e;
+    border:
+        1px solid #77705f;
 
-    background: transparent;
+    border-radius: 2px;
 
     font-family: "Cinzel", serif;
 
     font-size: 2rem;
 
-    font-weight: 500;
+    font-weight: 600;
 
     color: #29261f;
 
-    z-index: 0;
-
     transition:
-        color 0.25s ease,
-        border-color 0.25s ease,
-        transform 0.2s ease;
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
 
 }
 
 
 /* =========================================
-   CERCLES JAUNES ET VERTS
+   CASE VIDE
    ========================================= */
 
-.case.vert::before,
-.case.jaune::before {
+.case:empty {
 
-    content: "";
-
-    position: absolute;
-
-    width: 43px;
-
-    height: 43px;
-
-    border-radius: 50%;
-
-    left: 50%;
-
-    top: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
-    z-index: -1;
+    background:
+        rgba(
+            196,
+            183,
+            151,
+            0.22
+        );
 
 }
 
 
 /* =========================================
-   CERCLE VERT
-   ========================================= */
-
-.case.vert::before {
-
-    background: #738267;
-
-}
-
-
-/* =========================================
-   CERCLE JAUNE
-   ========================================= */
-
-.case.jaune::before {
-
-    background: #b49a5d;
-
-}
-
-
-/* =========================================
-   LETTRE VERTE
+   CASE VERTE
    ========================================= */
 
 .case.vert {
 
-    color: #29261f;
+    background: #738267;
 
-    border-bottom-color:
-        #738267;
+    border-color:
+        #56634d;
+
+    color: #29261f;
 
 }
 
 
 /* =========================================
-   LETTRE JAUNE
+   CASE JAUNE
    ========================================= */
 
 .case.jaune {
 
-    color: #29261f;
+    background: #b49a5d;
 
-    border-bottom-color:
-        #b49a5d;
+    border-color:
+        #907a48;
+
+    color: #29261f;
 
 }
 
 
 /* =========================================
-   LETTRE GRISE
+   CASE GRISE
    ========================================= */
 
 .case.gris {
 
-    color: #777064;
+    background: #8a857a;
 
-    border-bottom-color:
-        #777064;
+    border-color:
+        #706c64;
+
+    color: #e1d8c5;
 
 }
 
 
 /* =========================================
-   ANIMATION D'ÉCRITURE
+   ANIMATION LETTRE
    ========================================= */
 
 .letter-animation {
@@ -414,7 +387,7 @@ h2 {
 
     width: 3px;
 
-    height: 52px;
+    height: 55px;
 
     background: #29261f;
 
@@ -440,7 +413,7 @@ h2 {
 
 
 /* =========================================
-   RETOUR DU CHARIOT
+   ANIMATION DU CHARIOT
    ========================================= */
 
 #chariot.retour {
@@ -493,7 +466,7 @@ h2 {
 
     gap: 13px;
 
-    margin-top: 40px;
+    margin-top: 38px;
 
     padding-bottom: 35px;
 
@@ -545,7 +518,12 @@ h2 {
     box-shadow:
         0 2px 0 #776c55,
         0 3px 5px
-        rgba(0, 0, 0, 0.12);
+        rgba(
+            0,
+            0,
+            0,
+            0.12
+        );
 
     font-family: "Cinzel", serif;
 
@@ -557,8 +535,7 @@ h2 {
 
     transition:
         transform 0.1s ease,
-        background 0.2s ease,
-        color 0.2s ease;
+        background 0.2s ease;
 
 }
 
@@ -612,49 +589,49 @@ h2 {
 
 
 /* =========================================
-   TOUCHE VERTE
+   CLAVIER VERT
    ========================================= */
 
 .touche.vert {
 
     background: #738267;
 
-    color: #29261f;
-
     border-color:
         #56634d;
+
+    color: #29261f;
 
 }
 
 
 /* =========================================
-   TOUCHE JAUNE
+   CLAVIER JAUNE
    ========================================= */
 
 .touche.jaune {
 
     background: #b49a5d;
 
-    color: #29261f;
-
     border-color:
         #907a48;
+
+    color: #29261f;
 
 }
 
 
 /* =========================================
-   TOUCHE GRISE
+   CLAVIER GRIS
    ========================================= */
 
 .touche.gris {
 
     background: #8a857a;
 
-    color: #d9d0bd;
-
     border-color:
         #706c64;
+
+    color: #d9d0bd;
 
 }
 
@@ -689,7 +666,7 @@ h2 {
 
 
 /* =========================================
-   CONTENU FIN
+   CONTENU DE FIN
    ========================================= */
 
 .fin-contenu {
@@ -835,9 +812,18 @@ h2 {
     }
 
 
+    #message {
+
+        margin-top: 7px;
+
+        font-size: 0.75rem;
+
+    }
+
+
     .grille {
 
-        gap: 11px;
+        gap: 7px;
 
         margin-top: 5px;
 
@@ -846,7 +832,7 @@ h2 {
 
     .ligne {
 
-        gap: 9px;
+        gap: 7px;
 
     }
 
@@ -855,28 +841,9 @@ h2 {
 
         width: 52px;
 
-        height: 51px;
+        height: 52px;
 
         font-size: 1.45rem;
-
-    }
-
-
-    /* Cercles téléphone */
-
-    .case.vert::before,
-    .case.jaune::before {
-
-        width: 35px;
-
-        height: 35px;
-
-        left: 50%;
-
-        top: 50%;
-
-        transform:
-            translate(-50%, -50%);
 
     }
 
@@ -910,7 +877,7 @@ h2 {
 
     #chariot {
 
-        height: 44px;
+        height: 45px;
 
     }
 
@@ -943,6 +910,13 @@ h2 {
 @media (max-width: 380px) {
 
 
+    .grille {
+
+        gap: 6px;
+
+    }
+
+
     .ligne {
 
         gap: 6px;
@@ -954,26 +928,9 @@ h2 {
 
         width: 47px;
 
-        height: 48px;
+        height: 47px;
 
-        font-size: 1.35rem;
-
-    }
-
-
-    .case.vert::before,
-    .case.jaune::before {
-
-        width: 32px;
-
-        height: 32px;
-
-        left: 50%;
-
-        top: 50%;
-
-        transform:
-            translate(-50%, -50%);
+        font-size: 1.3rem;
 
     }
 
