@@ -49,6 +49,9 @@ let motSecret = "";
 
 let partieTerminee = false;
 
+// La musique n'a pas encore commencé
+let musiqueLancee = false;
+
 
 // =========================================
 // VOLUME
@@ -72,7 +75,7 @@ let sonFalse =
     new Audio("False.mp3");
 
 
-// Sons légers
+// Volume léger
 
 sonGood.volume = 0.05;
 
@@ -264,7 +267,9 @@ function ecrireLettre(lettre) {
     });
 
 
-    // Son
+    // =====================================
+    // SON DE LA TOUCHE
+    // =====================================
 
     if (
         touche &&
@@ -288,7 +293,9 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Écrire la lettre
+    // =====================================
+    // ÉCRIRE LA LETTRE
+    // =====================================
 
     let caseActuelle =
         cases[debut + position];
@@ -298,7 +305,7 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // Animation case
+    // Animation de la case
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -311,20 +318,12 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Animation clavier
+    // Animation du clavier
 
     animerTouche(lettre);
 
 
-    // Lancer la musique du jeu
-
-    if (musiqueJeu.paused) {
-
-        musiqueJeu.play()
-            .catch(function() {});
-
-    }
-
+    // Passer à la position suivante
 
     position++;
 
@@ -520,7 +519,9 @@ function validerMot() {
     }
 
 
-    // Pas assez de lettres
+    // =====================================
+    // PAS ASSEZ DE LETTRES
+    // =====================================
 
     if (position < 5) {
 
@@ -533,7 +534,9 @@ function validerMot() {
     }
 
 
-    // Construire le mot
+    // =====================================
+    // CONSTRUIRE LE MOT
+    // =====================================
 
     let mot = "";
 
@@ -552,7 +555,9 @@ function validerMot() {
     }
 
 
-    // Mot inexistant
+    // =====================================
+    // MOT INEXISTANT
+    // =====================================
 
     if (
         !mots.includes(mot)
@@ -563,6 +568,20 @@ function validerMot() {
         );
 
         return;
+
+    }
+
+
+    // =====================================
+    // PREMIER MOT VALIDÉ
+    // =====================================
+
+    if (!musiqueLancee) {
+
+        musiqueLancee = true;
+
+        musiqueJeu.play()
+            .catch(function() {});
 
     }
 
@@ -666,7 +685,9 @@ function validerMot() {
         motSecret.split("");
 
 
-    // Lettres vertes
+    // =====================================
+    // LETTRES VERTES
+    // =====================================
 
     for (
         let i = 0;
@@ -697,7 +718,9 @@ function validerMot() {
     }
 
 
-    // Lettres jaunes ou grises
+    // =====================================
+    // LETTRES JAUNES OU GRISES
+    // =====================================
 
     for (
         let i = 0;
@@ -783,7 +806,7 @@ function validerMot() {
         musiqueJeu.currentTime = 0;
 
 
-        // Jouer Fail une seule fois
+        // Jouer Fail
 
         musiqueDefaite.currentTime = 0;
 
@@ -816,7 +839,9 @@ function validerMot() {
     }
 
 
-    // Ligne suivante
+    // =====================================
+    // LIGNE SUIVANTE
+    // =====================================
 
     debut += 5;
 
@@ -849,6 +874,8 @@ boutonRejouer.addEventListener(
         debut = 0;
 
         partieTerminee = false;
+
+        musiqueLancee = false;
 
 
         // Effacer grille
