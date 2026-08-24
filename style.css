@@ -79,7 +79,7 @@ h1 {
 #sous-titre {
     position: fixed;
 
-    top: 105px;
+    top: 100px;
     left: 50%;
 
     transform: translateX(-50%);
@@ -109,7 +109,7 @@ h1 {
 #message {
     position: fixed;
 
-    top: 98px;
+    top: 125px;
     left: 50%;
 
     transform:
