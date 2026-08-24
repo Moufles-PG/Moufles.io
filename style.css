@@ -3,12 +3,12 @@
    ========================================= */
 
 @import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap'
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&display=swap'
 );
 
 
 /* =========================================
-   BASE
+   PAGE
    ========================================= */
 
 * {
@@ -18,29 +18,33 @@
 
 html,
 body {
+    margin: 0;
+    padding: 0;
+
     width: 100%;
     height: 100%;
+
+    overflow: hidden;
 }
 
 
 body {
-    margin: 0;
-
-    overflow: hidden;
 
     background:
-        radial-gradient(
-            circle at center,
-            rgba(255, 249, 224, 0.35),
-            transparent 70%
-        ),
-        #d8c9a9;
+        #eee9dc;
 
-    color: #29261f;
+    color:
+        #211c17;
 
     font-family:
         "Cinzel",
         serif;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
 }
 
 
@@ -48,28 +52,36 @@ body {
    TITRE
    ========================================= */
 
-header {
+h1 {
+
     position: fixed;
 
-    top: 18px;
+    top: 22px;
     left: 0;
 
     width: 100%;
 
-    text-align: center;
-
-    z-index: 20;
-}
-
-
-h1 {
     margin: 0;
 
-    font-size: 4.5rem;
+    text-align: center;
 
-    font-weight: 600;
+    font-family:
+        "Cinzel",
+        serif;
 
-    letter-spacing: 0.16em;
+    font-size: 48px;
+
+    font-weight: 700;
+
+    letter-spacing:
+        7px;
+
+    line-height: 1;
+
+    z-index: 20;
+
+    color:
+        #211c17;
 }
 
 
@@ -78,42 +90,39 @@ h1 {
    ========================================= */
 
 #message {
+
     position: fixed;
 
-    top: 108px;
-
+    top: 92px;
     left: 50%;
 
     transform:
         translateX(-50%);
 
-    height: 35px;
+    width: 100%;
 
-    font-size: 1rem;
+    text-align: center;
+
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 17px;
 
     font-weight: 600;
 
-    letter-spacing: 0.05em;
+    letter-spacing:
+        1px;
 
     opacity: 0;
 
     transition:
-        opacity 0.3s ease;
+        opacity 0.25s ease;
 
     z-index: 30;
 
-    white-space: nowrap;
-}
-
-
-/* =========================================
-   JEU
-   ========================================= */
-
-.jeu {
-    position: fixed;
-
-    inset: 0;
+    pointer-events:
+        none;
 }
 
 
@@ -122,51 +131,52 @@ h1 {
    ========================================= */
 
 .zone-grille {
-    position: absolute;
 
-    /*
-       On commence plus haut pour
-       donner davantage de place
-       au déplacement de la grille.
-    */
+    position: fixed;
 
-    top: 120px;
+    left: 50%;
 
-    /*
-       On laisse la grille descendre
-       plus près du clavier.
-    */
+    top: 135px;
 
-    bottom: 190px;
+    width: 760px;
 
-    left: 0;
-    right: 0;
+    height:
+        calc(100vh - 390px);
 
-    overflow: hidden;
+    transform:
+        translateX(-50%);
+
+    overflow:
+        hidden;
+
+    z-index: 5;
 }
 
 
 /* =========================================
-   FEUILLE / GRILLE
+   FEUILLE
    ========================================= */
 
-.feuille {
+#feuille {
+
     position: absolute;
 
     left: 50%;
 
-    bottom: 0;
+    top: 0;
 
-    width: 455px;
-
-    transform:
-        translateX(-50%);
+    width: 760px;
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 15px;
+    align-items: center;
+
+    gap: 18px;
+
+    transform:
+        translate(-50%, 0);
 
     will-change:
         transform;
@@ -178,19 +188,44 @@ h1 {
    ========================================= */
 
 .ligne {
+
+    display: none;
+
     width: 100%;
 
-    height: 76px;
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap: 13px;
 
     flex-shrink: 0;
+}
+
+
+/*
+   Les trois premières lignes existent
+   dès le lancement.
+*/
+
+.ligne:nth-child(1),
+.ligne:nth-child(2),
+.ligne:nth-child(3) {
 
     display: flex;
+}
 
-    justify-content: center;
 
-    align-items: center;
+/*
+   Le JavaScript ajoute cette classe
+   progressivement aux lignes 4, 5 et 6.
+*/
 
-    gap: 11px;
+.ligne.ligne-visible {
+
+    display: flex;
 }
 
 
@@ -199,125 +234,202 @@ h1 {
    ========================================= */
 
 .case {
+
     position: relative;
 
-    width: 76px;
+    width: 125px;
 
-    height: 76px;
+    height: 105px;
+
+    flex-shrink: 0;
 
     display: flex;
 
-    justify-content: center;
-
     align-items: center;
 
-    background:
-        rgba(
-            196,
-            183,
-            151,
-            0.35
-        );
+    justify-content: center;
 
-    border:
-        1px solid
-        #77705f;
+    font-family:
+        "Cinzel",
+        serif;
 
-    border-radius: 2px;
-
-    font-size: 2.35rem;
+    font-size: 54px;
 
     font-weight: 600;
 
     color:
-        #29261f;
+        #211c17;
+
+    background:
+        rgba(255, 252, 244, 0.8);
+
+    border:
+        2px solid
+        #302820;
+
+    box-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.12);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
 }
 
 
 /* =========================================
-   TRAIT
+   CERCLE DERRIÈRE LA LETTRE
    ========================================= */
 
-.case::after {
+.case.vert::before,
+.case.jaune::before {
+
     content: "";
 
     position: absolute;
 
-    left: 5px;
-    right: 5px;
+    left: 50%;
+    top: 50%;
 
-    bottom: 4px;
+    width: 68px;
+    height: 68px;
 
-    height: 2px;
+    transform:
+        translate(-50%, -50%);
 
-    background:
-        #625c4e;
+    border-radius:
+        50%;
+
+    z-index: 0;
+
+    animation:
+        apparitionCercle
+        0.25s ease-out;
 }
 
 
-/* =========================================
-   COULEURS
-   ========================================= */
+.case.vert::before {
 
-.case.vert {
     background:
-        #738267;
-
-    border-color:
-        #56634d;
+        #78946b;
 }
 
 
+.case.jaune::before {
+
+    background:
+        #c7a84b;
+}
+
+
+/*
+   La lettre reste au-dessus du cercle.
+*/
+
+.case.vert,
 .case.jaune {
+
     background:
-        #b49a5d;
-
-    border-color:
-        #907a48;
-}
-
-
-.case.gris {
-    background:
-        #8a857a;
-
-    border-color:
-        #706c64;
+        rgba(255, 252, 244, 0.8);
 
     color:
-        #e1d8c5;
+        #211c17;
+}
+
+
+.case::after {
+
+    content:
+        attr(data-letter);
+
+    position: absolute;
+
+    z-index: 2;
+}
+
+
+@keyframes apparitionCercle {
+
+    from {
+
+        width: 0;
+        height: 0;
+
+        opacity: 0;
+    }
+
+    to {
+
+        width: 68px;
+        height: 68px;
+
+        opacity: 1;
+    }
 }
 
 
 /* =========================================
-   ANIMATION LETTRE
+   LETTRE
    ========================================= */
 
-.letter-animation {
-    animation:
-        apparitionLettre
-        0.16s
-        ease-out;
+.case {
+
+    line-height:
+        1;
 }
 
 
-@keyframes apparitionLettre {
+/*
+   Animation lorsqu'une lettre est tapée.
+*/
+
+.letter-animation {
+
+    animation:
+        frappeLettre
+        0.16s ease-out;
+}
+
+
+@keyframes frappeLettre {
 
     0% {
+
         transform:
-            scale(0.72);
+            scale(0.88);
+
     }
 
-    65% {
+    60% {
+
         transform:
             scale(1.08);
+
     }
 
     100% {
+
         transform:
             scale(1);
-    }
 
+    }
+}
+
+
+/* =========================================
+   CASE GRISE
+   ========================================= */
+
+.case.gris {
+
+    background:
+        #b7b1a5;
+
+    border-color:
+        #8e887e;
+
+    color:
+        #5f5a52;
 }
 
 
@@ -326,35 +438,35 @@ h1 {
    ========================================= */
 
 .case.victoire {
+
     animation:
-        victoire
-        0.45s
-        ease-in-out;
+        victoireCase
+        0.45s ease forwards;
 }
 
 
-@keyframes victoire {
+@keyframes victoireCase {
 
     0% {
+
         transform:
-            translateY(0);
+            scale(1);
+
     }
 
-    35% {
-        transform:
-            translateY(-8px);
-    }
+    40% {
 
-    65% {
         transform:
-            translateY(3px);
+            scale(1.12);
+
     }
 
     100% {
-        transform:
-            translateY(0);
-    }
 
+        transform:
+            scale(1);
+
+    }
 }
 
 
@@ -363,26 +475,33 @@ h1 {
    ========================================= */
 
 #chariot {
+
     position: absolute;
 
-    width: 4px;
+    width: 18px;
 
-    height: 84px;
+    height: 8px;
+
+    border-radius:
+        2px;
 
     background:
-        #29261f;
-
-    border-radius: 2px;
+        #302820;
 
     opacity: 0;
 
-    pointer-events: none;
+    z-index: 15;
 
-    z-index: 20;
+    pointer-events:
+        none;
+
+    transform:
+        translateY(-2px);
 }
 
 
 #chariot::before {
+
     content: "";
 
     position: absolute;
@@ -391,14 +510,31 @@ h1 {
 
     top: -5px;
 
-    width: 12px;
+    width: 4px;
 
-    height: 4px;
+    height: 18px;
 
     background:
-        #29261f;
+        #302820;
+}
 
-    border-radius: 2px;
+
+#chariot::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 4px;
+
+    top: 5px;
+
+    width: 10px;
+
+    height: 2px;
+
+    background:
+        #302820;
 }
 
 
@@ -407,14 +543,19 @@ h1 {
    ========================================= */
 
 #clavier {
+
     position: fixed;
 
     left: 50%;
 
-    bottom: 18px;
+    bottom: 28px;
 
     transform:
         translateX(-50%);
+
+    width: 900px;
+
+    z-index: 40;
 
     display: flex;
 
@@ -423,17 +564,21 @@ h1 {
     align-items: center;
 
     gap: 10px;
-
-    z-index: 20;
 }
 
 
+/* =========================================
+   LIGNES DU CLAVIER
+   ========================================= */
+
 .ligne-clavier {
+
     display: flex;
 
-    justify-content: center;
+    justify-content:
+        center;
 
-    gap: 12px;
+    gap: 8px;
 }
 
 
@@ -442,9 +587,10 @@ h1 {
    ========================================= */
 
 .touche {
-    width: 58px;
 
-    height: 58px;
+    width: 78px;
+
+    height: 62px;
 
     display: flex;
 
@@ -452,98 +598,135 @@ h1 {
 
     justify-content: center;
 
-    border-radius: 50%;
+    font-family:
+        "Cinzel",
+        serif;
 
-    background:
-        #c7b792;
-
-    border:
-        1px solid
-        #6c634f;
-
-    box-shadow:
-        0 3px 0 #776c55,
-        0 4px 6px
-        rgba(0, 0, 0, 0.12);
-
-    font-size: 1.15rem;
+    font-size: 22px;
 
     font-weight: 600;
 
     color:
-        #29261f;
+        #211c17;
 
-    cursor: pointer;
+    background:
+        #d8d1c3;
 
-    user-select: none;
+    border:
+        1px solid
+        #777066;
+
+    border-bottom:
+        4px solid
+        #8c8478;
+
+    cursor:
+        pointer;
+
+    user-select:
+        none;
+
+    transition:
+        transform 0.08s ease,
+        background 0.15s ease,
+        color 0.15s ease;
 }
 
 
 .touche:hover {
+
+    background:
+        #e2dccf;
+}
+
+
+.touche:active {
+
     transform:
-        translateY(-2px);
-}
+        translateY(3px);
 
-
-.touche-appuyee {
-    animation:
-        toucheAppuyee
-        0.15s
-        ease-out;
-}
-
-
-@keyframes toucheAppuyee {
-
-    0% {
-        transform:
-            scale(1);
-    }
-
-    50% {
-        transform:
-            scale(0.87);
-    }
-
-    100% {
-        transform:
-            scale(1);
-    }
-
+    border-bottom-width:
+        1px;
 }
 
 
 /* =========================================
-   COULEURS CLAVIER
+   ANIMATION TOUCHE
+   ========================================= */
+
+.touche-appuyee {
+
+    animation:
+        toucheFrappee
+        0.15s ease-out;
+}
+
+
+@keyframes toucheFrappee {
+
+    0% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(3px);
+
+    }
+
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+}
+
+
+/* =========================================
+   COULEURS DU CLAVIER
    ========================================= */
 
 .touche.vert {
+
     background:
-        #738267;
+        #78946b;
 
     border-color:
-        #56634d;
+        #5d7453;
+
+    color:
+        #211c17;
 }
 
 
 .touche.jaune {
+
     background:
-        #b49a5d;
+        #c7a84b;
 
     border-color:
-        #907a48;
+        #9e8539;
+
+    color:
+        #211c17;
 }
 
 
 .touche.gris {
+
     background:
-        #8a857a;
+        #aaa398;
 
     border-color:
-        #706c64;
+        #858078;
 
     color:
-        #d9d0bd;
+        #68635c;
 }
 
 
@@ -552,9 +735,12 @@ h1 {
    ========================================= */
 
 #ecranFin {
+
     position: fixed;
 
     inset: 0;
+
+    z-index: 100;
 
     display: none;
 
@@ -564,81 +750,126 @@ h1 {
 
     background:
         rgba(
-            216,
-            201,
-            169,
-            0.96
+            238,
+            233,
+            220,
+            0.94
         );
-
-    z-index: 100;
 }
 
 
 .fin-contenu {
+
+    width: 520px;
+
+    padding: 55px;
+
     text-align: center;
+
+    border:
+        2px solid
+        #302820;
+
+    background:
+        #eee9dc;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.15);
 }
 
 
-#titreFin {
-    margin: 0;
+.fin-contenu h2 {
 
-    font-size: 5rem;
-
-    font-weight: 600;
-
-    letter-spacing: 0.12em;
-}
-
-
-#texteFin {
     margin:
-        10px 0 5px;
+        0 0 25px;
+
+    font-size:
+        42px;
+
+    letter-spacing:
+        4px;
+}
+
+
+.fin-contenu p {
+
+    margin:
+        0 0 15px;
+
+    font-size:
+        17px;
 }
 
 
 #motFin {
-    font-size: 2.2rem;
 
-    font-weight: 600;
+    margin:
+        15px 0 35px;
 
-    letter-spacing: 0.15em;
+    font-size:
+        36px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        5px;
 }
 
 
+/* =========================================
+   BOUTON REJOUER
+   ========================================= */
+
 #boutonRejouer {
-    margin-top: 30px;
 
     padding:
-        12px 28px;
-
-    background:
-        transparent;
-
-    border:
-        1px solid
-        #625c4e;
+        14px 32px;
 
     font-family:
         "Cinzel",
         serif;
 
-    font-size: 0.9rem;
+    font-size:
+        15px;
 
-    font-weight: 600;
+    font-weight:
+        600;
 
-    letter-spacing: 0.12em;
+    letter-spacing:
+        2px;
 
     color:
-        #29261f;
+        #eee9dc;
 
-    cursor: pointer;
+    background:
+        #302820;
+
+    border:
+        none;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
 }
 
 
 #boutonRejouer:hover {
-    background:
-        #29261f;
 
-    color:
-        #d8c9a9;
+    background:
+        #4a4035;
+
+    transform:
+        translateY(-2px);
+}
+
+
+#boutonRejouer:active {
+
+    transform:
+        translateY(1px);
 }
