@@ -650,7 +650,8 @@ function positionnerGrille(animation) {
 
     let depart =
         zoneRect.height -
-        hauteurLigne;
+        hauteurLigne -
+        30;
 
 
     /*
