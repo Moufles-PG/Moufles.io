@@ -28,15 +28,20 @@ body {
 
     overflow: hidden;
 
+    /*
+       BUREAU EN BOIS SOMBRE
+    */
+
     background:
         radial-gradient(
-            circle at center,
-            rgba(255, 249, 224, 0.35),
+            ellipse at center,
+            rgba(125, 85, 50, 0.20),
             transparent 70%
         ),
-        #d8c9a9;
+        #302017;
 
-    color: #29261f;
+    color:
+        #29261f;
 
     font-family:
         "Cinzel",
@@ -70,31 +75,41 @@ h1 {
     font-weight: 600;
 
     letter-spacing: 0.16em;
+
+    color:
+        #d8c9a9;
+
+    text-shadow:
+        0 2px 4px
+        rgba(0, 0, 0, 0.35);
 }
 
+
 /* =========================================
-   SOUS-TITRE DU JEU
+   SOUS-TITRE
    ========================================= */
 
 #sous-titre {
     position: fixed;
 
-    top: 100px;
+    top: 90px;
     left: 50%;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     display: flex;
 
     gap: 25px;
 
-    font-size: 1.25rem;
+    font-size: 0.75rem;
 
-    font-weight: 700;
+    font-weight: 500;
 
     letter-spacing: 0.12em;
 
-    color: #625c4e;
+    color:
+        #bcae91;
 
     z-index: 70;
 
@@ -109,7 +124,7 @@ h1 {
 #message {
     position: fixed;
 
-    top: 150px;
+    top: 125px;
     left: 50%;
 
     transform:
@@ -122,6 +137,9 @@ h1 {
     font-weight: 600;
 
     letter-spacing: 0.05em;
+
+    color:
+        #d8c9a9;
 
     opacity: 0;
 
@@ -163,7 +181,7 @@ h1 {
 
 
 /* =========================================
-   FEUILLE / GRILLE
+   FEUILLE
    ========================================= */
 
 .feuille {
@@ -173,6 +191,25 @@ h1 {
     left: 50%;
 
     width: 455px;
+
+    /*
+       VRAIE FEUILLE DE PAPIER
+    */
+
+    min-height: 600px;
+
+    padding-bottom: 50px;
+
+    background:
+        #d8c9a9;
+
+    /*
+       Très légère texture lumineuse
+    */
+
+    box-shadow:
+        0 0 18px
+        rgba(0, 0, 0, 0.25);
 
     transform:
         translateX(-50%);
@@ -187,6 +224,30 @@ h1 {
         transform;
 
     z-index: 10;
+}
+
+
+/*
+   Petit effet papier très discret
+*/
+
+.feuille::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 20% 15%,
+            rgba(255,255,255,0.16),
+            transparent 30%
+        );
+
+    opacity: 0.5;
 }
 
 
@@ -224,6 +285,7 @@ h1 {
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     background:
@@ -238,11 +300,14 @@ h1 {
         1px solid
         #77705f;
 
-    border-radius: 2px;
+    border-radius:
+        2px;
 
-    font-size: 2.35rem;
+    font-size:
+        2.35rem;
 
-    font-weight: 600;
+    font-weight:
+        600;
 
     color:
         #29261f;
@@ -374,7 +439,7 @@ h1 {
 
 
 /* =========================================
-   RECTANGLE NOIR DU CLAVIER
+   MACHINE À ÉCRIRE / ZONE NOIRE
    ========================================= */
 
 #clavier {
@@ -403,27 +468,51 @@ h1 {
         14px 20px 18px;
 
     /*
-       Rectangle totalement opaque.
-       Il masque la grille située derrière.
+       Corps sombre de la machine.
+       Opaque pour cacher la feuille
+       qui continue derrière.
     */
 
     background:
         #23201b;
-
-    /*
-       On garde les coins supérieurs
-       arrondis, mais le rectangle
-       descend jusqu'au bas de l'écran.
-    */
 
     border-radius:
         18px 18px 0 0;
 
     box-shadow:
         0 -6px 15px
-        rgba(0, 0, 0, 0.20);
+        rgba(0, 0, 0, 0.35);
 
     z-index: 50;
+}
+
+
+/* =========================================
+   PETITE LIGNE MÉTALLIQUE
+   ========================================= */
+
+#clavier::before {
+    content: "";
+
+    position: absolute;
+
+    top: 7px;
+
+    left: 15px;
+    right: 15px;
+
+    height: 2px;
+
+    background:
+        rgba(
+            216,
+            201,
+            169,
+            0.18
+        );
+
+    border-radius:
+        2px;
 }
 
 
@@ -451,11 +540,13 @@ h1 {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     flex-shrink: 0;
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     background:
         #c7b792;
@@ -465,20 +556,26 @@ h1 {
         #6c634f;
 
     box-shadow:
-        0 3px 0 #776c55,
+        0 3px 0
+        #776c55,
+
         0 4px 6px
-        rgba(0, 0, 0, 0.12);
+        rgba(0, 0, 0, 0.20);
 
-    font-size: 1.15rem;
+    font-size:
+        1.15rem;
 
-    font-weight: 600;
+    font-weight:
+        600;
 
     color:
         #29261f;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
-    user-select: none;
+    user-select:
+        none;
 }
 
 
@@ -567,9 +664,9 @@ h1 {
 
     background:
         rgba(
-            216,
-            201,
-            169,
+            48,
+            32,
+            23,
             0.96
         );
 
@@ -578,18 +675,26 @@ h1 {
 
 
 .fin-contenu {
-    text-align: center;
+    text-align:
+        center;
+
+    color:
+        #d8c9a9;
 }
 
 
 #titreFin {
-    margin: 0;
+    margin:
+        0;
 
-    font-size: 5rem;
+    font-size:
+        5rem;
 
-    font-weight: 600;
+    font-weight:
+        600;
 
-    letter-spacing: 0.12em;
+    letter-spacing:
+        0.12em;
 }
 
 
@@ -600,16 +705,20 @@ h1 {
 
 
 #motFin {
-    font-size: 2.2rem;
+    font-size:
+        2.2rem;
 
-    font-weight: 600;
+    font-weight:
+        600;
 
-    letter-spacing: 0.15em;
+    letter-spacing:
+        0.15em;
 }
 
 
 #boutonRejouer {
-    margin-top: 30px;
+    margin-top:
+        30px;
 
     padding:
         12px 28px;
@@ -619,29 +728,33 @@ h1 {
 
     border:
         1px solid
-        #625c4e;
+        #bcae91;
 
     font-family:
         "Cinzel",
         serif;
 
-    font-size: 0.9rem;
+    font-size:
+        0.9rem;
 
-    font-weight: 600;
+    font-weight:
+        600;
 
-    letter-spacing: 0.12em;
+    letter-spacing:
+        0.12em;
 
     color:
-        #29261f;
+        #d8c9a9;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 }
 
 
 #boutonRejouer:hover {
     background:
-        #29261f;
+        #d8c9a9;
 
     color:
-        #d8c9a9;
+        #302017;
 }
