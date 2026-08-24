@@ -645,7 +645,7 @@ function remettreGrilleAuDepart() {
 
 
     feuille.style.transform =
-        "translateX(-50%) translateY(0px)";
+    "translateX(-50%) translateY(80px)";
 }
 
 
