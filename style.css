@@ -22,7 +22,6 @@ html,
 body {
 
     width: 100%;
-
     height: 100%;
 
 }
@@ -57,15 +56,16 @@ body {
 
 header {
 
-    position: absolute;
+    position: fixed;
 
-    top: 25px;
-
+    top: 22px;
     left: 0;
 
     width: 100%;
 
     text-align: center;
+
+    z-index: 20;
 
 }
 
@@ -74,7 +74,7 @@ h1 {
 
     margin: 0;
 
-    font-size: 4.3rem;
+    font-size: 4.2rem;
 
     font-weight: 600;
 
@@ -89,95 +89,101 @@ h1 {
 
 #message {
 
-    position: absolute;
+    position: fixed;
 
-    top: 120px;
+    top: 112px;
 
     left: 50%;
 
     transform:
         translateX(-50%);
 
-    height: 28px;
+    height: 30px;
 
     font-size: 0.9rem;
 
     font-weight: 600;
 
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
 
     opacity: 0;
 
     transition:
         opacity 0.3s ease;
 
+    z-index: 30;
+
 }
 
 
 /* =========================================
-   ZONE DE JEU
+   ZONE PRINCIPALE
    ========================================= */
 
 .jeu {
 
+    position: fixed;
+
+    inset: 0;
+
+}
+
+
+/* =========================================
+   ESPACE ENTRE TITRE ET CLAVIER
+   ========================================= */
+
+.zone-grille {
+
     position: absolute;
 
-    top: 145px;
+    top: 115px;
 
-    bottom: 20px;
+    bottom: 205px;
 
     left: 0;
 
-    width: 100%;
+    right: 0;
 
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
+    overflow: hidden;
 
 }
 
 
 /* =========================================
-   GRILLE
+   FEUILLE
    ========================================= */
 
-.grille {
+.feuille {
 
-    position: relative;
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
 
     width: 365px;
 
-    /*
-       On calcule une hauteur suffisante
-       pour toujours garder les 6 lignes.
-    */
-
-    height: 510px;
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
 
     display: flex;
 
     flex-direction: column;
 
-    justify-content: center;
+    gap: 14px;
 
-    gap: 9px;
-
-    transition:
-        transform 0.6s
-        cubic-bezier(
-            0.22,
-            0.61,
-            0.36,
-            1
-        );
+    will-change:
+        transform;
 
 }
 
 
 /* =========================================
-   LIGNES
+   LIGNE
    ========================================= */
 
 .ligne {
@@ -186,19 +192,21 @@ h1 {
 
     height: 65px;
 
+    flex-shrink: 0;
+
     display: flex;
 
     justify-content: center;
 
-    gap: 9px;
+    align-items: center;
 
-    flex-shrink: 0;
+    gap: 9px;
 
 }
 
 
 /* =========================================
-   CASES
+   CASE
    ========================================= */
 
 .case {
@@ -211,9 +219,9 @@ h1 {
 
     display: flex;
 
-    align-items: center;
-
     justify-content: center;
+
+    align-items: center;
 
     background:
         rgba(
@@ -249,7 +257,6 @@ h1 {
     position: absolute;
 
     left: 5px;
-
     right: 5px;
 
     bottom: 3px;
@@ -262,7 +269,7 @@ h1 {
 
 
 /* =========================================
-   VERT
+   COULEURS DES CASES
    ========================================= */
 
 .case.vert {
@@ -281,10 +288,6 @@ h1 {
 }
 
 
-/* =========================================
-   JAUNE
-   ========================================= */
-
 .case.jaune {
 
     background: #b49a5d;
@@ -300,10 +303,6 @@ h1 {
 
 }
 
-
-/* =========================================
-   GRIS
-   ========================================= */
 
 .case.gris {
 
@@ -324,14 +323,14 @@ h1 {
 
 
 /* =========================================
-   ANIMATION LETTRE
+   ANIMATION DES LETTRES
    ========================================= */
 
 .letter-animation {
 
     animation:
         apparitionLettre
-        0.15s
+        0.16s
         ease-out;
 
 }
@@ -342,11 +341,11 @@ h1 {
     0% {
 
         transform:
-            scale(0.75);
+            scale(0.72);
 
     }
 
-    70% {
+    65% {
 
         transform:
             scale(1.08);
@@ -370,14 +369,14 @@ h1 {
 .case.victoire {
 
     animation:
-        victoireLettre
+        victoire
         0.45s
         ease-in-out;
 
 }
 
 
-@keyframes victoireLettre {
+@keyframes victoire {
 
     0% {
 
@@ -386,14 +385,14 @@ h1 {
 
     }
 
-    30% {
+    35% {
 
         transform:
             translateY(-8px);
 
     }
 
-    60% {
+    65% {
 
         transform:
             translateY(3px);
@@ -418,8 +417,6 @@ h1 {
 
     position: absolute;
 
-    left: 0;
-
     width: 4px;
 
     height: 74px;
@@ -434,6 +431,10 @@ h1 {
 
     z-index: 20;
 
+    will-change:
+        left,
+        top;
+
 }
 
 
@@ -443,13 +444,13 @@ h1 {
 
     position: absolute;
 
-    width: 12px;
-
-    height: 4px;
-
     left: -4px;
 
     top: -5px;
+
+    width: 12px;
+
+    height: 4px;
 
     background: #29261f;
 
@@ -464,11 +465,11 @@ h1 {
 
 #clavier {
 
-    position: absolute;
-
-    bottom: 5px;
+    position: fixed;
 
     left: 50%;
+
+    bottom: 22px;
 
     transform:
         translateX(-50%);
@@ -480,6 +481,8 @@ h1 {
     align-items: center;
 
     gap: 13px;
+
+    z-index: 20;
 
 }
 
@@ -570,7 +573,7 @@ h1 {
     50% {
 
         transform:
-            scale(0.88);
+            scale(0.87);
 
     }
 
@@ -670,8 +673,6 @@ h1 {
 
     margin:
         10px 0 5px;
-
-    font-size: 1rem;
 
 }
 
