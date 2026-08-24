@@ -2,11 +2,14 @@
 // ÉLÉMENTS
 // =========================================
 
-let cases = document.querySelectorAll(".case");
+let cases =
+    document.querySelectorAll(".case");
 
-let touches = document.querySelectorAll(".touche");
+let touches =
+    document.querySelectorAll(".touche");
 
-let message = document.querySelector("#message");
+let message =
+    document.querySelector("#message");
 
 let musiqueJeu =
     document.querySelector("#musiqueJeu");
@@ -16,6 +19,9 @@ let musiqueVictoire =
 
 let musiqueDefaite =
     document.querySelector("#musiqueDefaite");
+
+let sonChariot =
+    document.querySelector("#sonChariot");
 
 let ecranFin =
     document.querySelector("#ecranFin");
@@ -52,7 +58,6 @@ let motSecret = "";
 
 let partieTerminee = false;
 
-// La musique du jeu n'a pas encore commencé
 let musiqueLancee = false;
 
 
@@ -66,6 +71,8 @@ musiqueVictoire.volume = 0.25;
 
 musiqueDefaite.volume = 0.25;
 
+sonChariot.volume = 0.25;
+
 
 // =========================================
 // SONS DES TOUCHES
@@ -76,9 +83,6 @@ let sonGood =
 
 let sonFalse =
     new Audio("False.mp3");
-
-
-// Volume léger
 
 sonGood.volume = 0.05;
 
@@ -151,7 +155,7 @@ function animerTouche(lettre) {
 
 
 // =========================================
-// COULEUR TOUCHE
+// COULEUR CLAVIER
 // =========================================
 
 function mettreAJourClavier(
@@ -170,15 +174,10 @@ function mettreAJourClavier(
         }
 
 
-        // VERT
-
         if (couleur === "vert") {
 
             touche.classList.remove(
-                "jaune"
-            );
-
-            touche.classList.remove(
+                "jaune",
                 "gris"
             );
 
@@ -188,8 +187,6 @@ function mettreAJourClavier(
 
         }
 
-
-        // JAUNE
 
         if (couleur === "jaune") {
 
@@ -211,8 +208,6 @@ function mettreAJourClavier(
 
         }
 
-
-        // GRIS
 
         if (couleur === "gris") {
 
@@ -262,26 +257,16 @@ function positionnerChariot() {
     }
 
 
-    let positionCase =
-        caseActuelle.offsetLeft;
-
-
-    let positionHaut =
-        caseActuelle.offsetTop;
-
-
     chariot.style.left =
         (
-            positionCase +
+            caseActuelle.offsetLeft +
             caseActuelle.offsetWidth -
             3
         ) + "px";
 
 
     chariot.style.top =
-        (
-            positionHaut
-        ) + "px";
+        caseActuelle.offsetTop + "px";
 
 
     chariot.classList.add(
@@ -292,7 +277,7 @@ function positionnerChariot() {
 
 
 // =========================================
-// RETOUR DE CHARIOT
+// RETOUR DU CHARIOT
 // =========================================
 
 function animerRetourChariot() {
@@ -301,28 +286,26 @@ function animerRetourChariot() {
         "retour"
     );
 
-
-    // Force le navigateur à
-    // recommencer l'animation
-
     void chariot.offsetWidth;
-
 
     chariot.classList.add(
         "retour"
     );
 
 
-    setTimeout(
-        function() {
+    sonChariot.currentTime = 0;
 
-            chariot.classList.remove(
-                "retour"
-            );
+    sonChariot.play()
+        .catch(function() {});
 
-        },
-        450
-    );
+
+    setTimeout(function() {
+
+        chariot.classList.remove(
+            "retour"
+        );
+
+    }, 450);
 
 }
 
@@ -347,10 +330,6 @@ function ecrireLettre(lettre) {
     }
 
 
-    // =====================================
-    // TROUVER LA TOUCHE
-    // =====================================
-
     let touche = null;
 
 
@@ -367,9 +346,7 @@ function ecrireLettre(lettre) {
     });
 
 
-    // =====================================
-    // SON DE LA TOUCHE
-    // =====================================
+    // SON DE LA LETTRE
 
     if (
         touche &&
@@ -393,9 +370,7 @@ function ecrireLettre(lettre) {
     }
 
 
-    // =====================================
-    // ÉCRIRE LA LETTRE
-    // =====================================
+    // ÉCRIRE
 
     let caseActuelle =
         cases[debut + position];
@@ -405,40 +380,28 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // =====================================
-    // ANIMATION DE LA LETTRE
-    // =====================================
+    // ANIMATION
 
     caseActuelle.classList.remove(
         "letter-animation"
     );
 
-
     void caseActuelle.offsetWidth;
-
 
     caseActuelle.classList.add(
         "letter-animation"
     );
 
 
-    // =====================================
-    // ANIMATION DU CLAVIER
-    // =====================================
+    // CLAVIER
 
     animerTouche(lettre);
 
 
-    // =====================================
-    // PASSER À LA POSITION SUIVANTE
-    // =====================================
+    // AVANCER LE CHARIOT
 
     position++;
 
-
-    // =====================================
-    // DÉPLACER LE CHARIOT
-    // =====================================
 
     if (position < 5) {
 
@@ -457,17 +420,12 @@ document.addEventListener(
     "keydown",
     function(event) {
 
-
         if (partieTerminee) {
 
             return;
 
         }
 
-
-        // =====================================
-        // LETTRE
-        // =====================================
 
         if (event.key.length === 1) {
 
@@ -491,9 +449,7 @@ document.addEventListener(
         }
 
 
-        // =====================================
         // RETOUR ARRIÈRE
-        // =====================================
 
         if (
             event.key === "Backspace"
@@ -503,11 +459,9 @@ document.addEventListener(
 
                 position--;
 
-
                 cases[
                     debut + position
                 ].textContent = "";
-
 
                 positionnerChariot();
 
@@ -519,9 +473,7 @@ document.addEventListener(
         }
 
 
-        // =====================================
         // ENTRÉE
-        // =====================================
 
         if (
             event.key === "Enter"
@@ -593,6 +545,8 @@ fetch("mots.txt")
 
         choisirNouveauMot();
 
+        positionnerChariot();
+
     })
 
     .catch(function(erreur) {
@@ -648,9 +602,7 @@ function validerMot() {
     }
 
 
-    // =====================================
     // PAS ASSEZ DE LETTRES
-    // =====================================
 
     if (position < 5) {
 
@@ -663,9 +615,7 @@ function validerMot() {
     }
 
 
-    // =====================================
     // CONSTRUIRE LE MOT
-    // =====================================
 
     let mot = "";
 
@@ -684,9 +634,7 @@ function validerMot() {
     }
 
 
-    // =====================================
     // MOT INEXISTANT
-    // =====================================
 
     if (
         !mots.includes(mot)
@@ -701,9 +649,7 @@ function validerMot() {
     }
 
 
-    // =====================================
     // PREMIER MOT VALIDÉ
-    // =====================================
 
     if (!musiqueLancee) {
 
@@ -726,22 +672,16 @@ function validerMot() {
         partieTerminee = true;
 
 
-        // Arrêter musique du jeu
-
         musiqueJeu.pause();
 
         musiqueJeu.currentTime = 0;
 
-
-        // Musique victoire
 
         musiqueVictoire.currentTime = 0;
 
         musiqueVictoire.play()
             .catch(function() {});
 
-
-        // Colorer les cases
 
         for (
             let i = 0;
@@ -776,14 +716,10 @@ function validerMot() {
         }
 
 
-        // Cacher le chariot
-
         chariot.classList.remove(
             "visible"
         );
 
-
-        // Écran de victoire
 
         setTimeout(
             function() {
@@ -821,9 +757,7 @@ function validerMot() {
         motSecret.split("");
 
 
-    // =====================================
     // LETTRES VERTES
-    // =====================================
 
     for (
         let i = 0;
@@ -854,9 +788,7 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // LETTRES JAUNES OU GRISES
-    // =====================================
+    // LETTRES JAUNES / GRISES
 
     for (
         let i = 0;
@@ -917,16 +849,12 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // RETOUR DE CHARIOT
-    // =====================================
+    // RETOUR DU CHARIOT
 
     animerRetourChariot();
 
 
-    // =====================================
-    // PASSER À LA LIGNE SUIVANTE
-    // =====================================
+    // LIGNE SUIVANTE
 
     ligne++;
 
@@ -942,14 +870,10 @@ function validerMot() {
         partieTerminee = true;
 
 
-        // Arrêter musique jeu
-
         musiqueJeu.pause();
 
         musiqueJeu.currentTime = 0;
 
-
-        // Musique de défaite
 
         musiqueDefaite.currentTime = 0;
 
@@ -957,14 +881,10 @@ function validerMot() {
             .catch(function() {});
 
 
-        // Cacher le chariot
-
         chariot.classList.remove(
             "visible"
         );
 
-
-        // Afficher le mot
 
         titreFin.textContent =
             "PERDU";
@@ -978,8 +898,6 @@ function validerMot() {
             motSecret;
 
 
-        // Afficher écran
-
         ecranFin.style.display =
             "flex";
 
@@ -989,9 +907,7 @@ function validerMot() {
     }
 
 
-    // =====================================
     // NOUVELLE LIGNE
-    // =====================================
 
     setTimeout(
         function() {
@@ -1017,18 +933,9 @@ boutonRejouer.addEventListener(
     "click",
     function() {
 
-
-        // =====================================
-        // CACHER ÉCRAN DE FIN
-        // =====================================
-
         ecranFin.style.display =
             "none";
 
-
-        // =====================================
-        // RÉINITIALISER VARIABLES
-        // =====================================
 
         position = 0;
 
@@ -1041,9 +948,7 @@ boutonRejouer.addEventListener(
         musiqueLancee = false;
 
 
-        // =====================================
         // EFFACER GRILLE
-        // =====================================
 
         cases.forEach(
             function(caseJeu) {
@@ -1062,9 +967,7 @@ boutonRejouer.addEventListener(
         );
 
 
-        // =====================================
         // RÉINITIALISER CLAVIER
-        // =====================================
 
         touches.forEach(
             function(touche) {
@@ -1080,9 +983,7 @@ boutonRejouer.addEventListener(
         );
 
 
-        // =====================================
-        // ARRÊTER LES MUSIQUES
-        // =====================================
+        // ARRÊTER MUSIQUES
 
         musiqueJeu.pause();
 
@@ -1099,9 +1000,12 @@ boutonRejouer.addEventListener(
         musiqueDefaite.currentTime = 0;
 
 
-        // =====================================
-        // RÉINITIALISER CHARIOT
-        // =====================================
+        sonChariot.pause();
+
+        sonChariot.currentTime = 0;
+
+
+        // CHARIOT
 
         chariot.classList.remove(
             "visible",
@@ -1109,25 +1013,12 @@ boutonRejouer.addEventListener(
         );
 
 
-        // =====================================
         // NOUVEAU MOT
-        // =====================================
 
         choisirNouveauMot();
 
-
-        // =====================================
-        // POSITIONNER CHARIOT
-        // =====================================
 
         positionnerChariot();
 
     }
 );
-
-
-// =========================================
-// PREMIÈRE POSITION DU CHARIOT
-// =========================================
-
-positionnerChariot();
