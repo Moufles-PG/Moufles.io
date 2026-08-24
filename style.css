@@ -136,7 +136,7 @@ h1 {
 
 
 /* =========================================
-   FEUILLE / GRILLE
+   FEUILLE
    ========================================= */
 
 .feuille {
@@ -149,7 +149,8 @@ h1 {
     width: 455px;
 
     transform:
-        translateX(-50%);
+        translateX(-50%)
+        translateY(0);
 
     display: flex;
 
@@ -180,24 +181,20 @@ h1 {
     align-items: center;
 
     gap: 11px;
-}
 
+    opacity: 0;
 
-/*
-   Au lancement seules les trois premières
-   lignes sont visibles.
+    visibility: hidden;
 
-   Le JavaScript ajoute .ligne-visible
-   aux lignes suivantes.
-*/
-
-.ligne:nth-child(n + 4) {
-    display: none;
+    transition:
+        opacity 0.3s ease;
 }
 
 
 .ligne.ligne-visible {
-    display: flex;
+    opacity: 1;
+
+    visibility: visible;
 }
 
 
@@ -263,7 +260,7 @@ h1 {
 
 
 /* =========================================
-   COULEURS
+   COULEURS CASES
    ========================================= */
 
 .case.vert {
