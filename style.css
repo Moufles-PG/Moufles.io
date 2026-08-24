@@ -72,6 +72,35 @@ h1 {
     letter-spacing: 0.16em;
 }
 
+/* =========================================
+   SOUS-TITRE DU JEU
+   ========================================= */
+
+#sous-titre {
+    position: fixed;
+
+    top: 90px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    display: flex;
+
+    gap: 25px;
+
+    font-size: 0.75rem;
+
+    font-weight: 500;
+
+    letter-spacing: 0.12em;
+
+    color: #625c4e;
+
+    z-index: 70;
+
+    white-space: nowrap;
+}
+
 
 /* =========================================
    MESSAGE
