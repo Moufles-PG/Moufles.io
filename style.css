@@ -1,9 +1,9 @@
 /* =========================================
-   POLICES
+   POLICE
    ========================================= */
 
 @import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=IM+Fell+English&display=swap'
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap'
 );
 
 
@@ -32,7 +32,7 @@ body {
     color: #29261f;
 
     font-family:
-        "IM Fell English",
+        "Cinzel",
         serif;
 
     display: flex;
@@ -44,7 +44,6 @@ body {
     padding: 40px 20px;
 
     position: relative;
-
 }
 
 
@@ -218,6 +217,8 @@ h1::after {
 
     font-size: 0.9rem;
 
+    font-weight: 500;
+
     letter-spacing: 0.05em;
 
     color: #514a3d;
@@ -305,15 +306,13 @@ h1::after {
 
     justify-content: center;
 
-    /*
-       Police ancienne de presse
-    */
-
     font-family:
-        "IM Fell English",
+        "Cinzel",
         serif;
 
-    font-size: 2.15rem;
+    font-size: 2rem;
+
+    font-weight: 600;
 
     color: #29261f;
 
@@ -325,9 +324,9 @@ h1::after {
 }
 
 
-/*
-   Une lettre ne rend pas la case blanche.
-*/
+/* =========================================
+   CASE AVEC LETTRE
+   ========================================= */
 
 .case:not(:empty) {
 
@@ -533,15 +532,13 @@ h1::after {
             0.18
         );
 
-    /*
-       Même police que les lettres
-    */
-
     font-family:
-        "IM Fell English",
+        "Cinzel",
         serif;
 
-    font-size: 1.05rem;
+    font-size: 0.95rem;
+
+    font-weight: 600;
 
     color: #312e27;
 
@@ -571,18 +568,48 @@ h1::after {
 
         transform:
             translateY(0);
+
+        box-shadow:
+            0 3px 0 #9d927c,
+            0 4px 6px
+            rgba(
+                60,
+                50,
+                35,
+                0.18
+            );
     }
 
     45% {
 
         transform:
             translateY(3px);
+
+        box-shadow:
+            0 0 0 #9d927c,
+            0 1px 2px
+            rgba(
+                60,
+                50,
+                35,
+                0.12
+            );
     }
 
     100% {
 
         transform:
             translateY(0);
+
+        box-shadow:
+            0 3px 0 #9d927c,
+            0 4px 6px
+            rgba(
+                60,
+                50,
+                35,
+                0.18
+            );
     }
 }
 
@@ -790,6 +817,8 @@ h1::after {
 
     font-size: 1.05rem;
 
+    font-weight: 500;
+
     letter-spacing: 0.04em;
 
     color: #514a3d;
@@ -799,10 +828,12 @@ h1::after {
 #motFin {
 
     font-family:
-        "IM Fell English",
+        "Cinzel",
         serif;
 
     font-size: 2rem;
+
+    font-weight: 600;
 
     letter-spacing: 0.12em;
 
@@ -835,6 +866,8 @@ h1::after {
         serif;
 
     font-size: 1rem;
+
+    font-weight: 600;
 
     letter-spacing: 0.08em;
 
@@ -917,7 +950,7 @@ h1::after {
         height: 57px;
 
         font-size:
-            1.8rem;
+            1.65rem;
     }
 
 
@@ -935,7 +968,7 @@ h1::after {
         height: 38px;
 
         font-size:
-            0.85rem;
+            0.72rem;
     }
 
 
