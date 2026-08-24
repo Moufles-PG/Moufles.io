@@ -100,7 +100,7 @@ sonChariot.volume = 0.25;
 
 
 // =========================================
-// ACCENTS
+// ENLEVER LES ACCENTS
 // =========================================
 
 function enleverAccents(texte) {
@@ -173,7 +173,7 @@ function animerTouche(lettre) {
 
 
 // =========================================
-// COULEUR CLAVIER
+// COULEUR DU CLAVIER
 // =========================================
 
 function mettreAJourClavier(
@@ -193,6 +193,8 @@ function mettreAJourClavier(
             }
 
 
+            // VERT
+
             if (
                 couleur === "vert"
             ) {
@@ -208,6 +210,8 @@ function mettreAJourClavier(
 
             }
 
+
+            // JAUNE
 
             if (
                 couleur === "jaune"
@@ -231,6 +235,8 @@ function mettreAJourClavier(
 
             }
 
+
+            // GRIS
 
             if (
                 couleur === "gris"
@@ -284,6 +290,8 @@ function ecrireLettre(lettre) {
     }
 
 
+    // Trouver la touche
+
     let touche = null;
 
 
@@ -302,12 +310,15 @@ function ecrireLettre(lettre) {
     );
 
 
+    // Son de touche
+
     if (
         touche &&
         touche.classList.contains("gris")
     ) {
 
-        sonFalse.currentTime = 0;
+        sonFalse.currentTime =
+            0;
 
         sonFalse.play()
             .catch(
@@ -318,7 +329,8 @@ function ecrireLettre(lettre) {
 
     else {
 
-        sonGood.currentTime = 0;
+        sonGood.currentTime =
+            0;
 
         sonGood.play()
             .catch(
@@ -327,6 +339,8 @@ function ecrireLettre(lettre) {
 
     }
 
+
+    // Écrire dans la case
 
     let caseActuelle =
         cases[
@@ -337,6 +351,8 @@ function ecrireLettre(lettre) {
     caseActuelle.textContent =
         lettre;
 
+
+    // Animation de la lettre
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -349,12 +365,16 @@ function ecrireLettre(lettre) {
     );
 
 
+    // Animation du clavier
+
     animerTouche(
         lettre
     );
 
 
-    // Musique après la première lettre
+    // =====================================
+    // MUSIQUE DU JEU
+    // =====================================
 
     if (
         musiqueJeu.paused
@@ -381,7 +401,6 @@ document.addEventListener(
     "keydown",
     function(event) {
 
-
         if (
             partieTerminee ||
             animationEnCours
@@ -391,6 +410,8 @@ document.addEventListener(
 
         }
 
+
+        // Lettre
 
         if (
             event.key.length === 1
@@ -418,6 +439,8 @@ document.addEventListener(
         }
 
 
+        // Retour arrière
+
         if (
             event.key === "Backspace"
         ) {
@@ -440,6 +463,8 @@ document.addEventListener(
 
         }
 
+
+        // Entrée
 
         if (
             event.key === "Enter"
@@ -517,6 +542,12 @@ fetch("mots.txt")
                     );
 
 
+            console.log(
+                "Mots chargés :",
+                mots.length
+            );
+
+
             choisirNouveauMot();
 
         }
@@ -535,7 +566,7 @@ fetch("mots.txt")
 
 
 // =========================================
-// CHOISIR LE MOT
+// CHOISIR UN MOT
 // =========================================
 
 function choisirNouveauMot() {
@@ -567,7 +598,7 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// POSITION DE LA GRILLE
+// CALCULER LA POSITION DE LA GRILLE
 // =========================================
 
 function calculerPositionsGrille() {
@@ -583,9 +614,8 @@ function calculerPositionsGrille() {
     /*
        POSITION BASSE
 
-       +35 px :
-       la grille descend encore
-       davantage au premier essai.
+       Le +35 permet de faire commencer
+       la grille encore plus bas.
     */
 
     let positionBasse =
@@ -597,10 +627,8 @@ function calculerPositionsGrille() {
     /*
        POSITION HAUTE
 
-       -35 px :
-       au sixième essai, la grille
-       remonte davantage vers le titre
-       et le message.
+       Le -35 permet de faire monter
+       la grille davantage au sixième essai.
     */
 
     let positionHaute =
@@ -608,14 +636,14 @@ function calculerPositionsGrille() {
 
 
     /*
-       5 déplacements :
+       Progression :
 
-       essai 1 → 0
-       essai 2 → 1
-       essai 3 → 2
-       essai 4 → 3
-       essai 5 → 4
-       essai 6 → 5
+       ligne 0 → position basse
+       ligne 1 → 20 %
+       ligne 2 → 40 %
+       ligne 3 → 60 %
+       ligne 4 → 80 %
+       ligne 5 → position haute
     */
 
     let progression =
@@ -655,18 +683,40 @@ function positionInitiale() {
 }
 
 
-window.addEventListener(
-    "load",
-    function() {
+// =========================================
+// POSITION ACTUELLE
+// =========================================
 
-        positionInitiale();
+function calculerPositionActuelle() {
+
+    let style =
+        getComputedStyle(
+            feuille
+        );
+
+
+    if (
+        style.transform === "none"
+    ) {
+
+        return 0;
 
     }
-);
+
+
+    let matrice =
+        new DOMMatrix(
+            style.transform
+        );
+
+
+    return matrice.m42;
+
+}
 
 
 // =========================================
-// ANIMATION DE LA FEUILLE
+// ANIMATION DE LA GRILLE
 // =========================================
 
 function animerFeuille() {
@@ -721,7 +771,12 @@ function animerFeuille() {
                 duration: 750,
 
                 easing:
-                    "cubic-bezier(0.22, 0.61, 0.36, 1)",
+                    "cubic-bezier(
+                        0.22,
+                        0.61,
+                        0.36,
+                        1
+                    )",
 
                 fill:
                     "forwards"
@@ -744,29 +799,6 @@ function animerFeuille() {
 
             }
         );
-
-}
-
-
-// =========================================
-// POSITION ACTUELLE
-// =========================================
-
-function calculerPositionActuelle() {
-
-    let style =
-        getComputedStyle(
-            feuille
-        );
-
-
-    let matrice =
-        new DOMMatrix(
-            style.transform
-        );
-
-
-    return matrice.m42;
 
 }
 
@@ -850,6 +882,8 @@ function animerChariot() {
         "1";
 
 
+    // Son de machine à écrire
+
     sonChariot.currentTime =
         0;
 
@@ -858,6 +892,8 @@ function animerChariot() {
             function() {}
         );
 
+
+    // Aller vers la droite
 
     let aller =
         chariot.animate(
@@ -881,7 +917,12 @@ function animerChariot() {
                 duration: 420,
 
                 easing:
-                    "cubic-bezier(0.12, 0.8, 0.25, 1)",
+                    "cubic-bezier(
+                        0.12,
+                        0.8,
+                        0.25,
+                        1
+                    )",
 
                 fill:
                     "forwards"
@@ -913,6 +954,8 @@ function animerChariot() {
         .then(
             function() {
 
+                // Retour du chariot
+
                 let retour =
                     chariot.animate(
 
@@ -940,7 +983,12 @@ function animerChariot() {
                             duration: 340,
 
                             easing:
-                                "cubic-bezier(0.55, 0.05, 0.68, 0.19)",
+                                "cubic-bezier(
+                                    0.55,
+                                    0.05,
+                                    0.68,
+                                    0.19
+                                )",
 
                             fill:
                                 "forwards"
@@ -949,6 +997,9 @@ function animerChariot() {
 
                     );
 
+
+                // En même temps,
+                // la grille monte.
 
                 let mouvement =
                     animerFeuille();
@@ -992,6 +1043,8 @@ function validerMot() {
     }
 
 
+    // Pas assez de lettres
+
     if (
         position < 5
     ) {
@@ -1004,6 +1057,8 @@ function validerMot() {
 
     }
 
+
+    // Construire le mot
 
     let mot = "";
 
@@ -1021,6 +1076,8 @@ function validerMot() {
 
     }
 
+
+    // Mot inexistant
 
     if (
         !mots.includes(mot)
@@ -1047,11 +1104,15 @@ function validerMot() {
             true;
 
 
+        // Arrêter musique du jeu
+
         musiqueJeu.pause();
 
         musiqueJeu.currentTime =
             0;
 
+
+        // Jouer victoire
 
         musiqueVictoire.currentTime =
             0;
@@ -1061,6 +1122,8 @@ function validerMot() {
                 function() {}
             );
 
+
+        // Colorer les cases
 
         for (
             let i = 0;
@@ -1097,17 +1160,22 @@ function validerMot() {
         }
 
 
+        // Écran de victoire
+
         setTimeout(
             function() {
 
                 titreFin.textContent =
                     "GAGNÉ";
 
+
                 texteFin.textContent =
                     "Le mot était :";
 
+
                 motFin.textContent =
                     motSecret;
+
 
                 ecranFin.style.display =
                     "flex";
@@ -1123,12 +1191,14 @@ function validerMot() {
 
 
     // =====================================
-    // LETTRES VERTES
+    // VÉRIFICATION DES LETTRES
     // =====================================
 
     let lettresDisponibles =
         motSecret.split("");
 
+
+    // Lettres vertes
 
     for (
         let i = 0;
@@ -1161,9 +1231,7 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // LETTRES JAUNES / GRISES
-    // =====================================
+    // Lettres jaunes ou grises
 
     for (
         let i = 0;
@@ -1205,7 +1273,8 @@ function validerMot() {
 
             lettresDisponibles[
                 positionLettre
-            ] = null;
+            ] =
+                null;
 
         }
 
@@ -1229,7 +1298,7 @@ function validerMot() {
 
 
     // =====================================
-    // ESSAI SUIVANT
+    // PASSER À LA LIGNE SUIVANTE
     // =====================================
 
     ligne++;
@@ -1317,9 +1386,15 @@ boutonRejouer.addEventListener(
     "click",
     function() {
 
+        // Cacher l'écran de fin
+
         ecranFin.style.display =
             "none";
 
+
+        // =====================================
+        // RÉINITIALISER LES VARIABLES
+        // =====================================
 
         position = 0;
 
@@ -1333,6 +1408,10 @@ boutonRejouer.addEventListener(
         animationEnCours =
             false;
 
+
+        // =====================================
+        // EFFACER LA GRILLE
+        // =====================================
 
         cases.forEach(
             function(caseJeu) {
@@ -1352,6 +1431,10 @@ boutonRejouer.addEventListener(
         );
 
 
+        // =====================================
+        // RÉINITIALISER LE CLAVIER
+        // =====================================
+
         touches.forEach(
             function(touche) {
 
@@ -1365,6 +1448,10 @@ boutonRejouer.addEventListener(
             }
         );
 
+
+        // =====================================
+        // ARRÊTER LES MUSIQUES
+        // =====================================
 
         musiqueJeu.pause();
 
@@ -1384,12 +1471,78 @@ boutonRejouer.addEventListener(
             0;
 
 
+        // =====================================
+        // CACHER LE CHARIOT
+        // =====================================
+
         chariot.style.opacity =
             "0";
 
 
-        positionInitiale();
+        // =====================================
+        // ANNULER LES ANIMATIONS
+        // =====================================
 
+        feuille.getAnimations().forEach(
+            function(animation) {
+
+                animation.cancel();
+
+            }
+        );
+
+
+        chariot.getAnimations().forEach(
+            function(animation) {
+
+                animation.cancel();
+
+            }
+        );
+
+
+        // =====================================
+        // FORCER LE RETOUR À LA POSITION
+        // DE DÉPART
+        // =====================================
+
+        /*
+           On enlève momentanément la
+           transformation précédente.
+        */
+
+        feuille.style.transform =
+            "none";
+
+
+        /*
+           On force le navigateur à
+           recalculer la grille.
+        */
+
+        void feuille.offsetHeight;
+
+
+        /*
+           Maintenant ligne = 0,
+           donc calculerPositionsGrille()
+           renvoie bien la position basse.
+        */
+
+        let position =
+            calculerPositionsGrille();
+
+
+        feuille.style.transform =
+            `translate(
+                -50%,
+                ${position}px
+            )`;
+
+
+        // =====================================
+        // NOUVEAU MOT
+        // =====================================
 
         choisirNouveauMot();
 
