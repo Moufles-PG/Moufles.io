@@ -115,15 +115,18 @@ function enleverAccents(texte) {
 
 function afficherMessage(texte) {
 
-    message.textContent = texte;
+    message.textContent =
+        texte;
 
-    message.style.opacity = "1";
+    message.style.opacity =
+        "1";
 
 
     setTimeout(
         function() {
 
-            message.style.opacity = "0";
+            message.style.opacity =
+                "0";
 
         },
         1500
@@ -160,7 +163,7 @@ function animerTouche(lettre) {
 
 
 // =========================================
-// COULEUR DU CLAVIER
+// COULEUR CLAVIER
 // =========================================
 
 function mettreAJourClavier(
@@ -179,8 +182,6 @@ function mettreAJourClavier(
             }
 
 
-            // VERT
-
             if (
                 couleur === "vert"
             ) {
@@ -195,8 +196,6 @@ function mettreAJourClavier(
                 );
             }
 
-
-            // JAUNE
 
             if (
                 couleur === "jaune"
@@ -218,8 +217,6 @@ function mettreAJourClavier(
                 }
             }
 
-
-            // GRIS
 
             if (
                 couleur === "gris"
@@ -266,8 +263,6 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Trouver la touche
-
     let touche = null;
 
 
@@ -309,7 +304,7 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Case actuelle
+    // Case
 
     let caseActuelle =
         cases[
@@ -321,7 +316,7 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // Animation de la lettre
+    // Animation
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -334,19 +329,10 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Animation de la touche
-
     animerTouche(lettre);
 
 
-    // =====================================
-    // MUSIQUE DU JEU
-    // =====================================
-
-    /*
-       La musique commence dès la première
-       lettre tapée.
-    */
+    // Musique
 
     if (
         musiqueJeu.paused
@@ -379,7 +365,7 @@ document.addEventListener(
         }
 
 
-        // Lettre
+        // Lettres
 
         if (
             event.key.length === 1
@@ -395,7 +381,9 @@ document.addEventListener(
                 /^[A-Z]$/.test(lettre)
             ) {
 
-                ecrireLettre(lettre);
+                ecrireLettre(
+                    lettre
+                );
             }
 
 
@@ -564,15 +552,20 @@ function mettreAJourLignesVisibles() {
         function(uneLigne, index) {
 
             /*
-               Au début :
+               Début :
+               ligne 1 seulement.
 
-               lignes 1, 2, 3 = visibles
+               Après essai 1 :
+               lignes 1 + 2.
 
-               lignes 4, 5, 6 = cachées
+               Après essai 2 :
+               lignes 1 + 2 + 3.
+
+               etc.
             */
 
             if (
-                index <= ligne + 2
+                index <= ligne
             ) {
 
                 uneLigne.classList.add(
@@ -597,23 +590,26 @@ function mettreAJourLignesVisibles() {
 function positionGrille() {
 
     /*
-       Ces valeurs déterminent simplement
-       la montée de la grille.
+       La grille monte progressivement.
 
-       0 :
-       position de départ.
-
-       Puis la grille monte progressivement.
+       La ligne active reste visible.
     */
 
     let positions = [
-    80,
-    35,
-    -10,
-    -55,
-    -100,
-    -145
-];
+
+        0,      // ligne 1
+
+        -90,    // ligne 2
+
+        -180,   // ligne 3
+
+        -270,   // ligne 4
+
+        -360,   // ligne 5
+
+        -450    // ligne 6
+
+    ];
 
 
     return positions[ligne];
@@ -621,7 +617,7 @@ function positionGrille() {
 
 
 // =========================================
-// REMETTRE LA GRILLE AU DÉPART
+// RETOUR AU DÉPART
 // =========================================
 
 function remettreGrilleAuDepart() {
@@ -636,16 +632,12 @@ function remettreGrilleAuDepart() {
     mettreAJourLignesVisibles();
 
 
-    /*
-       Pas d'animation au chargement.
-    */
-
     feuille.style.transition =
         "none";
 
 
     feuille.style.transform =
-    "translateX(-50%) translateY(80px)";
+        "translateX(-50%) translateY(0px)";
 }
 
 
@@ -656,16 +648,15 @@ function remettreGrilleAuDepart() {
 function monterGrille() {
 
     /*
-       On affiche d'abord la nouvelle ligne.
+       La nouvelle ligne apparaît.
     */
 
     mettreAJourLignesVisibles();
 
 
     /*
-       Petite attente pour que le navigateur
-       prenne en compte la nouvelle hauteur
-       de la feuille.
+       On laisse le navigateur prendre
+       en compte son apparition.
     */
 
     requestAnimationFrame(
@@ -676,26 +667,24 @@ function monterGrille() {
 
 
             feuille.style.transition =
-                "transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1)";
+                "transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1)";
 
 
             feuille.style.transform =
                 `translateX(-50%) translateY(${nouvellePosition}px)`;
-
         }
     );
 }
 
 
 // =========================================
-// ANIMATION DU CHARIOT
+// CHARIOT
 // =========================================
 
 function animerChariot() {
 
     /*
-       La ligne qui vient d'être validée
-       est ligne - 1.
+       Ligne venant d'être validée.
     */
 
     let ligneValidee =
@@ -735,29 +724,17 @@ function animerChariot() {
         derniereCase.getBoundingClientRect();
 
 
-    /*
-       Départ du chariot.
-    */
-
     let depart =
         premiereRect.left -
         feuilleRect.left -
         8;
 
 
-    /*
-       Arrivée du chariot.
-    */
-
     let arrivee =
         derniereRect.right -
         feuilleRect.left +
         8;
 
-
-    /*
-       Hauteur.
-    */
 
     let haut =
         premiereRect.top -
@@ -775,7 +752,7 @@ function animerChariot() {
         "1";
 
 
-    // Son de machine à écrire
+    // Son machine à écrire
 
     sonChariot.currentTime =
         0;
@@ -786,9 +763,7 @@ function animerChariot() {
         );
 
 
-    /*
-       Le chariot traverse la ligne.
-    */
+    // Aller
 
     let aller =
         chariot.animate(
@@ -808,9 +783,11 @@ function animerChariot() {
             {
                 duration: 450,
 
-                easing: "ease-out",
+                easing:
+                    "ease-out",
 
-                fill: "forwards"
+                fill:
+                    "forwards"
             }
         );
 
@@ -820,7 +797,7 @@ function animerChariot() {
             function() {
 
                 /*
-                   Retour rapide du chariot.
+                   Retour du chariot.
                 */
 
                 let retour =
@@ -841,16 +818,17 @@ function animerChariot() {
                         {
                             duration: 320,
 
-                            easing: "ease-in",
+                            easing:
+                                "ease-in",
 
-                            fill: "forwards"
+                            fill:
+                                "forwards"
                         }
                     );
 
 
                 /*
-                   La feuille monte pendant
-                   le retour du chariot.
+                   Et la feuille monte.
                 */
 
                 monterGrille();
@@ -883,9 +861,7 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // PAS ASSEZ DE LETTRES
-    // =====================================
+    // Pas assez de lettres
 
     if (
         position < 5
@@ -899,9 +875,7 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // CONSTRUIRE LE MOT
-    // =====================================
+    // Construire le mot
 
     let mot = "";
 
@@ -919,9 +893,7 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // MOT INEXISTANT
-    // =====================================
+    // Mot inexistant
 
     if (
         !mots.includes(mot)
@@ -962,8 +934,6 @@ function validerMot() {
             );
 
 
-        // Cases vertes
-
         for (
             let i = 0;
             i < 5;
@@ -997,8 +967,6 @@ function validerMot() {
             );
         }
 
-
-        // Écran de victoire
 
         setTimeout(
             function() {
@@ -1035,9 +1003,7 @@ function validerMot() {
         motSecret.split("");
 
 
-    // =====================================
-    // LETTRES VERTES
-    // =====================================
+    // Lettres vertes
 
     for (
         let i = 0;
@@ -1068,9 +1034,7 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // JAUNES / GRISES
-    // =====================================
+    // Lettres jaunes / grises
 
     for (
         let i = 0;
@@ -1185,15 +1149,13 @@ function validerMot() {
 
 
     // =====================================
-    // CHARIOT
+    // CHARIOT + MONTÉE
     // =====================================
 
     animerChariot();
 
 
-    // =====================================
-    // NOUVELLE LIGNE
-    // =====================================
+    // Nouvelle ligne
 
     debut += 5;
 
@@ -1209,13 +1171,9 @@ boutonRejouer.addEventListener(
     "click",
     function() {
 
-        // Cacher écran
-
         ecranFin.style.display =
             "none";
 
-
-        // Variables
 
         partieTerminee =
             false;
@@ -1261,7 +1219,7 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Arrêter les musiques
+        // Musiques
 
         musiqueJeu.pause();
 
@@ -1281,27 +1239,15 @@ boutonRejouer.addEventListener(
             0;
 
 
-        // Cacher le chariot
+        // Chariot
 
         chariot.style.opacity =
             "0";
 
 
-        /*
-           Retour immédiat à la position
-           de départ.
-        */
+        // Retour au départ
 
-        feuille.style.transition =
-            "none";
-
-        feuille.style.transform =
-            "translateX(-50%) translateY(0px)";
-
-
-        // Seulement 3 lignes
-
-        mettreAJourLignesVisibles();
+        remettreGrilleAuDepart();
 
 
         // Nouveau mot
