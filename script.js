@@ -41,8 +41,11 @@ let boutonRejouer =
 let chariot =
     document.querySelector("#chariot");
 
-let grille =
-    document.querySelector(".grille");
+let feuille =
+    document.querySelector(".feuille");
+
+let zoneGrille =
+    document.querySelector(".zone-grille");
 
 
 // =========================================
@@ -170,7 +173,7 @@ function animerTouche(lettre) {
 
 
 // =========================================
-// COULEUR CLAVIER
+// COULEUR DU CLAVIER
 // =========================================
 
 function mettreAJourClavier(
@@ -299,8 +302,6 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Son
-
     if (
         touche &&
         touche.classList.contains("gris")
@@ -327,8 +328,6 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Écriture
-
     let caseActuelle =
         cases[
             debut + position
@@ -338,8 +337,6 @@ function ecrireLettre(lettre) {
     caseActuelle.textContent =
         lettre;
 
-
-    // Animation
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -357,7 +354,7 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Musique
+    // Musique après première lettre
 
     if (
         musiqueJeu.paused
@@ -538,7 +535,7 @@ fetch("mots.txt")
 
 
 // =========================================
-// CHOISIR MOT
+// CHOISIR UN MOT
 // =========================================
 
 function choisirNouveauMot() {
@@ -565,6 +562,167 @@ function choisirNouveauMot() {
         "Mot secret :",
         motSecret
     );
+
+}
+
+
+// =========================================
+// POSITIONNER LA FEUILLE
+// =========================================
+
+function positionnerLigneActuelle() {
+
+    if (
+        !lignes[ligne]
+    ) {
+
+        return;
+
+    }
+
+
+    let zoneRect =
+        zoneGrille.getBoundingClientRect();
+
+
+    let ligneRect =
+        lignes[ligne].getBoundingClientRect();
+
+
+    let centreZone =
+        zoneRect.top +
+        zoneRect.height / 2;
+
+
+    let centreLigne =
+        ligneRect.top +
+        ligneRect.height / 2;
+
+
+    let difference =
+        centreZone -
+        centreLigne;
+
+
+    let transformation =
+        feuille.getBoundingClientRect();
+
+
+    /*
+       On récupère la transformation
+       actuelle et on ajoute uniquement
+       la distance nécessaire.
+    */
+
+    return difference;
+
+}
+
+
+// =========================================
+// ANIMATION DE LA FEUILLE
+// =========================================
+
+function faireMonterLaFeuille() {
+
+    let difference =
+        positionnerLigneActuelle();
+
+
+    if (
+        difference === undefined
+    ) {
+
+        return Promise.resolve();
+
+    }
+
+
+    let matrice =
+        new DOMMatrix(
+            getComputedStyle(
+                feuille
+            ).transform
+        );
+
+
+    let departY =
+        matrice.m42;
+
+
+    let arriveeY =
+        departY + difference;
+
+
+    /*
+       Mouvement de papier :
+
+       départ
+       ↓
+       accélération
+       ↓
+       montée
+       ↓
+       petit dépassement
+       ↓
+       retour
+    */
+
+    let animation =
+        feuille.animate(
+
+            [
+
+                {
+                    transform:
+                        `translate(-50%, calc(-50% + ${departY}px))`
+                },
+
+                {
+                    transform:
+                        `translate(-50%, calc(-50% + ${arriveeY * 0.72}px))`
+                },
+
+                {
+                    transform:
+                        `translate(-50%, calc(-50% + ${arriveeY * 1.04}px))`
+                },
+
+                {
+                    transform:
+                        `translate(-50%, calc(-50% + ${arriveeY}px))`
+                }
+
+            ],
+
+            {
+
+                duration: 800,
+
+                easing:
+                    "cubic-bezier(0.22, 0.61, 0.36, 1)",
+
+                fill:
+                    "forwards"
+
+            }
+
+        );
+
+
+    return animation.finished
+
+        .then(
+            function() {
+
+                feuille.style.transform =
+                    `translate(
+                        -50%,
+                        calc(-50% + ${arriveeY}px)
+                    )`;
+
+            }
+        );
 
 }
 
@@ -601,31 +759,33 @@ function animerChariot() {
 
 
     let grilleRect =
-        grille.getBoundingClientRect();
+        feuille.getBoundingClientRect();
+
 
     let premiereRect =
         premiereCase.getBoundingClientRect();
+
 
     let derniereRect =
         derniereCase.getBoundingClientRect();
 
 
     let depart =
-        premiereRect.left -
-        grilleRect.left -
-        8;
+        premiereRect.left
+        - grilleRect.left
+        - 10;
 
 
     let arrivee =
-        derniereRect.right -
-        grilleRect.left +
-        8;
+        derniereRect.right
+        - grilleRect.left
+        + 10;
 
 
     let haut =
-        premiereRect.top -
-        grilleRect.top -
-        4;
+        premiereRect.top
+        - grilleRect.top
+        - 5;
 
 
     chariot.style.left =
@@ -638,11 +798,24 @@ function animerChariot() {
         "1";
 
 
-    // Aller
+    sonChariot.currentTime =
+        0;
+
+    sonChariot.play()
+        .catch(
+            function() {}
+        );
+
+
+    /*
+       CHARIOT → DROITE
+    */
 
     let aller =
         chariot.animate(
+
             [
+
                 {
                     left:
                         depart + "px"
@@ -652,24 +825,21 @@ function animerChariot() {
                     left:
                         arrivee + "px"
                 }
+
             ],
+
             {
-                duration: 330,
+
+                duration: 400,
 
                 easing:
-                    "cubic-bezier(0.15, 0.85, 0.25, 1)",
+                    "cubic-bezier(0.12, 0.8, 0.25, 1)",
 
-                fill: "forwards"
+                fill:
+                    "forwards"
+
             }
-        );
 
-
-    sonChariot.currentTime =
-        0;
-
-    sonChariot.play()
-        .catch(
-            function() {}
         );
 
 
@@ -683,7 +853,7 @@ function animerChariot() {
 
                         setTimeout(
                             resolve,
-                            80
+                            100
                         );
 
                     }
@@ -695,11 +865,15 @@ function animerChariot() {
         .then(
             function() {
 
-                // Retour du chariot
+                /*
+                   CHARIOT ← RETOUR
+                */
 
                 let retour =
                     chariot.animate(
+
                         [
+
                             {
                                 left:
                                     arrivee + "px"
@@ -707,74 +881,45 @@ function animerChariot() {
 
                             {
                                 left:
+                                    arrivee - 8 + "px"
+                            },
+
+                            {
+                                left:
                                     depart + "px"
                             }
+
                         ],
+
                         {
-                            duration: 430,
+
+                            duration: 360,
 
                             easing:
                                 "cubic-bezier(0.55, 0.05, 0.68, 0.19)",
 
-                            fill: "forwards"
+                            fill:
+                                "forwards"
+
                         }
+
                     );
 
-
-                // Feuille
 
                 /*
-                   Une ligne = 65 px
-                   + 9 px d'espace
-                   = 74 px.
-
-                   On monte la feuille de 14 px.
-                   C'est volontairement subtil.
+                   LE PAPIER MONTE EN MÊME TEMPS
                 */
 
-                let feuille =
-                    grille.animate(
-                        [
-                            {
-                                transform:
-                                    "translateY(0)"
-                            },
-
-                            {
-                                transform:
-                                    "translateY(-9px)"
-                            },
-
-                            {
-                                transform:
-                                    "translateY(-14px)"
-                            },
-
-                            {
-                                transform:
-                                    "translateY(-11px)"
-                            },
-
-                            {
-                                transform:
-                                    "translateY(-14px)"
-                            }
-                        ],
-                        {
-                            duration: 650,
-
-                            easing:
-                                "cubic-bezier(0.22, 0.61, 0.36, 1)",
-
-                            fill: "forwards"
-                        }
-                    );
+                let feuilleMonte =
+                    faireMonterLaFeuille();
 
 
-                return Promise.all([
-                    retour.finished,
-                    feuille.finished
-                ]);
+                return Promise.all(
+                    [
+                        retour.finished,
+                        feuilleMonte
+                    ]
+                );
 
             }
         )
@@ -859,9 +1004,9 @@ function validerMot() {
     }
 
 
-    // =========================================
+    // =====================================
     // VICTOIRE
-    // =========================================
+    // =====================================
 
     if (
         mot === motSecret
@@ -946,9 +1091,9 @@ function validerMot() {
     }
 
 
-    // =========================================
-    // VÉRIFICATION
-    // =========================================
+    // =====================================
+    // LETTRES VERTES
+    // =====================================
 
     let lettresDisponibles =
         motSecret.split("");
@@ -984,6 +1129,10 @@ function validerMot() {
 
     }
 
+
+    // =====================================
+    // JAUNE / GRIS
+    // =====================================
 
     for (
         let i = 0;
@@ -1025,8 +1174,7 @@ function validerMot() {
 
             lettresDisponibles[
                 positionLettre
-            ] =
-                null;
+            ] = null;
 
         }
 
@@ -1049,16 +1197,16 @@ function validerMot() {
     }
 
 
-    // =========================================
+    // =====================================
     // LIGNE SUIVANTE
-    // =========================================
+    // =====================================
 
     ligne++;
 
 
-    // =========================================
+    // =====================================
     // DÉFAITE
-    // =========================================
+    // =====================================
 
     if (
         ligne === 6
@@ -1104,9 +1252,9 @@ function validerMot() {
     }
 
 
-    // =========================================
+    // =====================================
     // ANIMATION
-    // =========================================
+    // =====================================
 
     animationEnCours =
         true;
@@ -1156,7 +1304,7 @@ boutonRejouer.addEventListener(
             false;
 
 
-        // Grille
+        // Effacer grille
 
         cases.forEach(
             function(caseJeu) {
@@ -1176,7 +1324,10 @@ boutonRejouer.addEventListener(
         );
 
 
-        grille.getAnimations()
+        // Revenir à la position initiale
+
+        feuille
+            .getAnimations()
             .forEach(
                 function(animation) {
 
@@ -1186,8 +1337,8 @@ boutonRejouer.addEventListener(
             );
 
 
-        grille.style.transform =
-            "translateY(0)";
+        feuille.style.transform =
+            "translate(-50%, -50%)";
 
 
         // Clavier
