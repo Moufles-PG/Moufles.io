@@ -2,11 +2,14 @@
 // ÉLÉMENTS
 // =========================================
 
-let cases = document.querySelectorAll(".case");
+let cases =
+    document.querySelectorAll(".case");
 
-let touches = document.querySelectorAll(".touche");
+let touches =
+    document.querySelectorAll(".touche");
 
-let message = document.querySelector("#message");
+let message =
+    document.querySelector("#message");
 
 let musiqueJeu =
     document.querySelector("#musiqueJeu");
@@ -57,18 +60,25 @@ let partieTerminee = false;
 
 
 // =========================================
-// SON DE MACHINE À ÉCRIRE
+// SONS
 // =========================================
 
 let sonChariot =
     new Audio("Typewirter.mp3");
 
+let sonGood =
+    new Audio("Good.mp3");
+
+let sonFalse =
+    new Audio("False.mp3");
+
+
 sonChariot.volume = 0.25;
 
+sonGood.volume = 0.05;
 
-// =========================================
-// VOLUME
-// =========================================
+sonFalse.volume = 0.05;
+
 
 musiqueJeu.volume = 0.15;
 
@@ -78,22 +88,7 @@ musiqueDefaite.volume = 0.25;
 
 
 // =========================================
-// SONS DES TOUCHES
-// =========================================
-
-let sonGood =
-    new Audio("Good.mp3");
-
-let sonFalse =
-    new Audio("False.mp3");
-
-sonGood.volume = 0.05;
-
-sonFalse.volume = 0.05;
-
-
-// =========================================
-// ENLEVER LES ACCENTS
+// ACCENTS
 // =========================================
 
 function enleverAccents(texte) {
@@ -114,16 +109,22 @@ function enleverAccents(texte) {
 
 function afficherMessage(texte) {
 
-    message.textContent = texte;
+    message.textContent =
+        texte;
 
-    message.style.opacity = "1";
+    message.style.opacity =
+        "1";
 
 
-    setTimeout(function() {
+    setTimeout(
+        function() {
 
-        message.style.opacity = "0";
+            message.style.opacity =
+                "0";
 
-    }, 1500);
+        },
+        1500
+    );
 
 }
 
@@ -134,31 +135,33 @@ function afficherMessage(texte) {
 
 function animerTouche(lettre) {
 
-    touches.forEach(function(touche) {
+    touches.forEach(
+        function(touche) {
 
-        if (
-            touche.textContent === lettre
-        ) {
+            if (
+                touche.textContent === lettre
+            ) {
 
-            touche.classList.remove(
-                "touche-appuyee"
-            );
+                touche.classList.remove(
+                    "touche-appuyee"
+                );
 
-            void touche.offsetWidth;
+                void touche.offsetWidth;
 
-            touche.classList.add(
-                "touche-appuyee"
-            );
+                touche.classList.add(
+                    "touche-appuyee"
+                );
+
+            }
 
         }
-
-    });
+    );
 
 }
 
 
 // =========================================
-// COULEUR TOUCHE
+// COULEUR CLAVIER
 // =========================================
 
 function mettreAJourClavier(
@@ -166,75 +169,80 @@ function mettreAJourClavier(
     couleur
 ) {
 
-    touches.forEach(function(touche) {
-
-        if (
-            touche.textContent !== lettre
-        ) {
-
-            return;
-
-        }
-
-
-        if (couleur === "vert") {
-
-            touche.classList.remove(
-                "jaune"
-            );
-
-            touche.classList.remove(
-                "gris"
-            );
-
-            touche.classList.add(
-                "vert"
-            );
-
-        }
-
-
-        if (couleur === "jaune") {
+    touches.forEach(
+        function(touche) {
 
             if (
-                !touche.classList.contains(
-                    "vert"
-                )
+                touche.textContent !== lettre
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                couleur === "vert"
             ) {
 
                 touche.classList.remove(
+                    "jaune",
                     "gris"
                 );
 
                 touche.classList.add(
-                    "jaune"
+                    "vert"
                 );
 
             }
 
-        }
-
-
-        if (couleur === "gris") {
 
             if (
-                !touche.classList.contains(
-                    "vert"
-                ) &&
-                !touche.classList.contains(
-                    "jaune"
-                )
+                couleur === "jaune"
             ) {
 
-                touche.classList.add(
-                    "gris"
-                );
+                if (
+                    !touche.classList.contains(
+                        "vert"
+                    )
+                ) {
+
+                    touche.classList.remove(
+                        "gris"
+                    );
+
+                    touche.classList.add(
+                        "jaune"
+                    );
+
+                }
+
+            }
+
+
+            if (
+                couleur === "gris"
+            ) {
+
+                if (
+                    !touche.classList.contains(
+                        "vert"
+                    ) &&
+                    !touche.classList.contains(
+                        "jaune"
+                    )
+                ) {
+
+                    touche.classList.add(
+                        "gris"
+                    );
+
+                }
 
             }
 
         }
-
-    });
+    );
 
 }
 
@@ -245,14 +253,18 @@ function mettreAJourClavier(
 
 function ecrireLettre(lettre) {
 
-    if (partieTerminee) {
+    if (
+        partieTerminee
+    ) {
 
         return;
 
     }
 
 
-    if (position >= 5) {
+    if (
+        position >= 5
+    ) {
 
         return;
 
@@ -262,18 +274,22 @@ function ecrireLettre(lettre) {
     let touche = null;
 
 
-    touches.forEach(function(element) {
+    touches.forEach(
+        function(element) {
 
-        if (
-            element.textContent === lettre
-        ) {
+            if (
+                element.textContent === lettre
+            ) {
 
-            touche = element;
+                touche = element;
+
+            }
 
         }
+    );
 
-    });
 
+    // Son touche
 
     if (
         touche &&
@@ -283,7 +299,9 @@ function ecrireLettre(lettre) {
         sonFalse.currentTime = 0;
 
         sonFalse.play()
-            .catch(function() {});
+            .catch(
+                function() {}
+            );
 
     }
 
@@ -292,18 +310,26 @@ function ecrireLettre(lettre) {
         sonGood.currentTime = 0;
 
         sonGood.play()
-            .catch(function() {});
+            .catch(
+                function() {}
+            );
 
     }
 
 
+    // Écrire
+
     let caseActuelle =
-        cases[debut + position];
+        cases[
+            debut + position
+        ];
 
 
     caseActuelle.textContent =
         lettre;
 
+
+    // Animation lettre
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -316,15 +342,24 @@ function ecrireLettre(lettre) {
     );
 
 
-    animerTouche(lettre);
+    // Animation clavier
+
+    animerTouche(
+        lettre
+    );
 
 
-    // La musique démarre à la première lettre
+    // Musique à partir
+    // de la première lettre
 
-    if (musiqueJeu.paused) {
+    if (
+        musiqueJeu.paused
+    ) {
 
         musiqueJeu.play()
-            .catch(function() {});
+            .catch(
+                function() {}
+            );
 
     }
 
@@ -342,16 +377,21 @@ document.addEventListener(
     "keydown",
     function(event) {
 
-        if (partieTerminee) {
+
+        if (
+            partieTerminee
+        ) {
 
             return;
 
         }
 
 
-        // Lettre
+        // LETTRE
 
-        if (event.key.length === 1) {
+        if (
+            event.key.length === 1
+        ) {
 
             let lettre =
                 enleverAccents(
@@ -363,7 +403,9 @@ document.addEventListener(
                 /^[A-Z]$/.test(lettre)
             ) {
 
-                ecrireLettre(lettre);
+                ecrireLettre(
+                    lettre
+                );
 
             }
 
@@ -373,13 +415,15 @@ document.addEventListener(
         }
 
 
-        // Retour arrière
+        // BACKSPACE
 
         if (
             event.key === "Backspace"
         ) {
 
-            if (position > 0) {
+            if (
+                position > 0
+            ) {
 
                 position--;
 
@@ -395,7 +439,7 @@ document.addEventListener(
         }
 
 
-        // Entrée
+        // ENTRÉE
 
         if (
             event.key === "Enter"
@@ -413,20 +457,22 @@ document.addEventListener(
 // CLAVIER VIRTUEL
 // =========================================
 
-touches.forEach(function(touche) {
+touches.forEach(
+    function(touche) {
 
-    touche.addEventListener(
-        "click",
-        function() {
+        touche.addEventListener(
+            "click",
+            function() {
 
-            ecrireLettre(
-                touche.textContent
-            );
+                ecrireLettre(
+                    touche.textContent
+                );
 
-        }
-    );
+            }
+        );
 
-});
+    }
+);
 
 
 // =========================================
@@ -435,57 +481,74 @@ touches.forEach(function(touche) {
 
 fetch("mots.txt")
 
-    .then(function(response) {
+    .then(
+        function(response) {
 
-        return response.text();
+            return response.text();
 
-    })
+        }
+    )
 
-    .then(function(texte) {
+    .then(
+        function(texte) {
 
-        mots = texte
-            .split(/\r?\n/)
-            .map(function(mot) {
+            mots =
+                texte
+                    .split(/\r?\n/)
+                    .map(
+                        function(mot) {
 
-                return enleverAccents(
-                    mot.trim().toUpperCase()
-                );
+                            return enleverAccents(
+                                mot
+                                    .trim()
+                                    .toUpperCase()
+                            );
 
-            })
-            .filter(function(mot) {
+                        }
+                    )
+                    .filter(
+                        function(mot) {
 
-                return mot.length === 5;
+                            return (
+                                mot.length === 5
+                            );
 
-            });
-
-
-        console.log(
-            "Mots chargés :",
-            mots.length
-        );
+                        }
+                    );
 
 
-        choisirNouveauMot();
+            console.log(
+                "Mots chargés :",
+                mots.length
+            );
 
-    })
 
-    .catch(function(erreur) {
+            choisirNouveauMot();
 
-        console.error(
-            "Erreur avec mots.txt :",
-            erreur
-        );
+        }
+    )
 
-    });
+    .catch(
+        function(erreur) {
+
+            console.error(
+                "Erreur avec mots.txt :",
+                erreur
+            );
+
+        }
+    );
 
 
 // =========================================
-// CHOISIR UN MOT
+// CHOISIR LE MOT
 // =========================================
 
 function choisirNouveauMot() {
 
-    if (mots.length === 0) {
+    if (
+        mots.length === 0
+    ) {
 
         return;
 
@@ -510,86 +573,225 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// ANIMATION CHARIOT
+// ANIMATION DU CHARIOT
 // =========================================
 
 function animerChariot() {
 
-    if (!chariot) {
+    if (
+        !chariot ||
+        !grille
+    ) {
 
-        return;
+        return Promise.resolve();
+
+    }
+
+
+    // On récupère la ligne
+    // qui vient d'être écrite
+
+    let ligneActuelle =
+        document.querySelectorAll(
+            ".ligne"
+        )[ligne];
+
+
+    if (
+        !ligneActuelle
+    ) {
+
+        return Promise.resolve();
 
     }
 
 
     let premiereCase =
-        cases[debut];
+        ligneActuelle.querySelector(
+            ".case"
+        );
 
 
-    if (!premiereCase) {
-
-        return;
-
-    }
+    let derniereCase =
+        ligneActuelle.querySelectorAll(
+            ".case"
+        )[4];
 
 
     let grilleRect =
         grille.getBoundingClientRect();
 
-    let caseRect =
+
+    let premiereRect =
         premiereCase.getBoundingClientRect();
 
 
-    let positionGauche =
-        caseRect.left -
+    let derniereRect =
+        derniereCase.getBoundingClientRect();
+
+
+    // Position de départ
+
+    let depart =
+        premiereRect.left -
         grilleRect.left -
-        7;
+        8;
 
 
-    let positionHaut =
-        caseRect.top -
-        grilleRect.top +
-        6;
+    // Position d'arrivée
+
+    let arrivee =
+        derniereRect.right -
+        grilleRect.left +
+        8;
+
+
+    let haut =
+        premiereRect.top -
+        grilleRect.top -
+        4;
 
 
     chariot.style.left =
-        positionGauche + "px";
+        depart + "px";
 
     chariot.style.top =
-        positionHaut + "px";
+        haut + "px";
 
 
-    chariot.classList.add(
-        "visible"
-    );
+    chariot.style.opacity =
+        "0.85";
 
+
+    // -----------------------------------------
+    // Animation du chariot
+    // -----------------------------------------
+
+    let animationDroite =
+        chariot.animate(
+            [
+                {
+                    left:
+                        depart + "px"
+                },
+                {
+                    left:
+                        arrivee + "px"
+                }
+            ],
+            {
+                duration: 330,
+
+                easing:
+                    "cubic-bezier(0.15, 0.85, 0.25, 1)",
+
+                fill: "forwards"
+            }
+        );
+
+
+    // Petit bruit mécanique
 
     sonChariot.currentTime = 0;
 
     sonChariot.play()
-        .catch(function() {});
-
-
-    setTimeout(function() {
-
-        chariot.classList.add(
-            "retour"
+        .catch(
+            function() {}
         );
 
-    }, 80);
+
+    return animationDroite.finished
+
+        .then(
+            function() {
 
 
-    setTimeout(function() {
+                // ---------------------------------
+                // Le chariot est arrivé à droite
+                // ---------------------------------
 
-        chariot.classList.remove(
-            "retour"
+                return new Promise(
+                    function(resolve) {
+
+                        setTimeout(
+                            resolve,
+                            70
+                        );
+
+                    }
+                );
+
+            }
+        )
+
+        .then(
+            function() {
+
+
+                // ---------------------------------
+                // RETOUR DU CHARIOT
+                // ---------------------------------
+
+                let animationRetour =
+                    chariot.animate(
+                        [
+                            {
+                                left:
+                                    arrivee + "px"
+                            },
+                            {
+                                left:
+                                    depart + "px"
+                            }
+                        ],
+                        {
+                            duration: 400,
+
+                            easing:
+                                "cubic-bezier(0.55, 0.05, 0.68, 0.19)",
+
+                            fill: "forwards"
+                        }
+                    );
+
+
+                // ---------------------------------
+                // Le papier monte en même temps
+                // ---------------------------------
+
+                grille.classList.remove(
+                    "papier-avance"
+                );
+
+                void grille.offsetWidth;
+
+                grille.classList.add(
+                    "papier-avance"
+                );
+
+
+                return animationRetour.finished;
+
+            }
+        )
+
+        .then(
+            function() {
+
+                chariot.style.opacity =
+                    "0";
+
+            }
+        )
+
+        .catch(
+            function() {
+
+                chariot.style.opacity =
+                    "0";
+
+            }
         );
-
-        chariot.classList.remove(
-            "visible"
-        );
-
-    }, 600);
 
 }
 
@@ -600,7 +802,9 @@ function animerChariot() {
 
 function validerMot() {
 
-    if (partieTerminee) {
+    if (
+        partieTerminee
+    ) {
 
         return;
 
@@ -609,7 +813,9 @@ function validerMot() {
 
     // Pas assez de lettres
 
-    if (position < 5) {
+    if (
+        position < 5
+    ) {
 
         afficherMessage(
             "Pas assez de lettres."
@@ -654,26 +860,31 @@ function validerMot() {
     }
 
 
-    // =====================================
+    // =========================================
     // VICTOIRE
-    // =====================================
+    // =========================================
 
     if (
         mot === motSecret
     ) {
 
-        partieTerminee = true;
+        partieTerminee =
+            true;
 
 
         musiqueJeu.pause();
 
-        musiqueJeu.currentTime = 0;
+        musiqueJeu.currentTime =
+            0;
 
 
-        musiqueVictoire.currentTime = 0;
+        musiqueVictoire.currentTime =
+            0;
 
         musiqueVictoire.play()
-            .catch(function() {});
+            .catch(
+                function() {}
+            );
 
 
         for (
@@ -684,7 +895,9 @@ function validerMot() {
 
             cases[
                 debut + i
-            ].classList.add("vert");
+            ].classList.add(
+                "vert"
+            );
 
 
             mettreAJourClavier(
@@ -737,9 +950,9 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // VÉRIFICATION DES LETTRES
-    // =====================================
+    // =========================================
+    // VÉRIFICATION
+    // =========================================
 
     let lettresDisponibles =
         motSecret.split("");
@@ -759,7 +972,9 @@ function validerMot() {
 
             cases[
                 debut + i
-            ].classList.add("vert");
+            ].classList.add(
+                "vert"
+            );
 
 
             mettreAJourClavier(
@@ -776,7 +991,7 @@ function validerMot() {
     }
 
 
-    // Lettres jaunes ou grises
+    // Lettres jaunes / grises
 
     for (
         let i = 0;
@@ -805,7 +1020,9 @@ function validerMot() {
 
             cases[
                 debut + i
-            ].classList.add("jaune");
+            ].classList.add(
+                "jaune"
+            );
 
 
             mettreAJourClavier(
@@ -816,7 +1033,8 @@ function validerMot() {
 
             lettresDisponibles[
                 positionLettre
-            ] = null;
+            ] =
+                null;
 
         }
 
@@ -824,7 +1042,9 @@ function validerMot() {
 
             cases[
                 debut + i
-            ].classList.add("gris");
+            ].classList.add(
+                "gris"
+            );
 
 
             mettreAJourClavier(
@@ -837,40 +1057,38 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // CHARIOT
-    // =====================================
-
-    animerChariot();
-
-
-    // =====================================
-    // LIGNE SUIVANTE
-    // =====================================
+    // =========================================
+    // PASSAGE À LA LIGNE
+    // =========================================
 
     ligne++;
 
 
-    // =====================================
+    // =========================================
     // DÉFAITE
-    // =====================================
+    // =========================================
 
     if (
         ligne === 6
     ) {
 
-        partieTerminee = true;
+        partieTerminee =
+            true;
 
 
         musiqueJeu.pause();
 
-        musiqueJeu.currentTime = 0;
+        musiqueJeu.currentTime =
+            0;
 
 
-        musiqueDefaite.currentTime = 0;
+        musiqueDefaite.currentTime =
+            0;
 
         musiqueDefaite.play()
-            .catch(function() {});
+            .catch(
+                function() {}
+            );
 
 
         titreFin.textContent =
@@ -894,11 +1112,20 @@ function validerMot() {
     }
 
 
-    // Ligne suivante
+    // -----------------------------------------
+    // On anime avant de changer de ligne
+    // -----------------------------------------
 
-    debut += 5;
+    animerChariot()
+        .then(
+            function() {
 
-    position = 0;
+                debut += 5;
+
+                position = 0;
+
+            }
+        );
 
 }
 
@@ -911,6 +1138,7 @@ boutonRejouer.addEventListener(
     "click",
     function() {
 
+
         ecranFin.style.display =
             "none";
 
@@ -921,7 +1149,8 @@ boutonRejouer.addEventListener(
 
         debut = 0;
 
-        partieTerminee = false;
+        partieTerminee =
+            false;
 
 
         // Effacer grille
@@ -929,7 +1158,8 @@ boutonRejouer.addEventListener(
         cases.forEach(
             function(caseJeu) {
 
-                caseJeu.textContent = "";
+                caseJeu.textContent =
+                    "";
 
                 caseJeu.classList.remove(
                     "vert",
@@ -959,33 +1189,30 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Arrêter musiques
+        // Musiques
 
         musiqueJeu.pause();
 
-        musiqueJeu.currentTime = 0;
+        musiqueJeu.currentTime =
+            0;
 
 
         musiqueVictoire.pause();
 
-        musiqueVictoire.currentTime = 0;
+        musiqueVictoire.currentTime =
+            0;
 
 
         musiqueDefaite.pause();
 
-        musiqueDefaite.currentTime = 0;
+        musiqueDefaite.currentTime =
+            0;
 
 
-        // Cacher chariot
+        // Chariot
 
-        if (chariot) {
-
-            chariot.classList.remove(
-                "visible",
-                "retour"
-            );
-
-        }
+        chariot.style.opacity =
+            "0";
 
 
         // Nouveau mot
