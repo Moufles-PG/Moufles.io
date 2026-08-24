@@ -79,7 +79,7 @@ h1 {
 #sous-titre {
     position: fixed;
 
-    top: 70px;
+    top: 125px;
     left: 50%;
 
     transform: translateX(-50%);
