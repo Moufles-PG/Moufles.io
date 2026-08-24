@@ -18,29 +18,35 @@
 }
 
 
+html,
+body {
+
+    width: 100%;
+
+    height: 100%;
+
+}
+
+
 body {
 
     margin: 0;
 
-    min-height: 100vh;
+    overflow: hidden;
 
     background:
         radial-gradient(
             circle at center,
-            rgba(255, 249, 224, 0.32),
+            rgba(255, 249, 224, 0.35),
             transparent 70%
         ),
         #d8c9a9;
 
     color: #29261f;
 
-    font-family: "Cinzel", serif;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
+    font-family:
+        "Cinzel",
+        serif;
 
 }
 
@@ -49,40 +55,30 @@ body {
    TITRE
    ========================================= */
 
-h1 {
+header {
 
-    margin: 45px 0 0;
+    position: absolute;
 
-    font-size: 4.5rem;
+    top: 25px;
 
-    font-weight: 600;
+    left: 0;
 
-    letter-spacing: 0.16em;
+    width: 100%;
 
     text-align: center;
-
-    color: #29261f;
 
 }
 
 
-/* =========================================
-   SOUS-TITRE
-   ========================================= */
+h1 {
 
-h2 {
+    margin: 0;
 
-    margin: 3px 0 0;
+    font-size: 4.3rem;
 
-    font-size: 1.2rem;
-
-    font-weight: 400;
+    font-weight: 600;
 
     letter-spacing: 0.16em;
-
-    color: #625c4e;
-
-    text-align: center;
 
 }
 
@@ -93,17 +89,22 @@ h2 {
 
 #message {
 
-    height: 30px;
+    position: absolute;
 
-    margin-top: 10px;
+    top: 120px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    height: 28px;
 
     font-size: 0.9rem;
 
     font-weight: 600;
 
-    letter-spacing: 0.05em;
-
-    color: #403a30;
+    letter-spacing: 0.06em;
 
     opacity: 0;
 
@@ -114,44 +115,26 @@ h2 {
 
 
 /* =========================================
-   JEU
+   ZONE DE JEU
    ========================================= */
 
 .jeu {
+
+    position: absolute;
+
+    top: 145px;
+
+    bottom: 20px;
+
+    left: 0;
+
+    width: 100%;
 
     display: flex;
 
     flex-direction: column;
 
     align-items: center;
-
-    width: 100%;
-
-}
-
-
-/* =========================================
-   FENÊTRE DE LA FEUILLE
-   ========================================= */
-
-/*
-   On ne montre qu'une partie de la feuille.
-
-   La ligne active est toujours placée
-   au milieu de cette fenêtre.
-*/
-
-.fenetre-grille {
-
-    position: relative;
-
-    width: 365px;
-
-    height: 213px;
-
-    overflow: hidden;
-
-    margin-top: 12px;
 
 }
 
@@ -162,29 +145,33 @@ h2 {
 
 .grille {
 
-    position: absolute;
+    position: relative;
 
-    top: 0;
+    width: 365px;
 
-    left: 0;
+    /*
+       On calcule une hauteur suffisante
+       pour toujours garder les 6 lignes.
+    */
 
-    width: 100%;
+    height: 510px;
 
     display: flex;
 
     flex-direction: column;
 
+    justify-content: center;
+
     gap: 9px;
 
-    /*
-       La première ligne commence
-       à la hauteur de la ligne centrale.
-    */
-
-    transform:
-        translateY(74px);
-
-    will-change: transform;
+    transition:
+        transform 0.6s
+        cubic-bezier(
+            0.22,
+            0.61,
+            0.36,
+            1
+        );
 
 }
 
@@ -195,13 +182,15 @@ h2 {
 
 .ligne {
 
+    width: 100%;
+
+    height: 65px;
+
     display: flex;
 
     justify-content: center;
 
     gap: 9px;
-
-    height: 65px;
 
     flex-shrink: 0;
 
@@ -234,7 +223,9 @@ h2 {
             0.35
         );
 
-    border: 1px solid #77705f;
+    border:
+        1px solid
+        #77705f;
 
     border-radius: 2px;
 
@@ -244,15 +235,11 @@ h2 {
 
     color: #29261f;
 
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
-
 }
 
 
 /* =========================================
-   TRAIT D'ÉCRITURE
+   TRAIT SOUS LA LETTRE
    ========================================= */
 
 .case::after {
@@ -337,7 +324,7 @@ h2 {
 
 
 /* =========================================
-   APPARITION LETTRE
+   ANIMATION LETTRE
    ========================================= */
 
 .letter-animation {
@@ -431,9 +418,7 @@ h2 {
 
     position: absolute;
 
-    left: 8px;
-
-    top: 70px;
+    left: 0;
 
     width: 4px;
 
@@ -443,18 +428,14 @@ h2 {
 
     border-radius: 2px;
 
-    pointer-events: none;
-
     opacity: 0;
+
+    pointer-events: none;
 
     z-index: 20;
 
-    will-change: left;
-
 }
 
-
-/* Petite poignée */
 
 #chariot::before {
 
@@ -462,11 +443,11 @@ h2 {
 
     position: absolute;
 
-    width: 11px;
+    width: 12px;
 
     height: 4px;
 
-    left: -3.5px;
+    left: -4px;
 
     top: -5px;
 
@@ -483,6 +464,15 @@ h2 {
 
 #clavier {
 
+    position: absolute;
+
+    bottom: 5px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
     display: flex;
 
     flex-direction: column;
@@ -490,10 +480,6 @@ h2 {
     align-items: center;
 
     gap: 13px;
-
-    margin-top: 38px;
-
-    padding-bottom: 35px;
 
 }
 
@@ -527,13 +513,11 @@ h2 {
 
     border-radius: 50%;
 
-    cursor: pointer;
-
-    user-select: none;
-
     background: #c7b792;
 
-    border: 1px solid #6c634f;
+    border:
+        1px solid
+        #6c634f;
 
     box-shadow:
         0 2px 0 #776c55,
@@ -546,9 +530,12 @@ h2 {
 
     color: #29261f;
 
+    cursor: pointer;
+
+    user-select: none;
+
     transition:
-        transform 0.1s ease,
-        background 0.2s ease;
+        transform 0.1s ease;
 
 }
 
@@ -661,12 +648,6 @@ h2 {
 
 .fin-contenu {
 
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
     text-align: center;
 
 }
@@ -682,8 +663,6 @@ h2 {
 
     letter-spacing: 0.12em;
 
-    color: #29261f;
-
 }
 
 
@@ -694,22 +673,16 @@ h2 {
 
     font-size: 1rem;
 
-    color: #625c4e;
-
 }
 
 
 #motFin {
-
-    margin-top: 5px;
 
     font-size: 2.2rem;
 
     font-weight: 600;
 
     letter-spacing: 0.15em;
-
-    color: #29261f;
 
 }
 
@@ -723,9 +696,13 @@ h2 {
 
     background: transparent;
 
-    border: 1px solid #625c4e;
+    border:
+        1px solid
+        #625c4e;
 
-    font-family: "Cinzel", serif;
+    font-family:
+        "Cinzel",
+        serif;
 
     font-size: 0.9rem;
 
@@ -737,11 +714,6 @@ h2 {
 
     cursor: pointer;
 
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        transform 0.15s ease;
-
 }
 
 
@@ -750,13 +722,5 @@ h2 {
     background: #29261f;
 
     color: #d8c9a9;
-
-}
-
-
-#boutonRejouer:active {
-
-    transform:
-        scale(0.96);
 
 }
