@@ -285,7 +285,7 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Son de touche
+    // Son
 
     if (
         touche &&
@@ -346,7 +346,7 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Musique du jeu
+    // Musique
 
     if (
         musiqueJeu.paused
@@ -567,29 +567,63 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// CALCUL DU DÉPLACEMENT
+// CALCULER LE PAS
 // =========================================
 //
-// La règle est maintenant très simple :
-//
-// ESSAI 1
-// → ligne 1 en bas
-//
-// ESSAI 2
-// → la feuille monte d'une ligne
-//
-// ESSAI 3
-// → encore une ligne
-//
-// etc.
-//
-// La grille ne cherche plus à rejoindre
-// progressivement le haut de la zone.
-// Elle monte toujours exactement
-// d'une hauteur de ligne.
+// Une montée = exactement la distance
+// entre deux lignes.
 //
 
-function calculerPositionGrille() {
+function obtenirPas() {
+
+    let ligneRect =
+        lignes[0].getBoundingClientRect();
+
+
+    let hauteur =
+        ligneRect.height;
+
+
+    let style =
+        getComputedStyle(
+            grille
+        );
+
+
+    let gap =
+        parseFloat(
+            style.gap
+        ) || 0;
+
+
+    return hauteur + gap;
+}
+
+
+// =========================================
+// POSITION DE LA GRILLE
+// =========================================
+//
+// La grille est une vraie feuille
+// contenant les 6 lignes.
+//
+// Au départ :
+//
+//        ligne 1
+//        ligne 2
+//        ligne 3
+//        ligne 4
+//        ligne 5
+//        ligne 6
+//
+// Les lignes du dessous sont simplement
+// cachées par .zone-grille.
+//
+// À chaque essai, toute la feuille
+// monte d'un seul pas.
+//
+
+function positionnerGrille(animation) {
 
     let zoneRect =
         zoneGrille.getBoundingClientRect();
@@ -603,33 +637,15 @@ function calculerPositionGrille() {
         ligneRect.height;
 
 
-    let styleGrille =
-        getComputedStyle(
-            grille
-        );
-
-
-    let espace =
-        parseFloat(
-            styleGrille.gap
-        ) || 0;
-
-
-    /*
-       Distance parcourue à chaque tour.
-
-       Une ligne = hauteur de la ligne
-       + espace entre les lignes.
-    */
-
     let pas =
-        hauteurLigne +
-        espace;
+        obtenirPas();
 
 
     /*
-       Au départ, le bas de la première
-       ligne touche le bas de la zone.
+       Position de départ.
+
+       Le bas de la ligne 1 arrive
+       exactement au bas de la zone.
     */
 
     let depart =
@@ -638,7 +654,7 @@ function calculerPositionGrille() {
 
 
     /*
-       À chaque essai, on monte d'un pas.
+       Une ligne montée par essai.
     */
 
     let positionVerticale =
@@ -646,22 +662,6 @@ function calculerPositionGrille() {
         (
             ligne * pas
         );
-
-
-    return positionVerticale;
-}
-
-
-// =========================================
-// POSITIONNER LA GRILLE
-// =========================================
-
-function positionnerGrille(
-    animation
-) {
-
-    let positionVerticale =
-        calculerPositionGrille();
 
 
     if (
@@ -689,49 +689,6 @@ function positionnerGrille(
 
 
 // =========================================
-// LIGNES VISIBLES
-// =========================================
-//
-// Ligne 1 au départ.
-//
-// Après le premier essai :
-// ligne 2 apparaît.
-//
-// Après le deuxième :
-// ligne 3 apparaît.
-//
-// Les lignes déjà passées restent
-// toujours visibles.
-//
-
-function mettreAJourLignesVisibles() {
-
-    lignes.forEach(
-        function(uneLigne, index) {
-
-            if (
-                index <= ligne
-            ) {
-
-                uneLigne.classList.add(
-                    "ligne-visible"
-                );
-
-            }
-
-            else {
-
-                uneLigne.classList.remove(
-                    "ligne-visible"
-                );
-            }
-
-        }
-    );
-}
-
-
-// =========================================
 // INITIALISATION
 // =========================================
 
@@ -747,7 +704,18 @@ function initialiserGrille() {
         0;
 
 
-    mettreAJourLignesVisibles();
+    /*
+       IMPORTANT :
+
+       On ne cache aucune ligne avec
+       JavaScript.
+
+       Les 6 lignes existent dès le départ.
+
+       C'est .zone-grille avec
+       overflow: hidden qui décide
+       lesquelles sont visibles.
+    */
 
 
     requestAnimationFrame(
@@ -763,18 +731,30 @@ function initialiserGrille() {
 
 
 // =========================================
-// CHARIOT
+// ANIMATION DU CHARIOT
 // =========================================
 
 function animerChariot() {
 
     /*
-       La nouvelle ligne vient d'être
-       créée logiquement.
+       Si aucun chariot n'existe,
+       on monte directement.
+    */
 
-       On fait simplement jouer le son
-       et l'animation du chariot avant
-       de faire monter la feuille.
+    if (
+        !chariot
+    ) {
+
+        positionnerGrille(
+            true
+        );
+
+        return;
+    }
+
+
+    /*
+       Son de machine à écrire.
     */
 
     sonChariot.currentTime =
@@ -786,19 +766,9 @@ function animerChariot() {
         );
 
 
-    if (
-        !chariot
-    ) {
-
-        mettreAJourLignesVisibles();
-
-        positionnerGrille(
-            true
-        );
-
-        return;
-    }
-
+    /*
+       Ligne actuellement terminée.
+    */
 
     let ancienneLigne =
         lignes[
@@ -809,8 +779,6 @@ function animerChariot() {
     if (
         !ancienneLigne
     ) {
-
-        mettreAJourLignesVisibles();
 
         positionnerGrille(
             true
@@ -836,8 +804,10 @@ function animerChariot() {
     let grilleRect =
         grille.getBoundingClientRect();
 
+
     let premiereRect =
         premiereCase.getBoundingClientRect();
+
 
     let derniereRect =
         derniereCase.getBoundingClientRect();
@@ -864,12 +834,18 @@ function animerChariot() {
     chariot.style.left =
         depart + "px";
 
+
     chariot.style.top =
         haut + "px";
+
 
     chariot.style.opacity =
         "1";
 
+
+    /*
+       Chariot vers la droite.
+    */
 
     let mouvement =
         chariot.animate(
@@ -934,16 +910,11 @@ function animerChariot() {
                 function() {
 
                     /*
-                       La nouvelle ligne devient
-                       visible.
-                    */
+                       MAINTENANT seulement,
+                       la feuille monte.
 
-                    mettreAJourLignesVisibles();
-
-
-                    /*
-                       Puis la feuille monte
-                       exactement d'une ligne.
+                       Elle monte d'UNE SEULE
+                       hauteur de ligne.
                     */
 
                     positionnerGrille(
@@ -1013,7 +984,6 @@ function validerMot() {
             cases[
                 debut + i
             ].textContent;
-
     }
 
 
@@ -1089,7 +1059,6 @@ function validerMot() {
                 },
                 i * 100
             );
-
         }
 
 
@@ -1156,7 +1125,6 @@ function validerMot() {
             lettresDisponibles[i] =
                 null;
         }
-
     }
 
 
@@ -1219,9 +1187,7 @@ function validerMot() {
                 mot[i],
                 "gris"
             );
-
         }
-
     }
 
 
@@ -1289,6 +1255,10 @@ function validerMot() {
     position =
         0;
 
+
+    /*
+       La feuille monte d'une seule ligne.
+    */
 
     animerChariot();
 }
@@ -1391,8 +1361,7 @@ boutonRejouer.addEventListener(
         choisirNouveauMot();
 
 
-        // Remettre la feuille
-        // à sa position initiale
+        // Revenir au début
 
         initialiserGrille();
 
