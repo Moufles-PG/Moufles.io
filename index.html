@@ -23,6 +23,7 @@
 
 <body>
 
+
     <!-- =========================================
          TITRE
          ========================================= -->
@@ -35,13 +36,10 @@
 
 
     <!-- =========================================
-         MUSIQUE
+         MUSIQUES
          ========================================= -->
 
-    <audio
-        id="musiqueJeu"
-        loop
-    >
+    <audio id="musiqueJeu" loop>
 
         <source
             src="Wordle1.mp3"
@@ -51,9 +49,7 @@
     </audio>
 
 
-    <audio
-        id="musiqueVictoire"
-    >
+    <audio id="musiqueVictoire">
 
         <source
             src="Victory.mp3"
@@ -63,12 +59,22 @@
     </audio>
 
 
-    <audio
-        id="musiqueDefaite"
-    >
+    <audio id="musiqueDefaite">
 
         <source
             src="Fail.mp3"
+            type="audio/mpeg"
+        >
+
+    </audio>
+
+
+    <!-- SON MACHINE À ÉCRIRE -->
+
+    <audio id="sonChariot">
+
+        <source
+            src="Tywirter.mp3"
             type="audio/mpeg"
         >
 
@@ -89,7 +95,7 @@
         <div class="grille">
 
 
-            <!-- CHARIOT DE MACHINE À ÉCRIRE -->
+            <!-- CHARIOT -->
 
             <div id="chariot"></div>
 
@@ -176,13 +182,13 @@
 
 
         <!-- =====================================
-             CLAVIER AZERTY
+             CLAVIER
              ===================================== -->
 
         <div id="clavier">
 
 
-            <!-- PREMIÈRE LIGNE -->
+            <!-- LIGNE 1 -->
 
             <div class="ligne-clavier">
 
@@ -200,7 +206,7 @@
             </div>
 
 
-            <!-- DEUXIÈME LIGNE -->
+            <!-- LIGNE 2 -->
 
             <div class="ligne-clavier">
 
@@ -218,7 +224,7 @@
             </div>
 
 
-            <!-- TROISIÈME LIGNE -->
+            <!-- LIGNE 3 -->
 
             <div class="ligne-clavier">
 
@@ -247,22 +253,15 @@
 
         <div class="fin-contenu">
 
-
             <h2 id="titreFin"></h2>
-
 
             <p id="texteFin"></p>
 
-
             <div id="motFin"></div>
 
-
             <button id="boutonRejouer">
-
                 REJOUER
-
             </button>
-
 
         </div>
 
@@ -275,6 +274,7 @@
          ========================================= -->
 
     <script src="script.js"></script>
+
 
 </body>
 
