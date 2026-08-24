@@ -1,10 +1,9 @@
-```css
 /* =========================================
    POLICES
    ========================================= */
 
 @import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=IM+Fell+English&display=swap'
 );
 
 
@@ -33,8 +32,8 @@ body {
     color: #29261f;
 
     font-family:
-        "Special Elite",
-        monospace;
+        "IM Fell English",
+        serif;
 
     display: flex;
 
@@ -42,7 +41,7 @@ body {
 
     align-items: center;
 
-    padding: 45px 20px;
+    padding: 40px 20px;
 
     position: relative;
 
@@ -63,7 +62,7 @@ body::before {
 
     pointer-events: none;
 
-    opacity: 0.16;
+    opacity: 0.18;
 
     background:
 
@@ -108,7 +107,6 @@ body::before {
         );
 
     z-index: 0;
-
 }
 
 
@@ -129,13 +127,12 @@ body::after {
     background:
         radial-gradient(
             ellipse at center,
-            transparent 52%,
-            rgba(91, 68, 38, 0.07) 72%,
-            rgba(73, 51, 28, 0.18) 100%
+            transparent 50%,
+            rgba(91, 68, 38, 0.08) 72%,
+            rgba(73, 51, 28, 0.20) 100%
         );
 
     z-index: 0;
-
 }
 
 
@@ -151,7 +148,6 @@ h1,
     position: relative;
 
     z-index: 1;
-
 }
 
 
@@ -183,9 +179,8 @@ h1 {
             255,
             255,
             255,
-            0.5
+            0.45
         );
-
 }
 
 
@@ -195,12 +190,15 @@ h1::after {
 
     display: block;
 
-    font-size: 0.9rem;
+    font-family:
+        "Cinzel",
+        serif;
+
+    font-size: 0.85rem;
 
     margin-top: 8px;
 
     color: #75694f;
-
 }
 
 
@@ -212,13 +210,13 @@ h1::after {
 
     height: 30px;
 
-    margin-top: 10px;
+    margin-top: 8px;
 
     font-family:
         "Cinzel",
         serif;
 
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 
     letter-spacing: 0.05em;
 
@@ -228,7 +226,6 @@ h1::after {
 
     transition:
         opacity 0.25s ease;
-
 }
 
 
@@ -248,8 +245,7 @@ h1::after {
 
     max-width: 620px;
 
-    margin-top: -5px;
-
+    margin-top: -8px;
 }
 
 
@@ -266,8 +262,7 @@ h1::after {
     gap: 9px;
 
     padding:
-        15px 20px 20px;
-
+        10px 20px 18px;
 }
 
 
@@ -278,7 +273,6 @@ h1::after {
     flex-direction: row;
 
     gap: 9px;
-
 }
 
 
@@ -295,7 +289,7 @@ h1::after {
     flex-shrink: 0;
 
     border:
-        1px solid #aaa08b;
+        1px solid #9e947e;
 
     background:
         rgba(
@@ -312,14 +306,14 @@ h1::after {
     justify-content: center;
 
     /*
-       Police machine à écrire
+       Police ancienne de presse
     */
 
     font-family:
-        "Special Elite",
-        monospace;
+        "IM Fell English",
+        serif;
 
-    font-size: 2rem;
+    font-size: 2.15rem;
 
     color: #29261f;
 
@@ -328,18 +322,16 @@ h1::after {
         border-color 0.25s ease,
         color 0.25s ease,
         transform 0.2s ease;
-
 }
 
 
 /*
-   La case garde sa couleur papier
-   quand une lettre est écrite.
+   Une lettre ne rend pas la case blanche.
 */
 
 .case:not(:empty) {
 
-    border-color: #6f6758;
+    border-color: #716957;
 
     background:
         rgba(
@@ -348,7 +340,6 @@ h1::after {
             200,
             0.30
         );
-
 }
 
 
@@ -360,10 +351,9 @@ h1::after {
 
     background: #65745b;
 
-    border-color: #65745b;
+    border-color: #596650;
 
     color: #fffdf5;
-
 }
 
 
@@ -371,10 +361,9 @@ h1::after {
 
     background: #b69a5a;
 
-    border-color: #b69a5a;
+    border-color: #a3874d;
 
     color: #fffdf5;
-
 }
 
 
@@ -382,10 +371,9 @@ h1::after {
 
     background: #625f57;
 
-    border-color: #625f57;
+    border-color: #55524b;
 
     color: #f7f2e7;
-
 }
 
 
@@ -399,7 +387,6 @@ h1::after {
         apparitionLettre
         0.15s
         ease-out;
-
 }
 
 
@@ -409,23 +396,19 @@ h1::after {
 
         transform:
             scale(0.8);
-
     }
 
     70% {
 
         transform:
             scale(1.08);
-
     }
 
     100% {
 
         transform:
             scale(1);
-
     }
-
 }
 
 
@@ -439,7 +422,6 @@ h1::after {
         victoire
         0.55s
         ease-in-out;
-
 }
 
 
@@ -450,7 +432,6 @@ h1::after {
         transform:
             translateY(0)
             rotate(0);
-
     }
 
     35% {
@@ -458,7 +439,6 @@ h1::after {
         transform:
             translateY(-10px)
             rotate(-2deg);
-
     }
 
     70% {
@@ -466,7 +446,6 @@ h1::after {
         transform:
             translateY(3px)
             rotate(1deg);
-
     }
 
     100% {
@@ -474,9 +453,7 @@ h1::after {
         transform:
             translateY(0)
             rotate(0);
-
     }
-
 }
 
 
@@ -494,10 +471,9 @@ h1::after {
 
     gap: 7px;
 
-    margin-top: 5px;
+    margin-top: 2px;
 
     width: 100%;
-
 }
 
 
@@ -510,13 +486,11 @@ h1::after {
     gap: 11px;
 
     justify-content: center;
-
 }
 
 
 /* =========================================
    TOUCHES
-   MACHINE À ÉCRIRE
    ========================================= */
 
 .touche {
@@ -545,12 +519,12 @@ h1::after {
         );
 
     border:
-        1px solid #aaa08d;
+        1px solid #9f957f;
 
     border-radius: 50%;
 
     box-shadow:
-        0 3px 0 #a49a86,
+        0 3px 0 #9d927c,
         0 4px 6px
         rgba(
             60,
@@ -560,14 +534,14 @@ h1::after {
         );
 
     /*
-       Police machine à écrire
+       Même police que les lettres
     */
 
     font-family:
-        "Special Elite",
-        monospace;
+        "IM Fell English",
+        serif;
 
-    font-size: 1rem;
+    font-size: 1.05rem;
 
     color: #312e27;
 
@@ -575,7 +549,6 @@ h1::after {
         transform 0.08s ease,
         box-shadow 0.08s ease,
         background 0.15s ease;
-
 }
 
 
@@ -589,7 +562,6 @@ h1::after {
         frappeTouche
         0.12s
         ease-out;
-
 }
 
 
@@ -599,53 +571,19 @@ h1::after {
 
         transform:
             translateY(0);
-
-        box-shadow:
-            0 3px 0 #a49a86,
-            0 4px 6px
-            rgba(
-                60,
-                50,
-                35,
-                0.18
-            );
-
     }
 
     45% {
 
         transform:
             translateY(3px);
-
-        box-shadow:
-            0 0 0 #a49a86,
-            0 1px 2px
-            rgba(
-                60,
-                50,
-                35,
-                0.12
-            );
-
     }
 
     100% {
 
         transform:
             translateY(0);
-
-        box-shadow:
-            0 3px 0 #a49a86,
-            0 4px 6px
-            rgba(
-                60,
-                50,
-                35,
-                0.18
-            );
-
     }
-
 }
 
 
@@ -659,7 +597,6 @@ h1::after {
         enrayement
         0.18s
         ease-in-out;
-
 }
 
 
@@ -669,44 +606,37 @@ h1::after {
 
         transform:
             translateX(0);
-
     }
 
     20% {
 
         transform:
             translateX(-3px);
-
     }
 
     40% {
 
         transform:
             translateX(3px);
-
     }
 
     60% {
 
         transform:
             translateX(-2px);
-
     }
 
     80% {
 
         transform:
             translateX(2px);
-
     }
 
     100% {
 
         transform:
             translateX(0);
-
     }
-
 }
 
 
@@ -729,7 +659,6 @@ h1::after {
 
     box-shadow:
         0 3px 0 #4f5948;
-
 }
 
 
@@ -748,7 +677,6 @@ h1::after {
 
     box-shadow:
         0 3px 0 #8d7542;
-
 }
 
 
@@ -767,7 +695,6 @@ h1::after {
 
     box-shadow:
         0 3px 0 #484640;
-
 }
 
 
@@ -798,12 +725,11 @@ h1::after {
         );
 
     z-index: 100;
-
 }
 
 
 /* =========================================
-   CONTENU ÉCRAN DE FIN
+   CONTENU DE FIN
    ========================================= */
 
 .fin-contenu {
@@ -814,7 +740,6 @@ h1::after {
 
     transform:
         translateY(-20px);
-
 }
 
 
@@ -830,10 +755,9 @@ h1::after {
 
     font-weight: 600;
 
-    letter-spacing: 0.12em;
+    letter-spacing: 0.10em;
 
     color: #29261f;
-
 }
 
 
@@ -843,12 +767,11 @@ h1::after {
 
     display: block;
 
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 
     margin-top: 8px;
 
     color: #75694f;
-
 }
 
 
@@ -865,27 +788,25 @@ h1::after {
         "Cinzel",
         serif;
 
-    font-size: 1.1rem;
+    font-size: 1.05rem;
 
     letter-spacing: 0.04em;
 
     color: #514a3d;
-
 }
 
 
 #motFin {
 
     font-family:
-        "Special Elite",
-        monospace;
+        "IM Fell English",
+        serif;
 
     font-size: 2rem;
 
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
 
     color: #29261f;
-
 }
 
 
@@ -927,7 +848,6 @@ h1::after {
     transition:
         transform 0.1s ease,
         box-shadow 0.1s ease;
-
 }
 
 
@@ -935,7 +855,6 @@ h1::after {
 
     transform:
         translateY(-2px);
-
 }
 
 
@@ -946,7 +865,6 @@ h1::after {
 
     box-shadow:
         0 1px 0 #4f5948;
-
 }
 
 
@@ -960,7 +878,6 @@ h1::after {
 
         padding:
             25px 10px;
-
     }
 
 
@@ -968,7 +885,6 @@ h1::after {
 
         font-size:
             2.7rem;
-
     }
 
 
@@ -976,7 +892,6 @@ h1::after {
 
         margin-top:
             -5px;
-
     }
 
 
@@ -986,14 +901,12 @@ h1::after {
 
         padding:
             10px 10px 15px;
-
     }
 
 
     .ligne {
 
         gap: 6px;
-
     }
 
 
@@ -1003,8 +916,8 @@ h1::after {
 
         height: 57px;
 
-        font-size: 1.7rem;
-
+        font-size:
+            1.8rem;
     }
 
 
@@ -1012,7 +925,6 @@ h1::after {
 
         margin-top:
             3px;
-
     }
 
 
@@ -1022,15 +934,14 @@ h1::after {
 
         height: 38px;
 
-        font-size: 0.8rem;
-
+        font-size:
+            0.85rem;
     }
 
 
     .ligne-clavier {
 
         gap: 7px;
-
     }
 
 
@@ -1038,7 +949,6 @@ h1::after {
 
         transform:
             translateY(-15px);
-
     }
 
 
@@ -1046,8 +956,6 @@ h1::after {
 
         font-size:
             3rem;
-
     }
 
 }
-```
