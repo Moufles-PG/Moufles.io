@@ -4,7 +4,7 @@
    ========================================= */
 
 @import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&family=UnifrakturCook:wght@700&display=swap'
 );
 
 
@@ -140,7 +140,7 @@ body::after {
 
 
 /* =========================================
-   CONTENU AU-DESSUS DU PAPIER
+   CONTENU
    ========================================= */
 
 h1,
@@ -201,8 +201,6 @@ h1::after {
 
     color: #75694f;
 
-    letter-spacing: 0;
-
 }
 
 
@@ -227,8 +225,7 @@ h1::after {
     opacity: 0;
 
     transition:
-        opacity 0.25s ease,
-        transform 0.25s ease;
+        opacity 0.25s ease;
 
 }
 
@@ -298,12 +295,18 @@ h1::after {
     border:
         1px solid #aaa08b;
 
+    /*
+       Même couleur que le papier.
+       La case ne devient PAS blanche
+       quand on écrit une lettre.
+    */
+
     background:
         rgba(
-            255,
-            252,
-            242,
-            0.45
+            238,
+            227,
+            200,
+            0.30
         );
 
     display: flex;
@@ -312,11 +315,15 @@ h1::after {
 
     justify-content: center;
 
-    font-family:
-        "Special Elite",
-        monospace;
+    /*
+       Police ancienne pour les lettres
+    */
 
-    font-size: 2rem;
+    font-family:
+        "UnifrakturCook",
+        serif;
+
+    font-size: 2.4rem;
 
     color: #29261f;
 
@@ -329,16 +336,23 @@ h1::after {
 }
 
 
+/*
+   IMPORTANT :
+
+   On ne met plus de fond blanc
+   sur .case:not(:empty)
+*/
+
 .case:not(:empty) {
 
     border-color: #6f6758;
 
     background:
         rgba(
-            255,
-            252,
-            242,
-            0.8
+            238,
+            227,
+            200,
+            0.30
         );
 
 }
@@ -551,6 +565,10 @@ h1::after {
             0.18
         );
 
+    /*
+       Police du clavier
+    */
+
     font-family:
         "Special Elite",
         monospace;
@@ -588,16 +606,6 @@ h1::after {
         transform:
             translateY(0);
 
-        box-shadow:
-            0 3px 0 #a49a86,
-            0 4px 6px
-            rgba(
-                60,
-                50,
-                35,
-                0.18
-            );
-
     }
 
     45% {
@@ -605,32 +613,12 @@ h1::after {
         transform:
             translateY(3px);
 
-        box-shadow:
-            0 0 0 #a49a86,
-            0 1px 2px
-            rgba(
-                60,
-                50,
-                35,
-                0.12
-            );
-
     }
 
     100% {
 
         transform:
             translateY(0);
-
-        box-shadow:
-            0 3px 0 #a49a86,
-            0 4px 6px
-            rgba(
-                60,
-                50,
-                35,
-                0.18
-            );
 
     }
 
@@ -855,10 +843,10 @@ h1::after {
 #motFin {
 
     font-family:
-        "Special Elite",
-        monospace;
+        "UnifrakturCook",
+        serif;
 
-    font-size: 2rem;
+    font-size: 2.2rem;
 
     letter-spacing: 0.15em;
 
@@ -981,7 +969,7 @@ h1::after {
 
         height: 57px;
 
-        font-size: 1.7rem;
+        font-size: 2rem;
 
     }
 
