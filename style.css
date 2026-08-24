@@ -1,3 +1,4 @@
+```css
 /* =========================================
    POLICE
    ========================================= */
@@ -53,6 +54,8 @@ h1 {
 
     margin: 45px 0 0;
 
+    font-family: "Cinzel", serif;
+
     font-size: clamp(
         2.2rem,
         5vw,
@@ -65,6 +68,8 @@ h1 {
 
     text-align: center;
 
+    color: #29261f;
+
 }
 
 
@@ -75,6 +80,8 @@ h1 {
 h2 {
 
     margin: 3px 0 0;
+
+    font-family: "Cinzel", serif;
 
     font-size: clamp(
         0.8rem,
@@ -103,15 +110,20 @@ h2 {
 
     margin-top: 10px;
 
+    font-family: "Cinzel", serif;
+
     font-size: 0.9rem;
 
     font-weight: 600;
 
     letter-spacing: 0.05em;
 
+    color: #403a30;
+
     opacity: 0;
 
-    transition: opacity 0.3s ease;
+    transition:
+        opacity 0.3s ease;
 
 }
 
@@ -168,7 +180,7 @@ h2 {
 
 
 /* =========================================
-   CASES = TIRETS
+   CASES / TIRETS
    ========================================= */
 
 .case {
@@ -181,17 +193,20 @@ h2 {
 
     display: flex;
 
-    align-items: flex-end;
+    align-items: center;
 
     justify-content: center;
 
-    padding-bottom: 6px;
+    padding-bottom: 0;
 
     border: none;
 
-    border-bottom: 2px solid #625c4e;
+    border-bottom:
+        2px solid #625c4e;
 
     background: transparent;
+
+    font-family: "Cinzel", serif;
 
     font-size: 2rem;
 
@@ -201,11 +216,16 @@ h2 {
 
     z-index: 0;
 
+    transition:
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.2s ease;
+
 }
 
 
 /* =========================================
-   CERCLES
+   CERCLES JAUNES ET VERTS
    ========================================= */
 
 .case.vert::before,
@@ -223,16 +243,19 @@ h2 {
 
     left: 50%;
 
-    top: 1px;
+    top: 50%;
 
-    transform: translateX(-50%);
+    transform:
+        translate(-50%, -50%);
 
     z-index: -1;
 
 }
 
 
-/* VERT */
+/* =========================================
+   CERCLE VERT
+   ========================================= */
 
 .case.vert::before {
 
@@ -241,7 +264,9 @@ h2 {
 }
 
 
-/* JAUNE */
+/* =========================================
+   CERCLE JAUNE
+   ========================================= */
 
 .case.jaune::before {
 
@@ -251,42 +276,49 @@ h2 {
 
 
 /* =========================================
-   LETTRES
+   LETTRE VERTE
    ========================================= */
-
-.case.vert,
-.case.jaune {
-
-    color: #29261f;
-
-}
-
 
 .case.vert {
 
-    border-bottom-color: #738267;
+    color: #29261f;
 
-}
-
-
-.case.jaune {
-
-    border-bottom-color: #b49a5d;
-
-}
-
-
-.case.gris {
-
-    color: #777064;
-
-    border-bottom-color: #777064;
+    border-bottom-color:
+        #738267;
 
 }
 
 
 /* =========================================
-   ANIMATION LETTRE
+   LETTRE JAUNE
+   ========================================= */
+
+.case.jaune {
+
+    color: #29261f;
+
+    border-bottom-color:
+        #b49a5d;
+
+}
+
+
+/* =========================================
+   LETTRE GRISE
+   ========================================= */
+
+.case.gris {
+
+    color: #777064;
+
+    border-bottom-color:
+        #777064;
+
+}
+
+
+/* =========================================
+   ANIMATION D'ÉCRITURE
    ========================================= */
 
 .letter-animation {
@@ -302,22 +334,31 @@ h2 {
 @keyframes apparitionLettre {
 
     0% {
-        transform: scale(0.75);
+
+        transform:
+            scale(0.75);
+
     }
 
     70% {
-        transform: scale(1.08);
+
+        transform:
+            scale(1.08);
+
     }
 
     100% {
-        transform: scale(1);
+
+        transform:
+            scale(1);
+
     }
 
 }
 
 
 /* =========================================
-   VICTOIRE
+   ANIMATION VICTOIRE
    ========================================= */
 
 .case.victoire {
@@ -333,19 +374,31 @@ h2 {
 @keyframes victoireLettre {
 
     0% {
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
+
     }
 
     30% {
-        transform: translateY(-8px);
+
+        transform:
+            translateY(-8px);
+
     }
 
     60% {
-        transform: translateY(3px);
+
+        transform:
+            translateY(3px);
+
     }
 
     100% {
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
+
     }
 
 }
@@ -403,15 +456,24 @@ h2 {
 @keyframes retourChariot {
 
     0% {
-        transform: translateX(0);
+
+        transform:
+            translateX(0);
+
     }
 
     35% {
-        transform: translateX(12px);
+
+        transform:
+            translateX(12px);
+
     }
 
     100% {
-        transform: translateX(0);
+
+        transform:
+            translateX(0);
+
     }
 
 }
@@ -437,6 +499,10 @@ h2 {
 
 }
 
+
+/* =========================================
+   LIGNES DU CLAVIER
+   ========================================= */
 
 .ligne-clavier {
 
@@ -473,11 +539,15 @@ h2 {
 
     background: #c7b792;
 
-    border: 1px solid #6c634f;
+    border:
+        1px solid #6c634f;
 
     box-shadow:
         0 2px 0 #776c55,
-        0 3px 5px rgba(0, 0, 0, 0.12);
+        0 3px 5px
+        rgba(0, 0, 0, 0.12);
+
+    font-family: "Cinzel", serif;
 
     font-size: 0.95rem;
 
@@ -487,17 +557,23 @@ h2 {
 
     transition:
         transform 0.1s ease,
-        background 0.2s ease;
+        background 0.2s ease,
+        color 0.2s ease;
 
 }
 
 
 .touche:hover {
 
-    transform: translateY(-2px);
+    transform:
+        translateY(-2px);
 
 }
 
+
+/* =========================================
+   TOUCHE APPUYÉE
+   ========================================= */
 
 .touche-appuyee {
 
@@ -512,41 +588,64 @@ h2 {
 @keyframes toucheAppuyee {
 
     0% {
-        transform: scale(1);
+
+        transform:
+            scale(1);
+
     }
 
     50% {
-        transform: scale(0.88);
+
+        transform:
+            scale(0.88);
+
     }
 
     100% {
-        transform: scale(1);
+
+        transform:
+            scale(1);
+
     }
 
 }
 
 
 /* =========================================
-   COULEURS CLAVIER
+   TOUCHE VERTE
    ========================================= */
 
 .touche.vert {
 
     background: #738267;
 
-    border-color: #56634d;
+    color: #29261f;
+
+    border-color:
+        #56634d;
 
 }
 
+
+/* =========================================
+   TOUCHE JAUNE
+   ========================================= */
 
 .touche.jaune {
 
     background: #b49a5d;
 
-    border-color: #907a48;
+    color: #29261f;
+
+    border-color:
+        #907a48;
 
 }
 
+
+/* =========================================
+   TOUCHE GRISE
+   ========================================= */
 
 .touche.gris {
 
@@ -554,13 +653,14 @@ h2 {
 
     color: #d9d0bd;
 
-    border-color: #706c64;
+    border-color:
+        #706c64;
 
 }
 
 
 /* =========================================
-   ÉCRAN FIN
+   ÉCRAN DE FIN
    ========================================= */
 
 #ecranFin {
@@ -576,12 +676,21 @@ h2 {
     justify-content: center;
 
     background:
-        rgba(216, 201, 169, 0.96);
+        rgba(
+            216,
+            201,
+            169,
+            0.96
+        );
 
     z-index: 100;
 
 }
 
+
+/* =========================================
+   CONTENU FIN
+   ========================================= */
 
 .fin-contenu {
 
@@ -600,6 +709,8 @@ h2 {
 
     margin: 0;
 
+    font-family: "Cinzel", serif;
+
     font-size: clamp(
         2.5rem,
         7vw,
@@ -617,7 +728,10 @@ h2 {
 
 #texteFin {
 
-    margin: 10px 0 5px;
+    margin:
+        10px 0 5px;
+
+    font-family: "Cinzel", serif;
 
     font-size: 1rem;
 
@@ -630,24 +744,34 @@ h2 {
 
     margin-top: 5px;
 
+    font-family: "Cinzel", serif;
+
     font-size: 2.2rem;
 
     font-weight: 600;
 
     letter-spacing: 0.15em;
 
+    color: #29261f;
+
 }
 
+
+/* =========================================
+   BOUTON REJOUER
+   ========================================= */
 
 #boutonRejouer {
 
     margin-top: 30px;
 
-    padding: 12px 28px;
+    padding:
+        12px 28px;
 
     background: transparent;
 
-    border: 1px solid #625c4e;
+    border:
+        1px solid #625c4e;
 
     font-family: "Cinzel", serif;
 
@@ -661,6 +785,11 @@ h2 {
 
     cursor: pointer;
 
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+
 }
 
 
@@ -673,11 +802,20 @@ h2 {
 }
 
 
+#boutonRejouer:active {
+
+    transform:
+        scale(0.96);
+
+}
+
+
 /* =========================================
    TÉLÉPHONE
    ========================================= */
 
 @media (max-width: 600px) {
+
 
     h1 {
 
@@ -721,10 +859,10 @@ h2 {
 
         font-size: 1.45rem;
 
-        padding-bottom: 4px;
-
     }
 
+
+    /* Cercles téléphone */
 
     .case.vert::before,
     .case.jaune::before {
@@ -733,7 +871,12 @@ h2 {
 
         height: 35px;
 
-        top: 0;
+        left: 50%;
+
+        top: 50%;
+
+        transform:
+            translate(-50%, -50%);
 
     }
 
@@ -783,7 +926,8 @@ h2 {
 
         margin-top: 24px;
 
-        padding: 10px 22px;
+        padding:
+            10px 22px;
 
         font-size: 0.78rem;
 
@@ -798,6 +942,7 @@ h2 {
 
 @media (max-width: 380px) {
 
+
     .ligne {
 
         gap: 6px;
@@ -811,6 +956,8 @@ h2 {
 
         height: 48px;
 
+        font-size: 1.35rem;
+
     }
 
 
@@ -820,6 +967,13 @@ h2 {
         width: 32px;
 
         height: 32px;
+
+        left: 50%;
+
+        top: 50%;
+
+        transform:
+            translate(-50%, -50%);
 
     }
 
@@ -842,3 +996,4 @@ h2 {
     }
 
 }
+```
