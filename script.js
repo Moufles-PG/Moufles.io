@@ -100,7 +100,7 @@ function positionInitialeGrille() {
         la grille de 20 px.
     */
 
-    const margeSupplementaire = +50;
+    const margeSupplementaire = +70;
 
     const basLigne =
         rectClavier.top -
