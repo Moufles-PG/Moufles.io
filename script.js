@@ -567,7 +567,7 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// CALCUL DE LA POSITION
+// POSITION DE LA GRILLE
 // =========================================
 
 function calculerPositionsGrille() {
@@ -581,39 +581,46 @@ function calculerPositionsGrille() {
 
 
     /*
-       Position basse :
-       le bas de la feuille touche
-       presque le clavier.
+       POSITION BASSE
+
+       +35 px :
+       la grille descend encore
+       davantage au premier essai.
     */
 
     let positionBasse =
         zone.height -
-        feuilleHauteur;
+        feuilleHauteur +
+        35;
 
 
     /*
-       Position haute :
-       le haut de la feuille touche
-       presque le titre.
+       POSITION HAUTE
+
+       -35 px :
+       au sixième essai, la grille
+       remonte davantage vers le titre
+       et le message.
     */
 
     let positionHaute =
-        0;
+        -35;
 
 
     /*
-       5 déplacements entre
-       l'essai 1 et l'essai 6.
+       5 déplacements :
+
+       essai 1 → 0
+       essai 2 → 1
+       essai 3 → 2
+       essai 4 → 3
+       essai 5 → 4
+       essai 6 → 5
     */
 
     let progression =
         ligne / 5;
 
-
-    /*
-       Ligne 0 = position basse
-       Ligne 5 = position haute
-    */
 
     let position =
         positionBasse +
@@ -668,18 +675,6 @@ function animerFeuille() {
         calculerPositionActuelle();
 
 
-    /*
-       On augmente ligne AVANT
-       d'appeler cette fonction.
-
-       Donc :
-
-       ligne 1 → 0
-       ligne 2 → 1
-       ligne 3 → 2
-       etc.
-    */
-
     let nouvellePosition =
         calculerPositionsGrille();
 
@@ -701,11 +696,13 @@ function animerFeuille() {
                     transform:
                         `translate(
                             -50%,
-                            ${anciennePosition +
-                            (
-                                nouvellePosition -
-                                anciennePosition
-                            ) * 0.82}px
+                            ${
+                                anciennePosition +
+                                (
+                                    nouvellePosition -
+                                    anciennePosition
+                                ) * 0.82
+                            }px
                         )`
                 },
 
@@ -862,10 +859,6 @@ function animerChariot() {
         );
 
 
-    /*
-       CHARIOT PART
-    */
-
     let aller =
         chariot.animate(
 
@@ -920,10 +913,6 @@ function animerChariot() {
         .then(
             function() {
 
-                /*
-                   LE CHARIOT REVIENT
-                */
-
                 let retour =
                     chariot.animate(
 
@@ -961,11 +950,6 @@ function animerChariot() {
                     );
 
 
-                /*
-                   ET LA FEUILLE MONTE
-                   EN MÊME TEMPS.
-                */
-
                 let mouvement =
                     animerFeuille();
 
@@ -993,7 +977,7 @@ function animerChariot() {
 
 
 // =========================================
-// VALIDER
+// VALIDER LE MOT
 // =========================================
 
 function validerMot() {
@@ -1139,7 +1123,7 @@ function validerMot() {
 
 
     // =====================================
-    // VERT
+    // LETTRES VERTES
     // =====================================
 
     let lettresDisponibles =
@@ -1178,7 +1162,7 @@ function validerMot() {
 
 
     // =====================================
-    // JAUNE / GRIS
+    // LETTRES JAUNES / GRISES
     // =====================================
 
     for (
@@ -1333,7 +1317,6 @@ boutonRejouer.addEventListener(
     "click",
     function() {
 
-
         ecranFin.style.display =
             "none";
 
@@ -1350,8 +1333,6 @@ boutonRejouer.addEventListener(
         animationEnCours =
             false;
 
-
-        // Effacer les cases
 
         cases.forEach(
             function(caseJeu) {
@@ -1371,8 +1352,6 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Réinitialiser le clavier
-
         touches.forEach(
             function(touche) {
 
@@ -1386,8 +1365,6 @@ boutonRejouer.addEventListener(
             }
         );
 
-
-        // Musiques
 
         musiqueJeu.pause();
 
@@ -1407,19 +1384,12 @@ boutonRejouer.addEventListener(
             0;
 
 
-        // Chariot
-
         chariot.style.opacity =
             "0";
 
 
-        // Replacer la grille
-        // tout en bas
-
         positionInitiale();
 
-
-        // Nouveau mot
 
         choisirNouveauMot();
 
