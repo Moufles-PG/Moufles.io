@@ -91,7 +91,7 @@ h1 {
 
     position: fixed;
 
-    top: 112px;
+    top: 115px;
 
     left: 50%;
 
@@ -117,7 +117,7 @@ h1 {
 
 
 /* =========================================
-   ZONE PRINCIPALE
+   JEU
    ========================================= */
 
 .jeu {
@@ -130,19 +130,18 @@ h1 {
 
 
 /* =========================================
-   ESPACE ENTRE TITRE ET CLAVIER
+   ZONE ENTRE TITRE ET CLAVIER
    ========================================= */
 
 .zone-grille {
 
     position: absolute;
 
-    top: 115px;
+    top: 125px;
 
     bottom: 205px;
 
     left: 0;
-
     right: 0;
 
     overflow: hidden;
@@ -160,15 +159,17 @@ h1 {
 
     left: 50%;
 
-    top: 50%;
+    /*
+       La grille commence volontairement
+       en bas de la zone.
+    */
+
+    bottom: 0;
 
     width: 365px;
 
     transform:
-        translate(
-            -50%,
-            -50%
-        );
+        translateX(-50%);
 
     display: flex;
 
@@ -183,7 +184,7 @@ h1 {
 
 
 /* =========================================
-   LIGNE
+   LIGNES
    ========================================= */
 
 .ligne {
@@ -206,7 +207,7 @@ h1 {
 
 
 /* =========================================
-   CASE
+   CASES
    ========================================= */
 
 .case {
@@ -247,7 +248,7 @@ h1 {
 
 
 /* =========================================
-   TRAIT SOUS LA LETTRE
+   TRAIT
    ========================================= */
 
 .case::after {
@@ -263,67 +264,54 @@ h1 {
 
     height: 2px;
 
-    background: #625c4e;
+    background:
+        #625c4e;
 
 }
 
 
 /* =========================================
-   COULEURS DES CASES
+   CASES COLORÉES
    ========================================= */
 
 .case.vert {
 
-    background: #738267;
+    background:
+        #738267;
 
-    border-color: #56634d;
-
-}
-
-
-.case.vert::after {
-
-    background: #56634d;
+    border-color:
+        #56634d;
 
 }
 
 
 .case.jaune {
 
-    background: #b49a5d;
+    background:
+        #b49a5d;
 
-    border-color: #907a48;
-
-}
-
-
-.case.jaune::after {
-
-    background: #907a48;
+    border-color:
+        #907a48;
 
 }
 
 
 .case.gris {
 
-    background: #8a857a;
+    background:
+        #8a857a;
 
-    border-color: #706c64;
+    border-color:
+        #706c64;
 
-    color: #e1d8c5;
-
-}
-
-
-.case.gris::after {
-
-    background: #706c64;
+    color:
+        #e1d8c5;
 
 }
 
 
 /* =========================================
-   ANIMATION DES LETTRES
+   ANIMATION LETTRE
    ========================================= */
 
 .letter-animation {
@@ -421,7 +409,8 @@ h1 {
 
     height: 74px;
 
-    background: #29261f;
+    background:
+        #29261f;
 
     border-radius: 2px;
 
@@ -430,10 +419,6 @@ h1 {
     pointer-events: none;
 
     z-index: 20;
-
-    will-change:
-        left,
-        top;
 
 }
 
@@ -452,7 +437,8 @@ h1 {
 
     height: 4px;
 
-    background: #29261f;
+    background:
+        #29261f;
 
     border-radius: 2px;
 
@@ -516,7 +502,8 @@ h1 {
 
     border-radius: 50%;
 
-    background: #c7b792;
+    background:
+        #c7b792;
 
     border:
         1px solid
@@ -531,14 +518,12 @@ h1 {
 
     font-weight: 600;
 
-    color: #29261f;
+    color:
+        #29261f;
 
     cursor: pointer;
 
     user-select: none;
-
-    transition:
-        transform 0.1s ease;
 
 }
 
@@ -593,29 +578,36 @@ h1 {
 
 .touche.vert {
 
-    background: #738267;
+    background:
+        #738267;
 
-    border-color: #56634d;
+    border-color:
+        #56634d;
 
 }
 
 
 .touche.jaune {
 
-    background: #b49a5d;
+    background:
+        #b49a5d;
 
-    border-color: #907a48;
+    border-color:
+        #907a48;
 
 }
 
 
 .touche.gris {
 
-    background: #8a857a;
+    background:
+        #8a857a;
 
-    border-color: #706c64;
+    border-color:
+        #706c64;
 
-    color: #d9d0bd;
+    color:
+        #d9d0bd;
 
 }
 
@@ -695,7 +687,8 @@ h1 {
     padding:
         12px 28px;
 
-    background: transparent;
+    background:
+        transparent;
 
     border:
         1px solid
@@ -711,7 +704,8 @@ h1 {
 
     letter-spacing: 0.12em;
 
-    color: #29261f;
+    color:
+        #29261f;
 
     cursor: pointer;
 
@@ -720,8 +714,10 @@ h1 {
 
 #boutonRejouer:hover {
 
-    background: #29261f;
+    background:
+        #29261f;
 
-    color: #d8c9a9;
+    color:
+        #d8c9a9;
 
 }
