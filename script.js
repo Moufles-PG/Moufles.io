@@ -607,20 +607,13 @@ function positionGrille() {
     */
 
     let positions = [
-
-        0,
-
-        -45,
-
-        -90,
-
-        -135,
-
-        -180,
-
-        -225
-
-    ];
+    80,
+    35,
+    -10,
+    -55,
+    -100,
+    -145
+];
 
 
     return positions[ligne];
