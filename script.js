@@ -18,6 +18,8 @@ const texteFin = document.querySelector("#texteFin");
 const motFin = document.querySelector("#motFin");
 const boutonRejouer = document.querySelector("#boutonRejouer");
 
+const grille = document.querySelector(".feuille");
+
 
 // =========================================
 // VARIABLES
@@ -34,18 +36,79 @@ let partieTerminee = false;
 
 
 // =========================================
-// SONS
+// DÉPLACEMENT DE LA GRILLE
 // =========================================
 
-const sonGood = new Audio("Good.mp3");
-const sonFalse = new Audio("False.mp3");
+let decalageGrille = 0;
 
-musiqueJeu.volume = 0.15;
-musiqueVictoire.volume = 0.25;
-musiqueDefaite.volume = 0.25;
 
-sonGood.volume = 0.05;
-sonFalse.volume = 0.05;
+function monterGrille() {
+
+    /*
+        Une ligne =
+        hauteur de la ligne
+        + espace entre deux lignes
+    */
+
+    const hauteurLigne =
+        lignes[0].getBoundingClientRect().height;
+
+
+    const style =
+        getComputedStyle(grille);
+
+
+    const gap =
+        parseFloat(style.rowGap || style.gap) || 0;
+
+
+    const pas =
+        hauteurLigne + gap;
+
+
+    /*
+        On ajoute TOUJOURS exactement
+        un seul pas.
+    */
+
+    decalageGrille += pas;
+
+
+    /*
+        Animation douce.
+    */
+
+    grille.style.transition =
+        "transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)";
+
+
+    /*
+        On conserve le centrage horizontal.
+    */
+
+    grille.style.transform =
+        `translateX(-50%) translateY(-${decalageGrille}px)`;
+
+}
+
+
+// =========================================
+// REMETTRE LA GRILLE À SA POSITION INITIALE
+// =========================================
+
+function remettreGrilleEnPlace() {
+
+    decalageGrille = 0;
+
+
+    grille.style.transition =
+        "none";
+
+
+    grille.style.transform =
+        "translateX(-50%)";
+
+}
 
 
 // =========================================
@@ -67,13 +130,18 @@ function enleverAccents(texte) {
 
 function afficherMessage(texte) {
 
-    message.textContent = texte;
+    message.textContent =
+        texte;
 
-    message.style.opacity = "1";
+
+    message.style.opacity =
+        "1";
+
 
     setTimeout(() => {
 
-        message.style.opacity = "0";
+        message.style.opacity =
+            "0";
 
     }, 1500);
 
@@ -88,13 +156,17 @@ function animerTouche(lettre) {
 
     touches.forEach(touche => {
 
-        if (touche.textContent === lettre) {
+        if (
+            touche.textContent === lettre
+        ) {
 
             touche.classList.remove(
                 "touche-appuyee"
             );
 
+
             void touche.offsetWidth;
+
 
             touche.classList.add(
                 "touche-appuyee"
@@ -125,14 +197,19 @@ function mettreAJourClavier(
         }
 
 
-        // VERT = priorité maximale
+        /*
+            VERT
+        */
 
-        if (couleur === "vert") {
+        if (
+            couleur === "vert"
+        ) {
 
             touche.classList.remove(
                 "jaune",
                 "gris"
             );
+
 
             touche.classList.add(
                 "vert"
@@ -141,7 +218,9 @@ function mettreAJourClavier(
         }
 
 
-        // JAUNE
+        /*
+            JAUNE
+        */
 
         else if (
             couleur === "jaune"
@@ -157,6 +236,7 @@ function mettreAJourClavier(
                     "gris"
                 );
 
+
                 touche.classList.add(
                     "jaune"
                 );
@@ -166,7 +246,9 @@ function mettreAJourClavier(
         }
 
 
-        // GRIS
+        /*
+            GRIS
+        */
 
         else if (
             couleur === "gris"
@@ -200,14 +282,20 @@ function mettreAJourClavier(
 
 function ecrireLettre(lettre) {
 
-    if (partieTerminee) {
+    if (
+        partieTerminee
+    ) {
         return;
     }
 
 
-    // Une ligne contient 5 lettres
+    /*
+        Une ligne contient 5 lettres.
+    */
 
-    if (position >= 5) {
+    if (
+        position >= 5
+    ) {
         return;
     }
 
@@ -224,40 +312,56 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // Animation de la lettre
+    /*
+        Animation de la lettre.
+    */
 
     caseActuelle.classList.remove(
         "letter-animation"
     );
 
+
     void caseActuelle.offsetWidth;
+
 
     caseActuelle.classList.add(
         "letter-animation"
     );
 
 
-    // Animation du clavier
+    /*
+        Animation de la touche.
+    */
 
     animerTouche(
         lettre
     );
 
 
-    // Petit son de frappe
+    /*
+        Son de frappe.
+    */
 
-    sonGood.currentTime = 0;
+    sonGood.currentTime =
+        0;
 
-    sonGood.play().catch(() => {});
+
+    sonGood.play().catch(
+        () => {}
+    );
 
 
-    // Musique de fond
+    /*
+        Musique de fond.
+    */
 
     if (
         musiqueJeu.paused
     ) {
 
-        musiqueJeu.play().catch(() => {});
+        musiqueJeu.play().catch(
+            () => {}
+        );
 
     }
 
@@ -268,6 +372,38 @@ function ecrireLettre(lettre) {
 
 
 // =========================================
+// SONS DE FRAPPE
+// =========================================
+
+const sonGood =
+    new Audio("Good.mp3");
+
+
+const sonFalse =
+    new Audio("False.mp3");
+
+
+sonGood.volume =
+    0.05;
+
+
+sonFalse.volume =
+    0.05;
+
+
+musiqueJeu.volume =
+    0.15;
+
+
+musiqueVictoire.volume =
+    0.25;
+
+
+musiqueDefaite.volume =
+    0.25;
+
+
+// =========================================
 // CLAVIER PHYSIQUE
 // =========================================
 
@@ -275,14 +411,16 @@ document.addEventListener(
     "keydown",
     event => {
 
-        if (partieTerminee) {
+        if (
+            partieTerminee
+        ) {
             return;
         }
 
 
-        // -------------------------
-        // LETTRE
-        // -------------------------
+        /*
+            LETTRE
+        */
 
         if (
             event.key.length === 1
@@ -306,14 +444,15 @@ document.addEventListener(
 
             }
 
+
             return;
 
         }
 
 
-        // -------------------------
-        // RETOUR ARRIÈRE
-        // -------------------------
+        /*
+            RETOUR ARRIÈRE
+        */
 
         if (
             event.key === "Backspace"
@@ -342,14 +481,15 @@ document.addEventListener(
 
             }
 
+
             return;
 
         }
 
 
-        // -------------------------
-        // ENTRÉE
-        // -------------------------
+        /*
+            ENTRÉE
+        */
 
         if (
             event.key === "Enter"
@@ -386,7 +526,7 @@ touches.forEach(
 
 
 // =========================================
-// CHARGER LE DICTIONNAIRE
+// CHARGEMENT DU DICTIONNAIRE
 // =========================================
 
 fetch("mots.txt")
@@ -394,13 +534,16 @@ fetch("mots.txt")
     .then(
         response => {
 
-            if (!response.ok) {
+            if (
+                !response.ok
+            ) {
 
                 throw new Error(
                     "Impossible de charger mots.txt"
                 );
 
             }
+
 
             return response.text();
 
@@ -480,12 +623,16 @@ function choisirNouveauMot() {
 
 function validerMot() {
 
-    if (partieTerminee) {
+    if (
+        partieTerminee
+    ) {
         return;
     }
 
 
-    // Pas assez de lettres
+    /*
+        Pas assez de lettres.
+    */
 
     if (
         position < 5
@@ -495,12 +642,15 @@ function validerMot() {
             "Pas assez de lettres."
         );
 
+
         return;
 
     }
 
 
-    // Récupérer le mot
+    /*
+        Construire le mot.
+    */
 
     let mot = "";
 
@@ -519,9 +669,9 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // MOT INEXISTANT
-    // =====================================
+    /*
+        Mot inexistant.
+    */
 
     if (
         !mots.includes(mot)
@@ -535,6 +685,7 @@ function validerMot() {
         sonFalse.currentTime =
             0;
 
+
         sonFalse.play().catch(
             () => {}
         );
@@ -545,9 +696,11 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // VICTOIRE
-    // =====================================
+    /*
+        =====================================
+        VICTOIRE
+        =====================================
+    */
 
     if (
         mot === motSecret
@@ -557,25 +710,25 @@ function validerMot() {
             true;
 
 
-        // Arrêter la musique du jeu
-
         musiqueJeu.pause();
+
 
         musiqueJeu.currentTime =
             0;
 
 
-        // Lancer la musique de victoire
-
         musiqueVictoire.currentTime =
             0;
+
 
         musiqueVictoire.play().catch(
             () => {}
         );
 
 
-        // Colorer les 5 cases
+        /*
+            Colorer les cases.
+        */
 
         for (
             let i = 0;
@@ -614,7 +767,9 @@ function validerMot() {
         }
 
 
-        // Écran de fin
+        /*
+            Écran de victoire.
+        */
 
         setTimeout(
             () => {
@@ -644,17 +799,19 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // ANALYSE DES LETTRES
-    // =====================================
+    /*
+        =====================================
+        ANALYSE DES LETTRES
+        =====================================
+    */
 
     const disponibles =
         motSecret.split("");
 
 
-    // -------------------------------------
-    // LETTRES VERTES
-    // -------------------------------------
+    /*
+        LETTRES VERTES
+    */
 
     for (
         let i = 0;
@@ -687,17 +844,15 @@ function validerMot() {
     }
 
 
-    // -------------------------------------
-    // LETTRES JAUNES / GRISES
-    // -------------------------------------
+    /*
+        LETTRES JAUNES / GRISES
+    */
 
     for (
         let i = 0;
         i < 5;
         i++
     ) {
-
-        // Déjà vert
 
         if (
             mot[i] === motSecret[i]
@@ -713,8 +868,6 @@ function validerMot() {
                 mot[i]
             );
 
-
-        // JAUNE
 
         if (
             index !== -1
@@ -738,9 +891,6 @@ function validerMot() {
 
         }
 
-
-        // GRIS
-
         else {
 
             cases[
@@ -760,9 +910,11 @@ function validerMot() {
     }
 
 
-    // =====================================
-    // PASSER À LA LIGNE SUIVANTE
-    // =====================================
+    /*
+        =====================================
+        PASSER À LA LIGNE SUIVANTE
+        =====================================
+    */
 
     ligneActuelle++;
 
@@ -771,9 +923,25 @@ function validerMot() {
     position = 0;
 
 
-    // =====================================
-    // PLUS D'ESSAIS
-    // =====================================
+    /*
+        On fait monter la grille
+        d'UNE SEULE ligne.
+    */
+
+    if (
+        ligneActuelle < 6
+    ) {
+
+        monterGrille();
+
+    }
+
+
+    /*
+        =====================================
+        DERNIER ESSAI
+        =====================================
+    */
 
     if (
         ligneActuelle >= 6
@@ -785,12 +953,14 @@ function validerMot() {
 
         musiqueJeu.pause();
 
+
         musiqueJeu.currentTime =
             0;
 
 
         musiqueDefaite.currentTime =
             0;
+
 
         musiqueDefaite.play().catch(
             () => {}
@@ -812,9 +982,6 @@ function validerMot() {
         ecranFin.style.display =
             "flex";
 
-
-        return;
-
     }
 
 }
@@ -828,34 +995,52 @@ boutonRejouer.addEventListener(
     "click",
     () => {
 
-        // Fermer l'écran de fin
+        /*
+            Écran de fin.
+        */
 
         ecranFin.style.display =
             "none";
 
 
-        // Réinitialiser le jeu
+        /*
+            Variables.
+        */
 
         partieTerminee =
             false;
 
+
         position =
             0;
 
+
         ligneActuelle =
             0;
+
 
         debut =
             0;
 
 
-        // Vider les cases
+        /*
+            Remettre la grille
+            à sa position initiale.
+        */
+
+        remettreGrilleEnPlace();
+
+
+        /*
+            Vider les cases.
+        */
 
         cases.forEach(
             caseJeu => {
 
                 caseJeu.textContent =
                     "";
+
 
                 caseJeu.classList.remove(
                     "vert",
@@ -869,7 +1054,9 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Réinitialiser le clavier
+        /*
+            Réinitialiser le clavier.
+        */
 
         touches.forEach(
             touche => {
@@ -885,27 +1072,23 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Réinitialiser les musiques
+        /*
+            Musiques.
+        */
 
         musiqueJeu.pause();
-
-        musiqueJeu.currentTime =
-            0;
-
+        musiqueJeu.currentTime = 0;
 
         musiqueVictoire.pause();
-
-        musiqueVictoire.currentTime =
-            0;
-
+        musiqueVictoire.currentTime = 0;
 
         musiqueDefaite.pause();
-
-        musiqueDefaite.currentTime =
-            0;
+        musiqueDefaite.currentTime = 0;
 
 
-        // Choisir un nouveau mot
+        /*
+            Nouveau mot.
+        */
 
         choisirNouveauMot();
 
