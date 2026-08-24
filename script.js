@@ -38,7 +38,7 @@ let motFin =
 let boutonRejouer =
     document.querySelector("#boutonRejouer");
 
-let feuille =
+let grille =
     document.querySelector(".feuille");
 
 let clavier =
@@ -66,7 +66,7 @@ let partieTerminee = false;
 
 
 // =========================================
-// VOLUME
+// SONS
 // =========================================
 
 musiqueJeu.volume = 0.15;
@@ -75,10 +75,6 @@ musiqueVictoire.volume = 0.25;
 
 musiqueDefaite.volume = 0.25;
 
-
-// =========================================
-// SONS
-// =========================================
 
 let sonGood =
     new Audio("Good.mp3");
@@ -118,22 +114,16 @@ function enleverAccents(texte) {
 
 function afficherMessage(texte) {
 
-    message.textContent =
-        texte;
+    message.textContent = texte;
 
-    message.style.opacity =
-        "1";
+    message.style.opacity = "1";
 
 
-    setTimeout(
-        function() {
+    setTimeout(function() {
 
-            message.style.opacity =
-                "0";
+        message.style.opacity = "0";
 
-        },
-        1500
-    );
+    }, 1500);
 }
 
 
@@ -143,30 +133,29 @@ function afficherMessage(texte) {
 
 function animerTouche(lettre) {
 
-    touches.forEach(
-        function(touche) {
+    touches.forEach(function(touche) {
 
-            if (
-                touche.textContent === lettre
-            ) {
+        if (
+            touche.textContent === lettre
+        ) {
 
-                touche.classList.remove(
-                    "touche-appuyee"
-                );
+            touche.classList.remove(
+                "touche-appuyee"
+            );
 
-                void touche.offsetWidth;
+            void touche.offsetWidth;
 
-                touche.classList.add(
-                    "touche-appuyee"
-                );
-            }
+            touche.classList.add(
+                "touche-appuyee"
+            );
         }
-    );
+
+    });
 }
 
 
 // =========================================
-// COULEUR CLAVIER
+// COULEUR DU CLAVIER
 // =========================================
 
 function mettreAJourClavier(
@@ -174,73 +163,78 @@ function mettreAJourClavier(
     couleur
 ) {
 
-    touches.forEach(
-        function(touche) {
+    touches.forEach(function(touche) {
+
+        if (
+            touche.textContent !== lettre
+        ) {
+
+            return;
+        }
+
+
+        // VERT
+
+        if (
+            couleur === "vert"
+        ) {
+
+            touche.classList.remove(
+                "jaune",
+                "gris"
+            );
+
+            touche.classList.add(
+                "vert"
+            );
+        }
+
+
+        // JAUNE
+
+        if (
+            couleur === "jaune"
+        ) {
 
             if (
-                touche.textContent !== lettre
-            ) {
-
-                return;
-            }
-
-
-            if (
-                couleur === "vert"
+                !touche.classList.contains(
+                    "vert"
+                )
             ) {
 
                 touche.classList.remove(
-                    "jaune",
                     "gris"
                 );
 
                 touche.classList.add(
-                    "vert"
+                    "jaune"
                 );
             }
+        }
 
 
-            if (
-                couleur === "jaune"
-            ) {
+        // GRIS
 
-                if (
-                    !touche.classList.contains(
-                        "vert"
-                    )
-                ) {
-
-                    touche.classList.remove(
-                        "gris"
-                    );
-
-                    touche.classList.add(
-                        "jaune"
-                    );
-                }
-            }
-
+        if (
+            couleur === "gris"
+        ) {
 
             if (
-                couleur === "gris"
+                !touche.classList.contains(
+                    "vert"
+                ) &&
+                !touche.classList.contains(
+                    "jaune"
+                )
             ) {
 
-                if (
-                    !touche.classList.contains(
-                        "vert"
-                    ) &&
-                    !touche.classList.contains(
-                        "jaune"
-                    )
-                ) {
-
-                    touche.classList.add(
-                        "gris"
-                    );
-                }
+                touche.classList.add(
+                    "gris"
+                );
             }
         }
-    );
+
+    });
 }
 
 
@@ -251,7 +245,14 @@ function mettreAJourClavier(
 function ecrireLettre(lettre) {
 
     if (
-        partieTerminee ||
+        partieTerminee
+    ) {
+
+        return;
+    }
+
+
+    if (
         position >= 5
     ) {
 
@@ -259,21 +260,24 @@ function ecrireLettre(lettre) {
     }
 
 
+    // Chercher la touche correspondante
+
     let touche = null;
 
 
-    touches.forEach(
-        function(element) {
+    touches.forEach(function(element) {
 
-            if (
-                element.textContent === lettre
-            ) {
+        if (
+            element.textContent === lettre
+        ) {
 
-                touche = element;
-            }
+            touche = element;
         }
-    );
 
+    });
+
+
+    // Son de touche
 
     if (
         touche &&
@@ -283,20 +287,20 @@ function ecrireLettre(lettre) {
         sonFalse.currentTime = 0;
 
         sonFalse.play()
-            .catch(
-                function() {}
-            );
+            .catch(function() {});
 
-    } else {
+    }
+
+    else {
 
         sonGood.currentTime = 0;
 
         sonGood.play()
-            .catch(
-                function() {}
-            );
+            .catch(function() {});
     }
 
+
+    // Case actuelle
 
     let caseActuelle =
         cases[
@@ -307,6 +311,8 @@ function ecrireLettre(lettre) {
     caseActuelle.textContent =
         lettre;
 
+
+    // Animation de la lettre
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -319,19 +325,19 @@ function ecrireLettre(lettre) {
     );
 
 
+    // Animation du clavier
+
     animerTouche(lettre);
 
 
-    // Musique à partir de la première lettre
+    // Musique du jeu
 
     if (
         musiqueJeu.paused
     ) {
 
         musiqueJeu.play()
-            .catch(
-                function() {}
-            );
+            .catch(function() {});
     }
 
 
@@ -355,6 +361,8 @@ document.addEventListener(
         }
 
 
+        // Lettre
+
         if (
             event.key.length === 1
         ) {
@@ -369,15 +377,15 @@ document.addEventListener(
                 /^[A-Z]$/.test(lettre)
             ) {
 
-                ecrireLettre(
-                    lettre
-                );
+                ecrireLettre(lettre);
             }
 
 
             return;
         }
 
+
+        // Retour arrière
 
         if (
             event.key === "Backspace"
@@ -405,6 +413,8 @@ document.addEventListener(
         }
 
 
+        // Entrée
+
         if (
             event.key === "Enter"
         ) {
@@ -420,20 +430,20 @@ document.addEventListener(
 // CLAVIER VIRTUEL
 // =========================================
 
-touches.forEach(
-    function(touche) {
+touches.forEach(function(touche) {
 
-        touche.addEventListener(
-            "click",
-            function() {
+    touche.addEventListener(
+        "click",
+        function() {
 
-                ecrireLettre(
-                    touche.textContent
-                );
-            }
-        );
-    }
-);
+            ecrireLettre(
+                touche.textContent
+            );
+
+        }
+    );
+
+});
 
 
 // =========================================
@@ -442,58 +452,53 @@ touches.forEach(
 
 fetch("mots.txt")
 
-    .then(
-        function(response) {
+    .then(function(response) {
 
-            return response.text();
-        }
-    )
+        return response.text();
 
-    .then(
-        function(texte) {
+    })
 
-            mots =
-                texte
-                    .split(/\r?\n/)
-                    .map(
-                        function(mot) {
+    .then(function(texte) {
 
-                            return enleverAccents(
-                                mot
-                                    .trim()
-                                    .toUpperCase()
-                            );
-                        }
-                    )
-                    .filter(
-                        function(mot) {
+        mots =
+            texte
+                .split(/\r?\n/)
+                .map(function(mot) {
 
-                            return mot.length === 5;
-                        }
+                    return enleverAccents(
+                        mot
+                            .trim()
+                            .toUpperCase()
                     );
 
+                })
+                .filter(function(mot) {
 
-            console.log(
-                "Mots chargés :",
-                mots.length
-            );
+                    return mot.length === 5;
+
+                });
 
 
-            choisirNouveauMot();
+        console.log(
+            "Mots chargés :",
+            mots.length
+        );
 
-            initialiserGrille();
-        }
-    )
 
-    .catch(
-        function(erreur) {
+        choisirNouveauMot();
 
-            console.error(
-                "Erreur avec mots.txt :",
-                erreur
-            );
-        }
-    );
+        initialiserGrille();
+
+    })
+
+    .catch(function(erreur) {
+
+        console.error(
+            "Erreur avec mots.txt :",
+            erreur
+        );
+
+    });
 
 
 // =========================================
@@ -527,67 +532,27 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// VISIBILITÉ DES LIGNES
+// POSITION DE LA GRILLE
+// =========================================
+//
+// C'est ici que tout se joue.
+//
+// La grille est déplacée entre deux
+// positions fixes.
+//
+// POSITION 1 :
+// Le haut de la grille est à 10 px
+// au-dessus du clavier.
+//
+// POSITION 6 :
+// Le haut de la grille est à 10 px
+// sous la zone des messages.
+//
+// Il y a 5 déplacements entre
+// l'essai 1 et l'essai 6.
 // =========================================
 
-function mettreAJourLignesVisibles() {
-
-    lignes.forEach(
-        function(uneLigne, index) {
-
-            /*
-               Au départ :
-               3 lignes visibles.
-
-               Essai 2 :
-               4 lignes.
-
-               Essai 3 :
-               5 lignes.
-
-               Essai 4 :
-               6 lignes.
-
-               Ensuite elles restent toutes visibles.
-            */
-
-            if (
-                index <= ligne + 2
-            ) {
-
-                uneLigne.classList.add(
-                    "ligne-visible"
-                );
-
-            } else {
-
-                uneLigne.classList.remove(
-                    "ligne-visible"
-                );
-            }
-        }
-    );
-}
-
-
-// =========================================
-// CALCUL DE LA TRAJECTOIRE
-// =========================================
-
-function calculerTrajectoire() {
-
-    /*
-       IMPORTANT :
-
-       On ne prend PAS la dernière ligne
-       comme référence.
-
-       C'est TOUJOURS LA LIGNE 1.
-    */
-
-    let ligne1 =
-        lignes[0].getBoundingClientRect();
-
+function calculerPositionsGrille() {
 
     let clavierRect =
         clavier.getBoundingClientRect();
@@ -597,58 +562,64 @@ function calculerTrajectoire() {
         message.getBoundingClientRect();
 
 
-    // =====================================
+    // -----------------------------------------
     // POSITION DE DÉPART
-    // =====================================
+    // -----------------------------------------
+    //
+    // Le bas de la première ligne doit être
+    // à 10 px au-dessus du clavier.
+    //
+    // Comme la grille commence avec la ligne 1,
+    // on utilise la hauteur d'une ligne.
 
-    /*
-       Le BAS de la ligne 1 doit être
-       10 px au-dessus du clavier.
-    */
-
-    let cibleDepart =
-        clavierRect.top - 10;
+    let hauteurLigne =
+        lignes[0].getBoundingClientRect().height;
 
 
     let positionDepart =
-        cibleDepart - ligne1.bottom;
+        clavierRect.top
+        -
+        10
+        -
+        hauteurLigne;
 
 
-    // =====================================
+    // -----------------------------------------
     // POSITION FINALE
-    // =====================================
-
-    /*
-       Le BAS de la ligne 1 doit terminer
-       10 px sous la zone des messages.
-
-       On utilise le bas de la ligne 1
-       comme repère dans les deux cas.
-    */
-
-    let cibleFinale =
-        messageRect.bottom + 10;
-
+    // -----------------------------------------
+    //
+    // Le haut de la grille doit arriver
+    // à 10 px sous les messages.
 
     let positionFinale =
-        cibleFinale - ligne1.bottom;
+        messageRect.bottom
+        +
+        10;
 
 
-    // =====================================
+    // -----------------------------------------
     // DISTANCE TOTALE
-    // =====================================
+    // -----------------------------------------
 
     let distanceTotale =
-        positionFinale -
+        positionFinale
+        -
         positionDepart;
 
 
-    /*
-       Il y a exactement 5 déplacements
-       entre les 6 essais.
-    */
+    // -----------------------------------------
+    // DISTANCE PAR TOUR
+    // -----------------------------------------
+    //
+    // 5 déplacements :
+    //
+    // 1 → 2
+    // 2 → 3
+    // 3 → 4
+    // 4 → 5
+    // 5 → 6
 
-    let mouvement =
+    let distanceParTour =
         distanceTotale / 5;
 
 
@@ -657,27 +628,12 @@ function calculerTrajectoire() {
         depart:
             positionDepart,
 
-        mouvement:
-            mouvement
+        finale:
+            positionFinale,
+
+        parTour:
+            distanceParTour
     };
-}
-
-
-// =========================================
-// POSITION ACTUELLE
-// =========================================
-
-function positionActuelle() {
-
-    let trajectoire =
-        calculerTrajectoire();
-
-
-    return (
-        trajectoire.depart
-        +
-        trajectoire.mouvement * ligne
-    );
 }
 
 
@@ -686,29 +642,90 @@ function positionActuelle() {
 // =========================================
 
 function positionnerGrille(
-    animation
+    animation = false
 ) {
 
-    let position =
-        positionActuelle();
+    let positions =
+        calculerPositionsGrille();
 
+
+    // Position correspondant à l'essai actuel
+
+    let positionVerticale =
+        positions.depart
+        +
+        (
+            positions.parTour
+            *
+            ligne
+        );
+
+
+    // Animation
 
     if (
         animation
     ) {
 
-        feuille.style.transition =
+        grille.style.transition =
             "transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1)";
 
-    } else {
+    }
 
-        feuille.style.transition =
+    else {
+
+        grille.style.transition =
             "none";
     }
 
 
-    feuille.style.transform =
-        `translateX(-50%) translateY(${position}px)`;
+    grille.style.transform =
+        `
+        translateX(-50%)
+        translateY(${positionVerticale}px)
+        `;
+}
+
+
+// =========================================
+// LIGNES VISIBLES
+// =========================================
+//
+// Au début : lignes 1, 2 et 3.
+//
+// Après le premier essai : ligne 4.
+//
+// Après le deuxième : ligne 5.
+//
+// Après le troisième : ligne 6.
+//
+// Ensuite tout reste visible.
+// =========================================
+
+function mettreAJourLignesVisibles() {
+
+    lignes.forEach(
+        function(uneLigne, index) {
+
+            if (
+                index <= ligne + 2
+            ) {
+
+                uneLigne.classList.add(
+                    "ligne-visible"
+                );
+
+            }
+
+            else {
+
+                uneLigne.classList.remove(
+                    "ligne-visible"
+                );
+            }
+
+        }
+    );
 }
 
 
@@ -729,57 +746,32 @@ function initialiserGrille() {
 
 
     /*
-       On attend que les dimensions soient
-       correctement calculées.
+       On attend que le navigateur ait
+       terminé de calculer les dimensions.
     */
 
-    requestAnimationFrame(
-        function() {
+    requestAnimationFrame(function() {
 
-            positionnerGrille(false);
-        }
-    );
+        positionnerGrille(false);
+
+    });
 }
 
 
 // =========================================
-// MONTER LA FEUILLE
-// =========================================
-
-function monterFeuille() {
-
-    /*
-       La nouvelle ligne devient visible
-       AVANT que la feuille ne commence
-       son déplacement.
-    */
-
-    mettreAJourLignesVisibles();
-
-
-    requestAnimationFrame(
-        function() {
-
-            positionnerGrille(true);
-        }
-    );
-}
-
-
-// =========================================
-// CHARIOT
+// ANIMATION DU CHARIOT
 // =========================================
 
 function animerChariot() {
 
-    let ligneValidee =
+    let lignePrecedente =
         lignes[
             ligne - 1
         ];
 
 
     if (
-        !ligneValidee
+        !lignePrecedente
     ) {
 
         return;
@@ -787,7 +779,7 @@ function animerChariot() {
 
 
     let casesLigne =
-        ligneValidee.querySelectorAll(
+        lignePrecedente.querySelectorAll(
             ".case"
         );
 
@@ -799,11 +791,13 @@ function animerChariot() {
         casesLigne[4];
 
 
-    let feuilleRect =
-        feuille.getBoundingClientRect();
+    let grilleRect =
+        grille.getBoundingClientRect();
+
 
     let premiereRect =
         premiereCase.getBoundingClientRect();
+
 
     let derniereRect =
         derniereCase.getBoundingClientRect();
@@ -812,7 +806,7 @@ function animerChariot() {
     let depart =
         premiereRect.left
         -
-        feuilleRect.left
+        grilleRect.left
         -
         8;
 
@@ -820,7 +814,7 @@ function animerChariot() {
     let arrivee =
         derniereRect.right
         -
-        feuilleRect.left
+        grilleRect.left
         +
         8;
 
@@ -828,7 +822,7 @@ function animerChariot() {
     let haut =
         premiereRect.top
         -
-        feuilleRect.top
+        grilleRect.top
         -
         4;
 
@@ -843,16 +837,17 @@ function animerChariot() {
         "1";
 
 
-    sonChariot.currentTime =
-        0;
+    // Son de machine à écrire
+
+    sonChariot.currentTime = 0;
 
     sonChariot.play()
-        .catch(
-            function() {}
-        );
+        .catch(function() {});
 
 
-    let aller =
+    // Aller vers la droite
+
+    let mouvement =
         chariot.animate(
             [
                 {
@@ -868,62 +863,81 @@ function animerChariot() {
             {
                 duration: 450,
 
-                easing:
-                    "ease-out",
+                easing: "ease-out",
 
-                fill:
-                    "forwards"
+                fill: "forwards"
             }
         );
 
 
-    aller.finished
-        .then(
-            function() {
+    mouvement.finished.then(function() {
 
-                let retour =
-                    chariot.animate(
-                        [
-                            {
-                                left:
-                                    arrivee + "px"
-                            },
+        // Petit retour du chariot
 
-                            {
-                                left:
-                                    depart + "px"
-                            }
-                        ],
-                        {
-                            duration: 320,
+        let retour =
+            chariot.animate(
+                [
+                    {
+                        left:
+                            arrivee + "px"
+                    },
 
-                            easing:
-                                "ease-in",
+                    {
+                        left:
+                            depart + "px"
+                    }
+                ],
+                {
+                    duration: 300,
 
-                            fill:
-                                "forwards"
-                        }
-                    );
+                    easing: "ease-in-out",
+
+                    fill: "forwards"
+                }
+            );
 
 
-                /*
-                   Le chariot repart et la feuille
-                   commence à monter.
-                */
+        /*
+           Pendant que le chariot revient,
+           la feuille monte.
+        */
 
-                monterFeuille();
+        monterGrille();
 
 
-                return retour.finished;
-            }
-        )
-        .then(
-            function() {
+        retour.finished.then(function() {
 
-                chariot.style.opacity =
-                    "0";
-            }
-        );
+            chariot.style.opacity =
+                "0";
+
+        });
+
+    });
+}
+
+
+// =========================================
+// FAIRE MONTER LA GRILLE
+// =========================================
+
+function monterGrille() {
+
+    // Faire apparaître la nouvelle ligne
+
+    mettreAJourLignesVisibles();
+
+
+    /*
+       On laisse le navigateur afficher
+       la nouvelle ligne avant de déplacer
+       la grille.
+    */
+
+    requestAnimationFrame(function() {
+
+        positionnerGrille(true);
+
+    });
 }
 
 
@@ -941,7 +955,9 @@ function validerMot() {
     }
 
 
-    // Pas assez de lettres
+    // -----------------------------------------
+    // PAS ASSEZ DE LETTRES
+    // -----------------------------------------
 
     if (
         position < 5
@@ -955,7 +971,9 @@ function validerMot() {
     }
 
 
-    // Construire le mot
+    // -----------------------------------------
+    // CONSTRUIRE LE MOT
+    // -----------------------------------------
 
     let mot = "";
 
@@ -970,10 +988,13 @@ function validerMot() {
             cases[
                 debut + i
             ].textContent;
+
     }
 
 
-    // Mot inexistant
+    // -----------------------------------------
+    // MOT INEXISTANT
+    // -----------------------------------------
 
     if (
         !mots.includes(mot)
@@ -987,31 +1008,26 @@ function validerMot() {
     }
 
 
-    // =====================================
+    // =========================================
     // VICTOIRE
-    // =====================================
+    // =========================================
 
     if (
         mot === motSecret
     ) {
 
-        partieTerminee =
-            true;
+        partieTerminee = true;
 
 
         musiqueJeu.pause();
 
-        musiqueJeu.currentTime =
-            0;
+        musiqueJeu.currentTime = 0;
 
 
-        musiqueVictoire.currentTime =
-            0;
+        musiqueVictoire.currentTime = 0;
 
         musiqueVictoire.play()
-            .catch(
-                function() {}
-            );
+            .catch(function() {});
 
 
         for (
@@ -1045,6 +1061,7 @@ function validerMot() {
                 },
                 i * 100
             );
+
         }
 
 
@@ -1075,15 +1092,17 @@ function validerMot() {
     }
 
 
-    // =====================================
+    // =========================================
     // VÉRIFICATION DES LETTRES
-    // =====================================
+    // =========================================
 
     let lettresDisponibles =
         motSecret.split("");
 
 
-    // Vert
+    // -----------------------------------------
+    // LETTRES VERTES
+    // -----------------------------------------
 
     for (
         let i = 0;
@@ -1111,10 +1130,13 @@ function validerMot() {
             lettresDisponibles[i] =
                 null;
         }
+
     }
 
 
-    // Jaune / gris
+    // -----------------------------------------
+    // LETTRES JAUNES / GRISES
+    // -----------------------------------------
 
     for (
         let i = 0;
@@ -1157,7 +1179,9 @@ function validerMot() {
                 positionLettre
             ] = null;
 
-        } else {
+        }
+
+        else {
 
             cases[
                 debut + i
@@ -1170,42 +1194,39 @@ function validerMot() {
                 mot[i],
                 "gris"
             );
+
         }
+
     }
 
 
-    // =====================================
-    // PASSAGE À L'ESSAI SUIVANT
-    // =====================================
+    // =========================================
+    // PASSER À LA LIGNE SUIVANTE
+    // =========================================
 
     ligne++;
 
 
-    // =====================================
+    // =========================================
     // DÉFAITE
-    // =====================================
+    // =========================================
 
     if (
         ligne === 6
     ) {
 
-        partieTerminee =
-            true;
+        partieTerminee = true;
 
 
         musiqueJeu.pause();
 
-        musiqueJeu.currentTime =
-            0;
+        musiqueJeu.currentTime = 0;
 
 
-        musiqueDefaite.currentTime =
-            0;
+        musiqueDefaite.currentTime = 0;
 
         musiqueDefaite.play()
-            .catch(
-                function() {}
-            );
+            .catch(function() {});
 
 
         titreFin.textContent =
@@ -1235,7 +1256,7 @@ function validerMot() {
     position = 0;
 
 
-    // Chariot + montée
+    // Animation machine à écrire + montée
 
     animerChariot();
 }
@@ -1253,23 +1274,21 @@ boutonRejouer.addEventListener(
             "none";
 
 
-        partieTerminee =
-            false;
-
-        ligne = 0;
+        partieTerminee = false;
 
         position = 0;
+
+        ligne = 0;
 
         debut = 0;
 
 
-        // Effacer grille
+        // Effacer les cases
 
         cases.forEach(
             function(caseJeu) {
 
-                caseJeu.textContent =
-                    "";
+                caseJeu.textContent = "";
 
                 caseJeu.classList.remove(
                     "vert",
@@ -1278,11 +1297,12 @@ boutonRejouer.addEventListener(
                     "victoire",
                     "letter-animation"
                 );
+
             }
         );
 
 
-        // Réinitialiser clavier
+        // Réinitialiser le clavier
 
         touches.forEach(
             function(touche) {
@@ -1293,37 +1313,35 @@ boutonRejouer.addEventListener(
                     "gris",
                     "touche-appuyee"
                 );
+
             }
         );
 
 
-        // Musiques
+        // Arrêter les musiques
 
         musiqueJeu.pause();
 
-        musiqueJeu.currentTime =
-            0;
+        musiqueJeu.currentTime = 0;
 
 
         musiqueVictoire.pause();
 
-        musiqueVictoire.currentTime =
-            0;
+        musiqueVictoire.currentTime = 0;
 
 
         musiqueDefaite.pause();
 
-        musiqueDefaite.currentTime =
-            0;
+        musiqueDefaite.currentTime = 0;
 
 
-        // Chariot
+        // Cacher le chariot
 
         chariot.style.opacity =
             "0";
 
 
-        // Retour au départ
+        // Revenir à la position initiale
 
         initialiserGrille();
 
@@ -1331,6 +1349,7 @@ boutonRejouer.addEventListener(
         // Nouveau mot
 
         choisirNouveauMot();
+
     }
 );
 
@@ -1348,6 +1367,8 @@ window.addEventListener(
         ) {
 
             positionnerGrille(false);
+
         }
+
     }
 );
