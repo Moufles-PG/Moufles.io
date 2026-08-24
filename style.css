@@ -4,7 +4,7 @@
    ========================================= */
 
 @import url(
-    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&family=UnifrakturCook:wght@700&display=swap'
+    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Special+Elite&display=swap'
 );
 
 
@@ -215,10 +215,12 @@ h1::after {
     margin-top: 10px;
 
     font-family:
-        "Special Elite",
-        monospace;
+        "Cinzel",
+        serif;
 
-    font-size: 1rem;
+    font-size: 0.95rem;
+
+    letter-spacing: 0.05em;
 
     color: #514a3d;
 
@@ -295,12 +297,6 @@ h1::after {
     border:
         1px solid #aaa08b;
 
-    /*
-       Même couleur que le papier.
-       La case ne devient PAS blanche
-       quand on écrit une lettre.
-    */
-
     background:
         rgba(
             238,
@@ -316,14 +312,14 @@ h1::after {
     justify-content: center;
 
     /*
-       Police ancienne pour les lettres
+       Police machine à écrire
     */
 
     font-family:
-        "UnifrakturCook",
-        serif;
+        "Special Elite",
+        monospace;
 
-    font-size: 2.4rem;
+    font-size: 2rem;
 
     color: #29261f;
 
@@ -337,10 +333,8 @@ h1::after {
 
 
 /*
-   IMPORTANT :
-
-   On ne met plus de fond blanc
-   sur .case:not(:empty)
+   La case garde sa couleur papier
+   quand une lettre est écrite.
 */
 
 .case:not(:empty) {
@@ -436,7 +430,7 @@ h1::after {
 
 
 /* =========================================
-   VICTOIRE
+   VICTOIRE DES CASES
    ========================================= */
 
 .case.victoire {
@@ -566,7 +560,7 @@ h1::after {
         );
 
     /*
-       Police du clavier
+       Police machine à écrire
     */
 
     font-family:
@@ -606,6 +600,16 @@ h1::after {
         transform:
             translateY(0);
 
+        box-shadow:
+            0 3px 0 #a49a86,
+            0 4px 6px
+            rgba(
+                60,
+                50,
+                35,
+                0.18
+            );
+
     }
 
     45% {
@@ -613,12 +617,32 @@ h1::after {
         transform:
             translateY(3px);
 
+        box-shadow:
+            0 0 0 #a49a86,
+            0 1px 2px
+            rgba(
+                60,
+                50,
+                35,
+                0.12
+            );
+
     }
 
     100% {
 
         transform:
             translateY(0);
+
+        box-shadow:
+            0 3px 0 #a49a86,
+            0 4px 6px
+            rgba(
+                60,
+                50,
+                35,
+                0.18
+            );
 
     }
 
@@ -798,6 +822,10 @@ h1::after {
 
     margin: 0;
 
+    font-family:
+        "Cinzel",
+        serif;
+
     font-size: 4.5rem;
 
     font-weight: 600;
@@ -824,6 +852,10 @@ h1::after {
 }
 
 
+/* =========================================
+   TEXTE DE FIN
+   ========================================= */
+
 #texteFin {
 
     margin:
@@ -835,6 +867,8 @@ h1::after {
 
     font-size: 1.1rem;
 
+    letter-spacing: 0.04em;
+
     color: #514a3d;
 
 }
@@ -843,10 +877,10 @@ h1::after {
 #motFin {
 
     font-family:
-        "UnifrakturCook",
-        serif;
+        "Special Elite",
+        monospace;
 
-    font-size: 2.2rem;
+    font-size: 2rem;
 
     letter-spacing: 0.15em;
 
@@ -969,7 +1003,7 @@ h1::after {
 
         height: 57px;
 
-        font-size: 2rem;
+        font-size: 1.7rem;
 
     }
 
