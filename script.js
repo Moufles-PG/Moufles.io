@@ -8,6 +8,9 @@ let cases =
 let touches =
     document.querySelectorAll(".touche");
 
+let lignes =
+    document.querySelectorAll(".ligne");
+
 let message =
     document.querySelector("#message");
 
@@ -58,13 +61,23 @@ let motSecret = "";
 
 let partieTerminee = false;
 
+let animationEnCours = false;
+
+
+// =========================================
+// VOLUME
+// =========================================
+
+musiqueJeu.volume = 0.15;
+
+musiqueVictoire.volume = 0.25;
+
+musiqueDefaite.volume = 0.25;
+
 
 // =========================================
 // SONS
 // =========================================
-
-let sonChariot =
-    new Audio("Typewirter.mp3");
 
 let sonGood =
     new Audio("Good.mp3");
@@ -72,19 +85,15 @@ let sonGood =
 let sonFalse =
     new Audio("False.mp3");
 
+let sonChariot =
+    new Audio("Typewirter.mp3");
 
-sonChariot.volume = 0.25;
 
 sonGood.volume = 0.05;
 
 sonFalse.volume = 0.05;
 
-
-musiqueJeu.volume = 0.15;
-
-musiqueVictoire.volume = 0.25;
-
-musiqueDefaite.volume = 0.25;
+sonChariot.volume = 0.25;
 
 
 // =========================================
@@ -254,7 +263,8 @@ function mettreAJourClavier(
 function ecrireLettre(lettre) {
 
     if (
-        partieTerminee
+        partieTerminee ||
+        animationEnCours
     ) {
 
         return;
@@ -289,7 +299,7 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Son touche
+    // Son
 
     if (
         touche &&
@@ -317,7 +327,7 @@ function ecrireLettre(lettre) {
     }
 
 
-    // Écrire
+    // Écrire la lettre
 
     let caseActuelle =
         cases[
@@ -329,7 +339,7 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // Animation lettre
+    // Animation de la lettre
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -342,15 +352,14 @@ function ecrireLettre(lettre) {
     );
 
 
-    // Animation clavier
+    // Animation du clavier
 
     animerTouche(
         lettre
     );
 
 
-    // Musique à partir
-    // de la première lettre
+    // Musique dès la première lettre
 
     if (
         musiqueJeu.paused
@@ -379,7 +388,8 @@ document.addEventListener(
 
 
         if (
-            partieTerminee
+            partieTerminee ||
+            animationEnCours
         ) {
 
             return;
@@ -387,7 +397,7 @@ document.addEventListener(
         }
 
 
-        // LETTRE
+        // Lettre
 
         if (
             event.key.length === 1
@@ -415,7 +425,7 @@ document.addEventListener(
         }
 
 
-        // BACKSPACE
+        // Retour arrière
 
         if (
             event.key === "Backspace"
@@ -429,7 +439,8 @@ document.addEventListener(
 
                 cases[
                     debut + position
-                ].textContent = "";
+                ].textContent =
+                    "";
 
             }
 
@@ -439,7 +450,7 @@ document.addEventListener(
         }
 
 
-        // ENTRÉE
+        // Entrée
 
         if (
             event.key === "Enter"
@@ -541,7 +552,7 @@ fetch("mots.txt")
 
 
 // =========================================
-// CHOISIR LE MOT
+// CHOISIR UN MOT
 // =========================================
 
 function choisirNouveauMot() {
@@ -573,37 +584,78 @@ function choisirNouveauMot() {
 
 
 // =========================================
+// ANIMATION DE LA FEUILLE
+// =========================================
+
+function faireMonterLaFeuille() {
+
+    /*
+       Chaque ligne mesure :
+
+       65 px de hauteur
+       + 9 px d'espace
+
+       = 74 px
+    */
+
+    let decalage =
+        74 -
+        (ligne * 74);
+
+
+    return grille.animate(
+        [
+            {
+                transform:
+                    "translateY(" +
+                    (74 - ((ligne - 1) * 74)) +
+                    "px)"
+            },
+
+            {
+                transform:
+                    "translateY(" +
+                    (decalage + 8) +
+                    "px)"
+            },
+
+            {
+                transform:
+                    "translateY(" +
+                    decalage +
+                    "px)"
+            }
+        ],
+        {
+            duration: 600,
+
+            easing:
+                "cubic-bezier(0.22, 0.61, 0.36, 1)",
+
+            fill: "forwards"
+        }
+    );
+
+}
+
+
+// =========================================
 // ANIMATION DU CHARIOT
 // =========================================
 
 function animerChariot() {
 
     if (
-        !chariot ||
-        !grille
+        !lignes[ligne]
     ) {
 
         return Promise.resolve();
 
     }
 
-
-    // On récupère la ligne
-    // qui vient d'être écrite
 
     let ligneActuelle =
-        document.querySelectorAll(
-            ".ligne"
-        )[ligne];
-
-
-    if (
-        !ligneActuelle
-    ) {
-
-        return Promise.resolve();
-
-    }
+        lignes[ligne];
 
 
     let premiereCase =
@@ -630,15 +682,11 @@ function animerChariot() {
         derniereCase.getBoundingClientRect();
 
 
-    // Position de départ
-
     let depart =
         premiereRect.left -
         grilleRect.left -
         8;
 
-
-    // Position d'arrivée
 
     let arrivee =
         derniereRect.right -
@@ -655,6 +703,7 @@ function animerChariot() {
     chariot.style.left =
         depart + "px";
 
+
     chariot.style.top =
         haut + "px";
 
@@ -663,17 +712,18 @@ function animerChariot() {
         "0.85";
 
 
-    // -----------------------------------------
-    // Animation du chariot
-    // -----------------------------------------
+    // =====================================
+    // CHARIOT PART À DROITE
+    // =====================================
 
-    let animationDroite =
+    let aller =
         chariot.animate(
             [
                 {
                     left:
                         depart + "px"
                 },
+
                 {
                     left:
                         arrivee + "px"
@@ -690,9 +740,10 @@ function animerChariot() {
         );
 
 
-    // Petit bruit mécanique
+    // Son de machine à écrire
 
-    sonChariot.currentTime = 0;
+    sonChariot.currentTime =
+        0;
 
     sonChariot.play()
         .catch(
@@ -700,22 +751,24 @@ function animerChariot() {
         );
 
 
-    return animationDroite.finished
+    return aller.finished
 
         .then(
             function() {
 
-
-                // ---------------------------------
-                // Le chariot est arrivé à droite
-                // ---------------------------------
+                /*
+                   Petit arrêt à droite.
+                   C'est le moment où une vraie
+                   machine à écrire attend avant
+                   de faire revenir le chariot.
+                */
 
                 return new Promise(
                     function(resolve) {
 
                         setTimeout(
                             resolve,
-                            70
+                            80
                         );
 
                     }
@@ -727,25 +780,30 @@ function animerChariot() {
         .then(
             function() {
 
-
-                // ---------------------------------
+                // =================================
                 // RETOUR DU CHARIOT
-                // ---------------------------------
+                // =================================
 
-                let animationRetour =
+                let retour =
                     chariot.animate(
                         [
                             {
                                 left:
                                     arrivee + "px"
                             },
+
+                            {
+                                left:
+                                    arrivee + 5 + "px"
+                            },
+
                             {
                                 left:
                                     depart + "px"
                             }
                         ],
                         {
-                            duration: 400,
+                            duration: 430,
 
                             easing:
                                 "cubic-bezier(0.55, 0.05, 0.68, 0.19)",
@@ -755,22 +813,18 @@ function animerChariot() {
                     );
 
 
-                // ---------------------------------
-                // Le papier monte en même temps
-                // ---------------------------------
+                // =================================
+                // LA FEUILLE MONTE
+                // =================================
 
-                grille.classList.remove(
-                    "papier-avance"
-                );
-
-                void grille.offsetWidth;
-
-                grille.classList.add(
-                    "papier-avance"
-                );
+                let feuille =
+                    faireMonterLaFeuille();
 
 
-                return animationRetour.finished;
+                return Promise.all([
+                    retour.finished,
+                    feuille.finished
+                ]);
 
             }
         )
@@ -803,7 +857,8 @@ function animerChariot() {
 function validerMot() {
 
     if (
-        partieTerminee
+        partieTerminee ||
+        animationEnCours
     ) {
 
         return;
@@ -951,7 +1006,7 @@ function validerMot() {
 
 
     // =========================================
-    // VÉRIFICATION
+    // VÉRIFICATION DES LETTRES
     // =========================================
 
     let lettresDisponibles =
@@ -991,7 +1046,7 @@ function validerMot() {
     }
 
 
-    // Lettres jaunes / grises
+    // Lettres jaunes ou grises
 
     for (
         let i = 0;
@@ -1058,7 +1113,7 @@ function validerMot() {
 
 
     // =========================================
-    // PASSAGE À LA LIGNE
+    // PASSAGE À LA LIGNE SUIVANTE
     // =========================================
 
     ligne++;
@@ -1112,17 +1167,31 @@ function validerMot() {
     }
 
 
-    // -----------------------------------------
-    // On anime avant de changer de ligne
-    // -----------------------------------------
+    // =========================================
+    // ANIMATION MACHINE À ÉCRIRE
+    // =========================================
+
+    animationEnCours =
+        true;
+
 
     animerChariot()
+
         .then(
             function() {
+
+                /*
+                   On ne permet de taper le mot
+                   suivant qu'une fois que la
+                   feuille a fini de monter.
+                */
 
                 debut += 5;
 
                 position = 0;
+
+                animationEnCours =
+                    false;
 
             }
         );
@@ -1139,9 +1208,13 @@ boutonRejouer.addEventListener(
     function() {
 
 
+        // Écran de fin
+
         ecranFin.style.display =
             "none";
 
+
+        // Variables
 
         position = 0;
 
@@ -1152,8 +1225,13 @@ boutonRejouer.addEventListener(
         partieTerminee =
             false;
 
+        animationEnCours =
+            false;
 
-        // Effacer grille
+
+        // =====================================
+        // EFFACER GRILLE
+        // =====================================
 
         cases.forEach(
             function(caseJeu) {
@@ -1173,7 +1251,27 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Réinitialiser clavier
+        // =====================================
+        // REPLACER LA FEUILLE
+        // =====================================
+
+        grille.getAnimations()
+            .forEach(
+                function(animation) {
+
+                    animation.cancel();
+
+                }
+            );
+
+
+        grille.style.transform =
+            "translateY(74px)";
+
+
+        // =====================================
+        // RÉINITIALISER CLAVIER
+        // =====================================
 
         touches.forEach(
             function(touche) {
@@ -1189,7 +1287,9 @@ boutonRejouer.addEventListener(
         );
 
 
-        // Musiques
+        // =====================================
+        // ARRÊTER MUSIQUES
+        // =====================================
 
         musiqueJeu.pause();
 
@@ -1209,13 +1309,21 @@ boutonRejouer.addEventListener(
             0;
 
 
-        // Chariot
+        // =====================================
+        // CHARIOT
+        // =====================================
 
         chariot.style.opacity =
             "0";
 
 
-        // Nouveau mot
+        chariot.style.left =
+            "8px";
+
+
+        // =====================================
+        // NOUVEAU MOT
+        // =====================================
 
         choisirNouveauMot();
 
