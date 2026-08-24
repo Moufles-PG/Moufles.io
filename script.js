@@ -607,7 +607,6 @@ function mettreAJourLignesVisibles() {
     );
 }
 
-
 // =========================================
 // POSITION DE LA GRILLE
 // =========================================
@@ -615,16 +614,12 @@ function mettreAJourLignesVisibles() {
 function obtenirPosition() {
 
     /*
-       Position de départ :
-       grille très basse.
+       On veut que la ligne actuelle soit
+       toujours visible.
 
-       Position finale :
-       grille très haute.
-
-       La progression se fait sur
-       les six essais.
+       On calcule donc la position de la
+       feuille à partir de la ligne active.
     */
-
 
     let hauteurZone =
         zoneGrille.clientHeight;
@@ -634,46 +629,75 @@ function obtenirPosition() {
         feuille.scrollHeight;
 
 
-    /*
-       Position basse.
+    let hauteurLigne =
+        76 + 15;
 
-       On place le bas de la feuille
-       près du clavier.
+
+    /*
+       Position de la ligne actuelle
+       dans la feuille.
     */
 
-    let positionBasse =
+    let positionLigne =
+        ligne * hauteurLigne;
+
+
+    /*
+       On place la ligne active assez bas
+       dans la zone.
+
+       Au fil des essais, elle remonte
+       progressivement.
+    */
+
+    let margeBas =
+        55;
+
+
+    let positionVoulue =
         hauteurZone -
-        hauteurFeuille;
+        margeBas -
+        positionLigne -
+        76;
 
 
     /*
-       Position haute.
-
-       Au sixième essai,
-       le haut de la grille arrive
-       près du message.
+       Pour les derniers essais, on évite
+       que la grille dépasse le haut.
     */
 
-    let positionHaute =
-        -35;
+    let limiteHaut =
+        -20;
+
+
+    if (
+        positionVoulue < limiteHaut
+    ) {
+
+        positionVoulue =
+            limiteHaut;
+    }
 
 
     /*
-       Progression de 0 à 5.
+       On évite également que la première
+       ligne parte trop bas.
     */
 
-    let progression =
-        ligne / 5;
+    let limiteBas =
+        hauteurZone - 120;
 
 
-    return (
-        positionBasse +
-        (
-            positionHaute -
-            positionBasse
-        ) *
-        progression
-    );
+    if (
+        positionVoulue > limiteBas
+    ) {
+
+        positionVoulue =
+            limiteBas;
+    }
+
+
+    return positionVoulue;
 }
 
 
@@ -683,26 +707,20 @@ function obtenirPosition() {
 
 function positionInitiale() {
 
-    /*
-       On commence avec uniquement
-       trois lignes visibles.
-    */
-
     ligne = 0;
 
     mettreAJourLignesVisibles();
 
-
-    /*
-       On attend un tout petit peu que
-       le navigateur recalcule la hauteur.
-    */
 
     requestAnimationFrame(
         function() {
 
             let position =
                 obtenirPosition();
+
+
+            feuille.style.transition =
+                "none";
 
 
             feuille.style.transform =
@@ -713,7 +731,6 @@ function positionInitiale() {
         }
     );
 }
-
 
 // =========================================
 // MONTER LA GRILLE
