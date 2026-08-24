@@ -85,36 +85,6 @@ h1 {
 }
 
 
-/* =========================================
-   SOUS-TITRE
-   ========================================= */
-
-#sous-titre {
-    position: fixed;
-
-    top: 110px;
-    left: 50%;
-
-    transform:
-        translateX(-50%);
-
-    display: flex;
-
-    gap: 25px;
-
-    font-size: 1.25rem;
-
-    font-weight: 600;
-
-    letter-spacing: 0.12em;
-
-    color:
-        #bcae91;
-
-    z-index: 70;
-
-    white-space: nowrap;
-}
 
 
 /* =========================================
