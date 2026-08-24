@@ -425,7 +425,7 @@ function positionnerGrille(animation = false) {
     const positionDepart =
         hauteurFeuille -
         hauteurLigne +
-        20;
+        10;
 
 
     /*
