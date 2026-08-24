@@ -140,7 +140,7 @@ h1 {
 .feuille {
     position: absolute;
 
-    top: 0;
+    top: 20px;
     left: 50%;
 
     width: 455px;
