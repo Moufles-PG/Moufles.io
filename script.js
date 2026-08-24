@@ -41,6 +41,12 @@ let boutonRejouer =
 let feuille =
     document.querySelector(".feuille");
 
+let zoneGrille =
+    document.querySelector(".zone-grille");
+
+let clavier =
+    document.querySelector("#clavier");
+
 let chariot =
     document.querySelector("#chariot");
 
@@ -316,7 +322,7 @@ function ecrireLettre(lettre) {
         lettre;
 
 
-    // Animation
+    // Animation lettre
 
     caseActuelle.classList.remove(
         "letter-animation"
@@ -329,10 +335,12 @@ function ecrireLettre(lettre) {
     );
 
 
+    // Animation clavier
+
     animerTouche(lettre);
 
 
-    // Musique
+    // Musique du jeu
 
     if (
         musiqueJeu.paused
@@ -365,7 +373,7 @@ document.addEventListener(
         }
 
 
-        // Lettres
+        // Lettre
 
         if (
             event.key.length === 1
@@ -552,16 +560,13 @@ function mettreAJourLignesVisibles() {
         function(uneLigne, index) {
 
             /*
-               Début :
-               ligne 1 seulement.
+               Au début :
+               seule la ligne 1 est visible.
 
-               Après essai 1 :
-               lignes 1 + 2.
+               Après le premier essai :
+               ligne 2 apparaît.
 
-               Après essai 2 :
-               lignes 1 + 2 + 3.
-
-               etc.
+               Puis ligne 3, etc.
             */
 
             if (
@@ -584,35 +589,118 @@ function mettreAJourLignesVisibles() {
 
 
 // =========================================
+// CALCUL DE LA POSITION
+// =========================================
+
+function calculerPositions() {
+
+    /*
+       On récupère les positions réelles
+       du clavier et de la zone de grille.
+    */
+
+    let zoneRect =
+        zoneGrille.getBoundingClientRect();
+
+    let clavierRect =
+        clavier.getBoundingClientRect();
+
+
+    /*
+       Première position :
+
+       le bas de la première ligne doit
+       être à 10 px au-dessus du clavier.
+    */
+
+    let positionDepart =
+        clavierRect.top
+        - 10
+        - zoneRect.top;
+
+
+    /*
+       Dernière position :
+
+       le haut de la sixième ligne doit
+       être à 10 px sous la bannière
+       des messages.
+    */
+
+    let messageRect =
+        message.getBoundingClientRect();
+
+
+    let positionFin =
+        messageRect.bottom
+        + 10
+        - zoneRect.top;
+
+
+    /*
+       Hauteur d'une ligne.
+    */
+
+    let hauteurLigne =
+        lignes[0].getBoundingClientRect().height;
+
+
+    /*
+       La position de la feuille dépend
+       de son bord inférieur.
+
+       On corrige donc avec la hauteur
+       de la ligne.
+    */
+
+    positionDepart -= hauteurLigne;
+
+
+    /*
+       Distance totale entre les deux
+       positions.
+    */
+
+    let distance =
+        positionDepart
+        - positionFin;
+
+
+    /*
+       Il y a 5 déplacements :
+
+       1 → 2
+       2 → 3
+       3 → 4
+       4 → 5
+       5 → 6
+    */
+
+    let mouvement =
+        distance / 5;
+
+
+    return {
+        depart: positionDepart,
+        mouvement: mouvement
+    };
+}
+
+
+// =========================================
 // POSITION DE LA GRILLE
 // =========================================
 
 function positionGrille() {
 
-    /*
-       La grille monte progressivement.
-
-       La ligne active reste visible.
-    */
-
-    let positions = [
-
-        0,      // ligne 1
-
-        -90,    // ligne 2
-
-        -180,   // ligne 3
-
-        -270,   // ligne 4
-
-        -360,   // ligne 5
-
-        -450    // ligne 6
-
-    ];
+    let positions =
+        calculerPositions();
 
 
-    return positions[ligne];
+    return (
+        positions.depart
+        - positions.mouvement * ligne
+    );
 }
 
 
@@ -632,12 +720,22 @@ function remettreGrilleAuDepart() {
     mettreAJourLignesVisibles();
 
 
-    feuille.style.transition =
-        "none";
+    /*
+       On attend que le navigateur ait
+       recalculé les dimensions.
+    */
+
+    requestAnimationFrame(
+        function() {
+
+            feuille.style.transition =
+                "none";
 
 
-    feuille.style.transform =
-        "translateX(-50%) translateY(0px)";
+            feuille.style.transform =
+                `translateX(-50%) translateY(${positionGrille()}px)`;
+        }
+    );
 }
 
 
@@ -648,16 +746,11 @@ function remettreGrilleAuDepart() {
 function monterGrille() {
 
     /*
-       La nouvelle ligne apparaît.
+       La nouvelle ligne devient visible.
     */
 
     mettreAJourLignesVisibles();
 
-
-    /*
-       On laisse le navigateur prendre
-       en compte son apparition.
-    */
 
     requestAnimationFrame(
         function() {
@@ -682,10 +775,6 @@ function monterGrille() {
 // =========================================
 
 function animerChariot() {
-
-    /*
-       Ligne venant d'être validée.
-    */
 
     let ligneValidee =
         lignes[
@@ -725,21 +814,21 @@ function animerChariot() {
 
 
     let depart =
-        premiereRect.left -
-        feuilleRect.left -
-        8;
+        premiereRect.left
+        - feuilleRect.left
+        - 8;
 
 
     let arrivee =
-        derniereRect.right -
-        feuilleRect.left +
-        8;
+        derniereRect.right
+        - feuilleRect.left
+        + 8;
 
 
     let haut =
-        premiereRect.top -
-        feuilleRect.top -
-        4;
+        premiereRect.top
+        - feuilleRect.top
+        - 4;
 
 
     chariot.style.left =
@@ -752,8 +841,6 @@ function animerChariot() {
         "1";
 
 
-    // Son machine à écrire
-
     sonChariot.currentTime =
         0;
 
@@ -763,11 +850,8 @@ function animerChariot() {
         );
 
 
-    // Aller
-
     let aller =
         chariot.animate(
-
             [
                 {
                     left:
@@ -779,7 +863,6 @@ function animerChariot() {
                         arrivee + "px"
                 }
             ],
-
             {
                 duration: 450,
 
@@ -796,13 +879,8 @@ function animerChariot() {
         .then(
             function() {
 
-                /*
-                   Retour du chariot.
-                */
-
                 let retour =
                     chariot.animate(
-
                         [
                             {
                                 left:
@@ -814,7 +892,6 @@ function animerChariot() {
                                     depart + "px"
                             }
                         ],
-
                         {
                             duration: 320,
 
@@ -826,10 +903,6 @@ function animerChariot() {
                         }
                     );
 
-
-                /*
-                   Et la feuille monte.
-                */
 
                 monterGrille();
 
@@ -996,7 +1069,7 @@ function validerMot() {
 
 
     // =====================================
-    // LETTRES DISPONIBLES
+    // VÉRIFICATION DES LETTRES
     // =====================================
 
     let lettresDisponibles =
@@ -1034,7 +1107,7 @@ function validerMot() {
     }
 
 
-    // Lettres jaunes / grises
+    // Lettres jaunes ou grises
 
     for (
         let i = 0;
@@ -1095,7 +1168,7 @@ function validerMot() {
 
 
     // =====================================
-    // ESSAI SUIVANT
+    // PASSER À LA LIGNE SUIVANTE
     // =====================================
 
     ligne++;
@@ -1149,17 +1222,19 @@ function validerMot() {
 
 
     // =====================================
-    // CHARIOT + MONTÉE
+    // NOUVELLE LIGNE
     // =====================================
-
-    animerChariot();
-
-
-    // Nouvelle ligne
 
     debut += 5;
 
     position = 0;
+
+
+    /*
+       Animation du chariot puis montée.
+    */
+
+    animerChariot();
 }
 
 
@@ -1245,7 +1320,7 @@ boutonRejouer.addEventListener(
             "0";
 
 
-        // Retour au départ
+        // Replacer la grille
 
         remettreGrilleAuDepart();
 
@@ -1253,5 +1328,28 @@ boutonRejouer.addEventListener(
         // Nouveau mot
 
         choisirNouveauMot();
+    }
+);
+
+
+// =========================================
+// RECALCUL SI LA FENÊTRE CHANGE
+// =========================================
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (
+            !partieTerminee
+        ) {
+
+            feuille.style.transition =
+                "none";
+
+
+            feuille.style.transform =
+                `translateX(-50%) translateY(${positionGrille()}px)`;
+        }
     }
 );
