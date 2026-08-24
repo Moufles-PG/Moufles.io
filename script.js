@@ -2,11 +2,17 @@
 // ÉLÉMENTS
 // =========================================
 
-let cases = document.querySelectorAll(".case");
-let touches = document.querySelectorAll(".touche");
-let lignes = document.querySelectorAll(".ligne");
+let cases =
+    document.querySelectorAll(".case");
 
-let message = document.querySelector("#message");
+let touches =
+    document.querySelectorAll(".touche");
+
+let lignes =
+    document.querySelectorAll(".ligne");
+
+let message =
+    document.querySelector("#message");
 
 let musiqueJeu =
     document.querySelector("#musiqueJeu");
@@ -301,8 +307,7 @@ function ecrireLettre(lettre) {
     animerTouche(lettre);
 
 
-    // La musique démarre uniquement
-    // quand la première lettre est écrite.
+    // La musique commence à la première lettre
 
     if (
         musiqueJeu.paused
@@ -333,6 +338,8 @@ document.addEventListener(
         }
 
 
+        // Lettre
+
         if (
             event.key.length === 1
         ) {
@@ -354,6 +361,8 @@ document.addEventListener(
             return;
         }
 
+
+        // Retour arrière
 
         if (
             event.key === "Backspace"
@@ -380,6 +389,8 @@ document.addEventListener(
             return;
         }
 
+
+        // Entrée
 
         if (
             event.key === "Enter"
@@ -498,29 +509,29 @@ function choisirNouveauMot() {
 
 
 // =========================================
-// CALCUL DE LA FEUILLE
+// CALCULER LE DÉPLACEMENT
 // =========================================
 //
-// On cherche deux positions.
+// IMPORTANT :
 //
-// 1. Position de départ :
-//    ligne 1 juste au-dessus du clavier.
+// On travaille maintenant uniquement
+// dans la zone-grille.
 //
-// 2. Position finale :
-//    ligne 6 juste sous les messages.
+// La grille est une feuille qui passe
+// derrière cette zone.
 //
-// Ensuite on répartit le déplacement
-// sur les 5 passages.
+// Au départ :
+// le bas de la ligne 1 = bas de la zone.
+//
+// À la fin :
+// le haut de la ligne 6 = haut de la zone.
+//
 // =========================================
 
-function calculerMouvement() {
+function calculerPositions() {
 
-    let clavierRect =
-        clavier.getBoundingClientRect();
-
-
-    let messageRect =
-        message.getBoundingClientRect();
+    let zoneRect =
+        zoneGrille.getBoundingClientRect();
 
 
     let ligneRect =
@@ -531,73 +542,93 @@ function calculerMouvement() {
         ligneRect.height;
 
 
-    let espaceEntreLignes =
+    /*
+       Espace entre deux lignes.
+    */
+
+    let styleGrille =
+        getComputedStyle(grille);
+
+
+    let espace =
         parseFloat(
-            getComputedStyle(grille).rowGap
-        );
+            styleGrille.rowGap
+        ) || 0;
 
 
     /*
-       La première ligne commence
-       10 px au-dessus du clavier.
+       Hauteur d'une ligne
+       + espace avant la suivante.
+    */
+
+    let pas =
+        hauteurLigne + espace;
+
+
+    /*
+       Position de départ.
+
+       La grille est positionnée avec son
+       haut comme référence.
+
+       Pour que le BAS de la ligne 1
+       arrive au BAS de la zone :
+
+       position = hauteur zone - hauteur ligne
     */
 
     let depart =
-        clavierRect.top
-        -
-        10
+        zoneRect.height
         -
         hauteurLigne;
 
 
     /*
-       La sixième ligne doit terminer
-       10 px sous les messages.
+       Position finale.
+
+       Pour que le HAUT de la ligne 6
+       arrive au HAUT de la zone :
+
+       on remonte de 5 pas.
     */
 
     let finale =
-        messageRect.bottom
-        +
-        10;
+        0
+        -
+        (
+            5 * pas
+        );
 
 
     /*
-       Distance que doit parcourir
-       la ligne actuelle entre l'essai 1
-       et l'essai 6.
+       On veut que le déplacement soit
+       réparti sur les 5 passages.
+
+       Exemple :
+
+       essai 1 = départ
+       essai 2 = + 1/5
+       essai 3 = + 2/5
+       ...
+       essai 6 = finale
     */
 
-    let monteeTotale =
-        depart - finale;
-
-
-    /*
-       5 déplacements :
-       1 → 2
-       2 → 3
-       3 → 4
-       4 → 5
-       5 → 6
-    */
-
-    let monteeParTour =
-        monteeTotale / 5;
-
-
-    /*
-       Distance physique entre deux lignes.
-    */
-
-    let hauteurPas =
-        hauteurLigne
-        +
-        espaceEntreLignes;
+    let deplacementParTour =
+        (
+            finale - depart
+        ) / 5;
 
 
     return {
-        depart,
-        monteeParTour,
-        hauteurPas
+
+        depart:
+            depart,
+
+        deplacementParTour:
+            deplacementParTour,
+
+        pas:
+            pas
     };
 }
 
@@ -606,42 +637,30 @@ function calculerMouvement() {
 // POSITIONNER LA FEUILLE
 // =========================================
 
-function positionnerGrille(animation) {
+function positionnerGrille(
+    animation
+) {
 
-    let mouvement =
-        calculerMouvement();
+    let positions =
+        calculerPositions();
 
 
     /*
-       La ligne actuelle doit se trouver
-       à une hauteur de plus en plus élevée.
+       La grille part de la position
+       correcte pour l'essai 1.
 
-       Pour cela, on déplace la feuille
-       de :
-
-       déplacement naturel des lignes
-       +
-       montée supplémentaire.
+       Puis elle monte d'un cinquième
+       de la distance disponible à chaque
+       nouvel essai.
     */
 
-    let deplacement =
-        (
-            ligne
-            *
-            mouvement.hauteurPas
-        )
+    let positionVerticale =
+        positions.depart
         +
         (
-            ligne
-            *
-            mouvement.monteeParTour
+            ligne *
+            positions.deplacementParTour
         );
-
-
-    let positionFinale =
-        mouvement.depart
-        -
-        deplacement;
 
 
     if (
@@ -649,7 +668,7 @@ function positionnerGrille(animation) {
     ) {
 
         grille.style.transition =
-            "transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1)";
+            "transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1)";
 
     }
 
@@ -663,7 +682,7 @@ function positionnerGrille(animation) {
     grille.style.transform =
         `
         translateX(-50%)
-        translateY(${positionFinale}px)
+        translateY(${positionVerticale}px)
         `;
 }
 
@@ -672,28 +691,25 @@ function positionnerGrille(animation) {
 // LIGNES VISIBLES
 // =========================================
 //
-// On ne fait apparaître une ligne
-// que lorsqu'elle sort réellement
-// de la machine.
+// Au début :
+// ligne 1 uniquement.
+//
+// Après le premier essai :
+// lignes 1 + 2.
+//
+// Après le deuxième :
+// lignes 1 + 2 + 3.
+//
+// etc.
+//
+// Les anciennes lignes ne disparaissent
+// JAMAIS.
 // =========================================
 
 function mettreAJourLignesVisibles() {
 
     lignes.forEach(
         function(uneLigne, index) {
-
-            /*
-               Au début :
-               index 0 uniquement.
-
-               Après essai 1 :
-               lignes 0 et 1.
-
-               Après essai 2 :
-               lignes 0, 1 et 2.
-
-               etc.
-            */
 
             if (
                 index <= ligne
@@ -724,18 +740,23 @@ function mettreAJourLignesVisibles() {
 function initialiserGrille() {
 
     position = 0;
+
     ligne = 0;
+
     debut = 0;
 
 
     /*
-       Au tout début :
-       seule la première ligne existe
-       visuellement.
+       Seulement la ligne 1 est visible.
     */
 
     mettreAJourLignesVisibles();
 
+
+    /*
+       On attend que le navigateur ait
+       calculé les dimensions.
+    */
 
     requestAnimationFrame(
         function() {
@@ -748,15 +769,10 @@ function initialiserGrille() {
 
 
 // =========================================
-// CHARIOT
+// ANIMATION DU CHARIOT
 // =========================================
 
 function animerChariot() {
-
-    /*
-       On fait bouger le chariot
-       pendant que la feuille avance.
-    */
 
     let ancienneLigne =
         lignes[
@@ -829,6 +845,10 @@ function animerChariot() {
         "1";
 
 
+    /*
+       Son de machine à écrire.
+    */
+
     sonChariot.currentTime = 0;
 
     sonChariot.play()
@@ -836,7 +856,7 @@ function animerChariot() {
 
 
     /*
-       Aller vers la droite.
+       Chariot vers la droite.
     */
 
     let mouvement =
@@ -866,7 +886,7 @@ function animerChariot() {
         function() {
 
             /*
-               Petit retour du chariot.
+               Retour du chariot.
             */
 
             chariot.animate(
@@ -882,7 +902,7 @@ function animerChariot() {
                     }
                 ],
                 {
-                    duration: 280,
+                    duration: 300,
 
                     easing: "ease-in-out",
 
@@ -892,23 +912,17 @@ function animerChariot() {
 
 
             /*
-               La feuille avance
-               juste après le mouvement
-               du chariot.
+               La nouvelle ligne apparaît
+               puis la feuille monte.
             */
+
+            mettreAJourLignesVisibles();
+
 
             requestAnimationFrame(
                 function() {
 
-                    mettreAJourLignesVisibles();
-
-                    requestAnimationFrame(
-                        function() {
-
-                            positionnerGrille(true);
-
-                        }
-                    );
+                    positionnerGrille(true);
 
                 }
             );
@@ -921,7 +935,7 @@ function animerChariot() {
                         "0";
 
                 },
-                300
+                350
             );
 
         }
@@ -943,6 +957,8 @@ function validerMot() {
     }
 
 
+    // Pas assez de lettres
+
     if (
         position < 5
     ) {
@@ -954,6 +970,8 @@ function validerMot() {
         return;
     }
 
+
+    // Construire le mot
 
     let mot = "";
 
@@ -968,8 +986,11 @@ function validerMot() {
             cases[
                 debut + i
             ].textContent;
+
     }
 
+
+    // Mot inexistant
 
     if (
         !mots.includes(mot)
@@ -1072,6 +1093,8 @@ function validerMot() {
         motSecret.split("");
 
 
+    // Lettres vertes
+
     for (
         let i = 0;
         i < 5;
@@ -1097,10 +1120,13 @@ function validerMot() {
 
             lettresDisponibles[i] =
                 null;
+
         }
 
     }
 
+
+    // Lettres jaunes / grises
 
     for (
         let i = 0;
@@ -1165,7 +1191,7 @@ function validerMot() {
 
 
     // =========================================
-    // PASSAGE À LA LIGNE SUIVANTE
+    // PASSER À LA LIGNE SUIVANTE
     // =========================================
 
     ligne++;
@@ -1218,10 +1244,7 @@ function validerMot() {
     position = 0;
 
 
-    /*
-       Maintenant la nouvelle ligne
-       sort de la machine.
-    */
+    // Faire sortir la nouvelle ligne
 
     animerChariot();
 }
@@ -1248,6 +1271,8 @@ boutonRejouer.addEventListener(
         debut = 0;
 
 
+        // Effacer les cases
+
         cases.forEach(
             function(caseJeu) {
 
@@ -1265,6 +1290,8 @@ boutonRejouer.addEventListener(
         );
 
 
+        // Réinitialiser le clavier
+
         touches.forEach(
             function(touche) {
 
@@ -1279,6 +1306,8 @@ boutonRejouer.addEventListener(
         );
 
 
+        // Arrêter les musiques
+
         musiqueJeu.pause();
         musiqueJeu.currentTime = 0;
 
@@ -1289,11 +1318,19 @@ boutonRejouer.addEventListener(
         musiqueDefaite.currentTime = 0;
 
 
+        // Cacher le chariot
+
         chariot.style.opacity =
             "0";
 
 
+        // Remettre la feuille
+        // dans sa position de départ
+
         initialiserGrille();
+
+
+        // Nouveau mot
 
         choisirNouveauMot();
 
