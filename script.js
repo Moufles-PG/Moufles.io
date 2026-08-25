@@ -598,7 +598,7 @@ function validerMot() {
     ) {
 
         afficherMessage(
-            "Pas assez de lettres."
+            "Not enough letters."
         );
 
         return;
@@ -628,7 +628,7 @@ function validerMot() {
     ) {
 
         afficherMessage(
-            "Ce mot n'existe pas"
+            "Not a word"
         );
 
 
