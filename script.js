@@ -1,6 +1,4 @@
-// =========================================
-// ÉLÉMENTS
-// =========================================
+// Éléments
 
 const cases = document.querySelectorAll(".case");
 const touches = document.querySelectorAll(".touche");
@@ -8,43 +6,23 @@ const lignes = document.querySelectorAll(".ligne");
 
 const grille = document.querySelector(".feuille");
 const clavier = document.querySelector("#clavier");
-
 const message = document.querySelector("#message");
 
-const musiqueJeu =
-    document.querySelector("#musiqueJeu");
+const musiqueJeu = document.querySelector("#musiqueJeu");
+const musiqueVictoire = document.querySelector("#musiqueVictoire");
+const musiqueDefaite = document.querySelector("#musiqueDefaite");
 
-const musiqueVictoire =
-    document.querySelector("#musiqueVictoire");
-
-const musiqueDefaite =
-    document.querySelector("#musiqueDefaite");
-
-const ecranFin =
-    document.querySelector("#ecranFin");
-
-const titreFin =
-    document.querySelector("#titreFin");
-
-const texteFin =
-    document.querySelector("#texteFin");
-
-const motFin =
-    document.querySelector("#motFin");
-
-const boutonRejouer =
-    document.querySelector("#boutonRejouer");
+const ecranFin = document.querySelector("#ecranFin");
+const titreFin = document.querySelector("#titreFin");
+const texteFin = document.querySelector("#texteFin");
+const motFin = document.querySelector("#motFin");
+const boutonRejouer = document.querySelector("#boutonRejouer");
 
 
-// =========================================
-// SONS
-// =========================================
+// Sons
 
-const sonGood =
-    new Audio("Good.mp3");
-
-const sonFalse =
-    new Audio("False.mp3");
+const sonGood = new Audio("Good.mp3");
+const sonFalse = new Audio("False.mp3");
 
 sonGood.volume = 0.05;
 sonFalse.volume = 0.05;
@@ -54,9 +32,7 @@ musiqueVictoire.volume = 0.25;
 musiqueDefaite.volume = 0.25;
 
 
-// =========================================
-// VARIABLES
-// =========================================
+// Variables
 
 let position = 0;
 let ligneActuelle = 0;
@@ -66,922 +42,488 @@ let mots = [];
 let motSecret = "";
 
 let partieTerminee = false;
-
 let positionGrille = 0;
 
 
-// =========================================
-// POSITION INITIALE
-// =========================================
+// Grille
 
 function positionInitialeGrille() {
 
-    const rectClavier =
-        clavier.getBoundingClientRect();
+    const clavierTop = clavier.getBoundingClientRect().top;
+    const hauteurLigne = lignes[0].getBoundingClientRect().height;
 
-    const hauteurLigne =
-        lignes[0].getBoundingClientRect().height;
-
-    const styleGrille =
-        getComputedStyle(grille);
-
-    const gap =
-        parseFloat(
-            styleGrille.rowGap ||
-            styleGrille.gap
-        ) || 0;
-
-
-    /*
-        On place le bas de la ligne 1
-        au milieu du gap.
-
-        Puis on remonte encore légèrement
-        la grille de 20 px.
-    */
-
-    const margeSupplementaire = +20
-    ;
-
-    const basLigne =
-        rectClavier.top -
-        (gap / 2) -
-        margeSupplementaire;
-
-
-    const hautLigne =
-        basLigne -
-        hauteurLigne;
-
+    const gap = parseFloat(
+        getComputedStyle(grille).gap
+    ) || 0;
 
     positionGrille =
-        hautLigne;
+        clavierTop -
+        gap / 2 -
+        20 -
+        hauteurLigne;
 
-
-    grille.style.transition =
-        "none";
-
+    grille.style.transition = "none";
 
     grille.style.transform =
         `translateX(-50%) translateY(${positionGrille}px)`;
 }
 
-
-// =========================================
-// MONTER D'UNE LIGNE
-// =========================================
 
 function monterGrille() {
 
     const hauteurLigne =
         lignes[0].getBoundingClientRect().height;
 
-    const styleGrille =
-        getComputedStyle(grille);
-
     const gap =
         parseFloat(
-            styleGrille.rowGap ||
-            styleGrille.gap
+            getComputedStyle(grille).gap
         ) || 0;
 
-
-    /*
-        Une montée = exactement :
-        hauteur d'une ligne + gap.
-    */
-
-    const pas =
-        hauteurLigne +
-        gap;
-
-
-    positionGrille -=
-        pas;
-
+    positionGrille -= hauteurLigne + gap;
 
     grille.style.transition =
         "transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)";
-
 
     grille.style.transform =
         `translateX(-50%) translateY(${positionGrille}px)`;
 }
 
 
-// =========================================
-// ENLEVER LES ACCENTS
-// =========================================
+// Texte
 
 function enleverAccents(texte) {
 
     return texte
         .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        );
+        .replace(/[\u0300-\u036f]/g, "");
 }
 
 
-// =========================================
-// MESSAGE
-// =========================================
-
 function afficherMessage(texte) {
 
-    message.textContent =
-        texte;
-
-    message.style.opacity =
-        "1";
-
+    message.textContent = texte;
+    message.style.opacity = "1";
 
     setTimeout(() => {
-
-        message.style.opacity =
-            "0";
-
+        message.style.opacity = "0";
     }, 1500);
 }
 
 
-// =========================================
-// ANIMATION TOUCHE
-// =========================================
+// Clavier
 
 function animerTouche(lettre) {
 
     touches.forEach(touche => {
 
-        if (
-            touche.textContent === lettre
-        ) {
+        if (touche.textContent === lettre) {
 
-            touche.classList.remove(
-                "touche-appuyee"
-            );
+            touche.classList.remove("touche-appuyee");
 
             void touche.offsetWidth;
 
-            touche.classList.add(
-                "touche-appuyee"
-            );
+            touche.classList.add("touche-appuyee");
         }
-
     });
 }
 
 
-// =========================================
-// COULEUR DU CLAVIER
-// =========================================
-
-function mettreAJourClavier(
-    lettre,
-    couleur
-) {
+function mettreAJourClavier(lettre, couleur) {
 
     touches.forEach(touche => {
 
-        if (
-            touche.textContent !== lettre
-        ) {
-            return;
-        }
+        if (touche.textContent !== lettre) return;
 
+        if (couleur === "vert") {
 
-        if (
-            couleur === "vert"
-        ) {
+            touche.classList.remove("jaune", "gris");
+            touche.classList.add("vert");
 
-            touche.classList.remove(
-                "jaune",
-                "gris"
-            );
+        } else if (couleur === "jaune") {
 
-            touche.classList.add(
-                "vert"
-            );
+            if (!touche.classList.contains("vert")) {
 
-        }
-
-
-        else if (
-            couleur === "jaune"
-        ) {
-
-            if (
-                !touche.classList.contains(
-                    "vert"
-                )
-            ) {
-
-                touche.classList.remove(
-                    "gris"
-                );
-
-                touche.classList.add(
-                    "jaune"
-                );
-
+                touche.classList.remove("gris");
+                touche.classList.add("jaune");
             }
 
-        }
-
-
-        else if (
-            couleur === "gris"
-        ) {
+        } else {
 
             if (
-                !touche.classList.contains(
-                    "vert"
-                ) &&
-                !touche.classList.contains(
-                    "jaune"
-                )
+                !touche.classList.contains("vert") &&
+                !touche.classList.contains("jaune")
             ) {
-
-                touche.classList.add(
-                    "gris"
-                );
-
+                touche.classList.add("gris");
             }
-
         }
-
     });
 }
 
 
-// =========================================
-// ÉCRIRE UNE LETTRE
-// =========================================
+// Écrire
 
 function ecrireLettre(lettre) {
 
-    if (
-        partieTerminee ||
-        position >= 5
-    ) {
-        return;
-    }
+    if (partieTerminee || position >= 5) return;
 
+    const caseActuelle = cases[debut + position];
 
-    const index =
-        debut +
-        position;
+    caseActuelle.textContent = lettre;
 
-
-    const caseActuelle =
-        cases[index];
-
-
-    caseActuelle.textContent =
-        lettre;
-
-
-    caseActuelle.classList.remove(
-        "letter-animation"
-    );
+    caseActuelle.classList.remove("letter-animation");
 
     void caseActuelle.offsetWidth;
 
-    caseActuelle.classList.add(
-        "letter-animation"
-    );
+    caseActuelle.classList.add("letter-animation");
 
-
-    animerTouche(
-        lettre
-    );
-
+    animerTouche(lettre);
 
     sonGood.currentTime = 0;
+    sonGood.play().catch(() => {});
 
-    sonGood.play().catch(
-        () => {}
-    );
-
-
-    if (
-        musiqueJeu.paused
-    ) {
-
-        musiqueJeu.play().catch(
-            () => {}
-        );
-
+    if (musiqueJeu.paused) {
+        musiqueJeu.play().catch(() => {});
     }
-
 
     position++;
 }
 
 
-// =========================================
-// CLAVIER PHYSIQUE
-// =========================================
+function effacerLettre() {
 
-document.addEventListener(
-    "keydown",
-    event => {
+    if (position === 0) return;
 
-        if (
-            partieTerminee
-        ) {
-            return;
-        }
+    position--;
 
+    const caseActuelle =
+        cases[debut + position];
 
-        if (
-            event.key.length === 1
-        ) {
+    caseActuelle.textContent = "";
 
-            const lettre =
-                enleverAccents(
-                    event.key.toUpperCase()
-                );
+    caseActuelle.classList.remove("letter-animation");
+}
 
 
-            if (
-                /^[A-Z]$/.test(
-                    lettre
-                )
-            ) {
+// Clavier physique
 
-                ecrireLettre(
-                    lettre
-                );
+document.addEventListener("keydown", event => {
 
-            }
+    if (partieTerminee) return;
 
-
-            return;
-        }
-
-
-        if (
-            event.key === "Backspace"
-        ) {
-
-            if (
-                position > 0
-            ) {
-
-                position--;
-
-
-                const caseActuelle =
-                    cases[
-                        debut +
-                        position
-                    ];
-
-
-                caseActuelle.textContent =
-                    "";
-
-
-                caseActuelle.classList.remove(
-                    "letter-animation"
-                );
-            }
-
-
-            return;
-        }
-
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            validerMot();
-
-        }
-
+    if (event.key === "Backspace") {
+        effacerLettre();
+        return;
     }
-);
 
-
-// =========================================
-// CLAVIER VIRTUEL
-// =========================================
-
-touches.forEach(
-    touche => {
-
-        touche.addEventListener(
-            "click",
-            () => {
-
-                ecrireLettre(
-                    touche.textContent
-                );
-
-            }
-        );
-
+    if (event.key === "Enter") {
+        validerMot();
+        return;
     }
-);
 
+    if (event.key.length === 1) {
 
-// =========================================
-// CHARGEMENT DU DICTIONNAIRE
-// =========================================
-
-fetch("mots.txt")
-
-    .then(response => {
-
-        if (
-            !response.ok
-        ) {
-
-            throw new Error(
-                "Impossible de charger mots.txt"
+        const lettre =
+            enleverAccents(
+                event.key.toUpperCase()
             );
 
+        if (/^[A-Z]$/.test(lettre)) {
+            ecrireLettre(lettre);
+        }
+    }
+});
+
+
+// Clavier virtuel
+
+touches.forEach(touche => {
+
+    touche.addEventListener("click", () => {
+        ecrireLettre(touche.textContent);
+    });
+
+});
+
+
+// Dictionnaire
+
+fetch("mots.txt")
+    .then(response => {
+
+        if (!response.ok) {
+            throw new Error("Impossible de charger mots.txt");
         }
 
-
         return response.text();
-
     })
 
     .then(texte => {
 
-        mots =
-            texte
-                .split(/\r?\n/)
-                .map(
-                    mot =>
-                        enleverAccents(
-                            mot
-                                .trim()
-                                .toUpperCase()
-                        )
+        mots = texte
+            .split(/\r?\n/)
+            .map(mot =>
+                enleverAccents(
+                    mot.trim().toUpperCase()
                 )
-                .filter(
-                    mot =>
-                        mot.length === 5
-                );
-
+            )
+            .filter(mot => mot.length === 5);
 
         choisirNouveauMot();
 
-
         requestAnimationFrame(() => {
-
             positionInitialeGrille();
-
         });
-
     })
 
     .catch(erreur => {
-
-        console.error(
-            "Erreur avec mots.txt :",
-            erreur
-        );
-
+        console.error(erreur);
     });
 
 
-// =========================================
-// CHOISIR UN NOUVEAU MOT
-// =========================================
+// Nouveau mot
 
 function choisirNouveauMot() {
-
-    if (
-        mots.length === 0
-    ) {
-        return;
-    }
-
 
     motSecret =
         mots[
             Math.floor(
-                Math.random() *
-                mots.length
+                Math.random() * mots.length
             )
         ];
 
-
-    console.log(
-        "Mot secret :",
-        motSecret
-    );
+    console.log("Mot secret :", motSecret);
 }
 
 
-// =========================================
-// VALIDER LE MOT
-// =========================================
+// Validation
 
 function validerMot() {
 
-    if (
-        partieTerminee
-    ) {
-        return;
-    }
+    if (partieTerminee) return;
 
+    if (position < 5) {
 
-    if (
-        position < 5
-    ) {
-
-        afficherMessage(
-            "Not enough letters."
-        );
+        afficherMessage("Not enough letters.");
 
         return;
     }
-
 
     let mot = "";
 
-
-    for (
-        let i = 0;
-        i < 5;
-        i++
-    ) {
-
-        mot +=
-            cases[
-                debut +
-                i
-            ].textContent;
-
+    for (let i = 0; i < 5; i++) {
+        mot += cases[debut + i].textContent;
     }
 
+    if (!mots.includes(mot)) {
 
-    if (
-        !mots.includes(mot)
-    ) {
-
-        afficherMessage(
-            "Not a word"
-        );
-
+        afficherMessage("Not a word");
 
         sonFalse.currentTime = 0;
-
-        sonFalse.play().catch(
-            () => {}
-        );
-
+        sonFalse.play().catch(() => {});
 
         return;
     }
 
 
-    // =====================================
-    // VICTOIRE
-    // =====================================
+    // Victoire
 
-    if (
-        mot === motSecret
-    ) {
+    if (mot === motSecret) {
 
-        partieTerminee =
-            true;
-
+        partieTerminee = true;
 
         musiqueJeu.pause();
         musiqueJeu.currentTime = 0;
 
         musiqueVictoire.currentTime = 0;
+        musiqueVictoire.play().catch(() => {});
 
-        musiqueVictoire.play().catch(
-            () => {}
-        );
-
-
-        for (
-            let i = 0;
-            i < 5;
-            i++
-        ) {
+        for (let i = 0; i < 5; i++) {
 
             const caseActuelle =
-                cases[
-                    debut +
-                    i
-                ];
+                cases[debut + i];
 
-
-            caseActuelle.classList.add(
-                "vert"
-            );
-
+            caseActuelle.classList.add("vert");
 
             mettreAJourClavier(
                 mot[i],
                 "vert"
             );
 
+            setTimeout(() => {
 
-            setTimeout(
-                () => {
+                caseActuelle.classList.add(
+                    "victoire"
+                );
 
-                    caseActuelle.classList.add(
-                        "victoire"
-                    );
-
-                },
-                i * 100
-            );
-
+            }, i * 100);
         }
 
+        setTimeout(() => {
 
-        setTimeout(
-            () => {
+            afficherFin(
+                "YOU WON",
+                "The word was :",
+                motSecret
+            );
 
-                titreFin.textContent =
-                    "YOU WON";
-
-                texteFin.textContent =
-                    "The word was :";
-
-                motFin.textContent =
-                    motSecret;
-
-                ecranFin.style.display =
-                    "flex";
-
-            },
-            700
-        );
-
+        }, 700);
 
         return;
     }
 
 
-    // =====================================
-    // ANALYSE
-    // =====================================
+    // Lettres vertes
 
-    const disponibles =
-        motSecret.split("");
+    const disponibles = motSecret.split("");
 
+    for (let i = 0; i < 5; i++) {
 
-    // LETTRES VERTES
+        if (mot[i] === motSecret[i]) {
 
-    for (
-        let i = 0;
-        i < 5;
-        i++
-    ) {
-
-        if (
-            mot[i] === motSecret[i]
-        ) {
-
-            cases[
-                debut +
-                i
-            ].classList.add(
-                "vert"
-            );
-
+            cases[debut + i].classList.add("vert");
 
             mettreAJourClavier(
                 mot[i],
                 "vert"
             );
 
-
-            disponibles[i] =
-                null;
+            disponibles[i] = null;
         }
-
     }
 
 
-    // LETTRES JAUNES / GRISES
+    // Lettres jaunes et grises
 
-    for (
-        let i = 0;
-        i < 5;
-        i++
-    ) {
+    for (let i = 0; i < 5; i++) {
 
-        if (
-            mot[i] === motSecret[i]
-        ) {
-            continue;
-        }
-
+        if (mot[i] === motSecret[i]) continue;
 
         const index =
-            disponibles.indexOf(
-                mot[i]
-            );
+            disponibles.indexOf(mot[i]);
 
+        if (index !== -1) {
 
-        if (
-            index !== -1
-        ) {
-
-            cases[
-                debut +
-                i
-            ].classList.add(
-                "jaune"
-            );
-
+            cases[debut + i].classList.add("jaune");
 
             mettreAJourClavier(
                 mot[i],
                 "jaune"
             );
 
+            disponibles[index] = null;
 
-            disponibles[index] =
-                null;
+        } else {
 
-        }
-
-        else {
-
-            cases[
-                debut +
-                i
-            ].classList.add(
-                "gris"
-            );
-
+            cases[debut + i].classList.add("gris");
 
             mettreAJourClavier(
                 mot[i],
                 "gris"
             );
-
         }
-
     }
 
 
-    // =====================================
-    // LIGNE SUIVANTE
-    // =====================================
+    // Ligne suivante
 
     ligneActuelle++;
-
     debut += 5;
-
     position = 0;
 
-
-    if (
-        ligneActuelle < 6
-    ) {
-
+    if (ligneActuelle < 6) {
         monterGrille();
-
     }
 
 
-    // =====================================
-    // DÉFAITE
-    // =====================================
+    // Défaite
 
-    if (
-        ligneActuelle >= 6
-    ) {
+    if (ligneActuelle >= 6) {
 
-        partieTerminee =
-            true;
-
+        partieTerminee = true;
 
         musiqueJeu.pause();
         musiqueJeu.currentTime = 0;
 
         musiqueDefaite.currentTime = 0;
+        musiqueDefaite.play().catch(() => {});
 
-        musiqueDefaite.play().catch(
-            () => {}
+        afficherFin(
+            "LOSER",
+            "The word was :",
+            motSecret
         );
-
-
-        titreFin.textContent =
-            "LOSER";
-
-        texteFin.textContent =
-            "The word was :";
-
-        motFin.textContent =
-            motSecret;
-
-        ecranFin.style.display =
-            "flex";
     }
-
 }
 
 
-// =========================================
-// REJOUER
-// =========================================
+// Écran de fin
 
-boutonRejouer.addEventListener(
-    "click",
-    () => {
+function afficherFin(titre, texte, mot) {
 
-        ecranFin.style.display =
-            "none";
+    titreFin.textContent = titre;
+    texteFin.textContent = texte;
+    motFin.textContent = mot;
 
-
-        partieTerminee =
-            false;
-
-        position =
-            0;
-
-        ligneActuelle =
-            0;
-
-        debut =
-            0;
+    ecranFin.style.display = "flex";
+}
 
 
+// Rejouer
+
+boutonRejouer.addEventListener("click", () => {
+
+    ecranFin.style.display = "none";
+
+    partieTerminee = false;
+
+    position = 0;
+    ligneActuelle = 0;
+    debut = 0;
+
+    cases.forEach(caseJeu => {
+
+        caseJeu.textContent = "";
+
+        caseJeu.classList.remove(
+            "vert",
+            "jaune",
+            "gris",
+            "victoire",
+            "letter-animation"
+        );
+    });
+
+    touches.forEach(touche => {
+
+        touche.classList.remove(
+            "vert",
+            "jaune",
+            "gris",
+            "touche-appuyee"
+        );
+    });
+
+    musiqueJeu.pause();
+    musiqueJeu.currentTime = 0;
+
+    musiqueVictoire.pause();
+    musiqueVictoire.currentTime = 0;
+
+    musiqueDefaite.pause();
+    musiqueDefaite.currentTime = 0;
+
+    choisirNouveauMot();
+
+    positionInitialeGrille();
+});
+
+
+// Redimensionnement
+
+window.addEventListener("resize", () => {
+
+    if (ligneActuelle === 0) {
         positionInitialeGrille();
-
-
-        cases.forEach(
-            caseJeu => {
-
-                caseJeu.textContent =
-                    "";
-
-
-                caseJeu.classList.remove(
-                    "vert",
-                    "jaune",
-                    "gris",
-                    "victoire",
-                    "letter-animation"
-                );
-
-            }
-        );
-
-
-        touches.forEach(
-            touche => {
-
-                touche.classList.remove(
-                    "vert",
-                    "jaune",
-                    "gris",
-                    "touche-appuyee"
-                );
-
-            }
-        );
-
-
-        musiqueJeu.pause();
-        musiqueJeu.currentTime = 0;
-
-        musiqueVictoire.pause();
-        musiqueVictoire.currentTime = 0;
-
-        musiqueDefaite.pause();
-        musiqueDefaite.currentTime = 0;
-
-
-        choisirNouveauMot();
-
     }
-);
 
-
-// =========================================
-// REDIMENSIONNEMENT
-// =========================================
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        if (
-            ligneActuelle === 0
-        ) {
-
-            positionInitialeGrille();
-
-        }
-
-    }
-);
+});
