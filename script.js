@@ -707,10 +707,10 @@ function validerMot() {
             () => {
 
                 titreFin.textContent =
-                    "GAGNÉ";
+                    "YOU WON";
 
                 texteFin.textContent =
-                    "Le mot était :";
+                    "The word was :";
 
                 motFin.textContent =
                     motSecret;
@@ -875,10 +875,10 @@ function validerMot() {
 
 
         titreFin.textContent =
-            "PERDU";
+            "LOSER";
 
         texteFin.textContent =
-            "Le mot était :";
+            "The word was :";
 
         motFin.textContent =
             motSecret;
